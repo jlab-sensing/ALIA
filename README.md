@@ -1,2 +1,3 @@
 # ALIA
-ALIA (Adaptive Latency-Integrated Algorithm) 
+
+ALIA (Adaptive Latency-Integrated Algorithm)
