@@ -10,7 +10,6 @@ Convert provided XLSX into GeoJSON files.
 """
 
 import argparse
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 import geojson
 import json
@@ -18,111 +17,15 @@ import numpy as np
 import os
 import pandas as pd
 import re
+import sys
 import matplotlib.pyplot as plt
 
-# Classes.
-"""Datum
+# Make the simulation package importable when this file is run directly.
+_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
 
-Storage for either sim or sensor datum.
-"""
-
-
-@dataclass
-class Datum:
-    timestamp: datetime
-    VWC: float
-    SC: float = None
-    ST: float = None
-
-
-"""Sensor
-
-Sensor data from either a location in sim or a sensor.
-"""
-
-
-class Sensor(object):
-    def __init__(
-        self,
-        coordinates: [float, float],  #   [lat, lon]
-        crs: str,
-        data: list[Datum],
-        depth: float,
-        layer: int,
-        name: str,
-    ):
-        self.coordinates = coordinates
-        self.crs = crs
-        self.data = data
-        self.depth = depth
-        self.layer = layer
-        self.name = name
-
-    """ get_vwc_max()
-
-    @return Max VWC.
-    """
-
-    def get_vwc_max(self) -> float:
-        return max([datum.VWC for datum in self.data])
-
-    """
-    """
-
-    def write_geojson(self, folder: str, label: int = 0):
-        path = ".".join([self.name + "_" + str(label), "geojson"])
-        if not os.path.isdir(folder):
-            os.makedirs(folder)
-        full_path = "/".join([folder, path])
-
-        # Ensure not to overwrite existing file paths.
-        if os.path.isfile(full_path):
-            print(f"Repeated file ({full_path}), updating...")
-            self.write_geojson(folder, label + 1)
-        else:
-            geojson_str = self.get_geojson()
-            with open(full_path, "w") as gfp:
-                json.dump(geojson_str, gfp)
-
-    """get_geojson()
-
-    Returns a GeoJSON interpretation of sensor data.
-    
-    @return
-    """
-
-    def get_geojson(self):
-        features = []
-        for index, datum in enumerate(self.data):
-            features.append(
-                {
-                    "type": "Feature",
-                    "properties": {
-                        "depth": self.depth,
-                        "ts": str(datum.timestamp),
-                        "SC": datum.SC,
-                        "ST": datum.ST,
-                        "WC": datum.VWC,
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [self.coordinates[0], self.coordinates[1]],
-                    },
-                    "id": str(index),
-                }
-            )
-
-        geojson_str = {
-            "type": "FeatureCollection",
-            "crs": {
-                "type": "name",
-                "properties": {"name": "urn:ogc:def:crs:EPSG::32610"},
-            },
-            "name": self.name,
-            "features": features,
-        }
-
-        return geojson_str
+from simulation.src.models import Datum, Sensor
 
 
 """_ingest_sensor_data_single_dict(data_json) -> Sensor, crs
@@ -248,10 +151,18 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
         timestamps = df[df.columns[0]]
 
         indices_vwc = []
+        indices_st = []
+        indices_sc = []
         labels_sensors = []
+        port_to_sensor = {}
         for index, header in enumerate(sheet_headers):
-            if "Water Content" in header[-1]:
+            measurement = header[-1]
+            port = header[0]
+            if "Water Content" in measurement:
+                port_to_sensor[port] = len(indices_vwc)
                 indices_vwc.append(index)
+                indices_st.append(None)
+                indices_sc.append(None)
                 labels_sensors.append(
                     "_".join(
                         [
@@ -262,15 +173,25 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
                     )
                 )
                 data_sensors.append([])
+            elif "Soil Temperature" in measurement and port in port_to_sensor:
+                indices_st[port_to_sensor[port]] = index
+            elif "Bulk EC" in measurement and port in port_to_sensor:
+                indices_sc[port_to_sensor[port]] = index
 
         for index_row, row in df.iterrows():
             for index_sensor, index_swc in enumerate(indices_vwc):
                 # Filter out entries with "nan".
                 if isinstance(row.iloc[index_swc], float):
+                    idx_st = indices_st[index_sensor]
+                    idx_sc = indices_sc[index_sensor]
+                    st_val = row.iloc[idx_st] if idx_st is not None else None
+                    sc_val = row.iloc[idx_sc] if idx_sc is not None else None
                     data_sensors[index_sensor].append(
                         Datum(
                             timestamp=timestamps.iloc[index_row],
                             VWC=row.iloc[index_swc],
+                            ST=st_val if isinstance(st_val, float) else None,
+                            SC=sc_val if isinstance(sc_val, float) else None,
                         )
                     )
 
@@ -415,12 +336,6 @@ def transform(
 
     plt.show()
 
-    # Compute the the covariance matrix of each sensor.
-    # sensors = _sensors_align_data(sensors)
-
-    # Save some time by saving your work.
-    # for sensor in sensors:
-    #     sensor.write_geojson(output_dir)
     """
     # Read janky cache.
     sensors = []

@@ -11,7 +11,7 @@ the comparison harness can attribute drops to specific reasons.
 
 from collections import deque
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from math import sqrt
 
 from simulation.src import config
@@ -36,13 +36,29 @@ class Drop:
     reason: str
 
 
+@dataclass
+class RollingStats:
+    W: int
+    window: deque[float] = field(init=False)
+    mean: float = 0.0
+    variance: float = 0.0
+    sdev: float = 0.0
+
+    def __post_init__(self):
+        self.window = deque(maxlen=self.W)
+
+    @property
+    def warmed_up(self) -> bool:
+        return len(self.window) == self.W
+
+
 # Populated by the most recent `filter` call. Read by metrics.py.
 last_drops: list[Drop] = []
 
 
 def _should_log(datum: Datum, prev: Datum | None, delta: float) -> tuple[bool, str]:
     """Return (keep, reason). `delta` is the current event threshold from
-    UPDATE_DELTA. `prev` is the most recently kept Datum, or None on first
+    update_delta. `prev` is the most recently kept Datum, or None on first
     sample.
     """
     if prev is None:
@@ -67,10 +83,9 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
     for sensor in sensors:
         kept: list[Datum] = []
         prev: Datum | None = None
-        window: deque[float] = deque()
-        sums = [0.0, 0.0]  # [sum, sum_sq]
+        stats = RollingStats(W=W)
         for datum in sensor.data:
-            delta = UPDATE_DELTA(datum, window, sums, W, sensorResolution)
+            delta = update_delta(datum, stats, sensorResolution)
             keep, reason = _should_log(datum, prev, delta)
             if keep:
                 kept.append(datum)
@@ -85,32 +100,34 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
     return out
 
 
-# just using sensorResolution to ensure that data that is not random is detected
-def UPDATE_DELTA(
+def update_delta(
     datum: Datum,
-    window: deque,
-    sums: list[float],
-    W: int,
-    sensorResolution: float,
+    stats: RollingStats,
+    sensor_resolution: float,
 ) -> float:
-    """Add `datum` to the rolling VWC window (length W), maintaining running
-    sum and sum-of-squares so stddev is O(1) per call. Returns the event
-    threshold = max(eventDeltaThreshold * sigma, sensorResolution).
+    """Maintain rolling mean/variance over `stats.window` (length W) and
+    return the event threshold = max(eventDeltaThreshold * sigma, sensor_resolution).
 
-    Mutates `window` and `sums` in place.
+    During warm-up (fewer than W samples seen) returns 0.0 so every sample
+    passes _should_log. Once the window fills, seeds mean/variance directly
+    from it; thereafter uses an O(1) incremental update.
     """
-    v = datum.VWC
-    window.append(v)
-    sums[0] += v
-    sums[1] += v * v
-    if len(window) > W:
-        old = window.popleft()
-        sums[0] -= old
-        sums[1] -= old * old
+    x = datum.VWC
 
-    n = len(window)
-    if n < 2:
-        return sensorResolution
-    mean = sums[0] / n
-    var = max(0.0, sums[1] / n - mean * mean)
-    return max(2 * sqrt(var), sensorResolution)
+    if not stats.warmed_up:
+        stats.window.append(x)
+        if stats.warmed_up:
+            stats.mean = sum(stats.window) / stats.W
+            stats.variance = sum((v - stats.mean) ** 2 for v in stats.window) / (stats.W - 1)
+            stats.sdev = sqrt(stats.variance)
+        return 0.0
+
+    goingaway = stats.window[0]
+    oldmean = stats.mean
+    stats.window.append(x)  # auto-evicts goingaway (maxlen=W)
+    newmean = oldmean + (x - goingaway) / stats.W
+    stats.variance += (x - goingaway) * ((x - newmean) + (goingaway - oldmean)) / (stats.W - 1)
+    stats.mean = newmean
+    stats.sdev = sqrt(max(0.0, stats.variance))
+
+    return max(eventDeltaThreshold * stats.sdev, sensor_resolution)
