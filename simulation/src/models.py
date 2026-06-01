@@ -19,6 +19,7 @@ class Datum:
     VWC: float
     SC: float = None
     ST: float = None
+    run_length: int = 0
 
 
 class Sensor(object):

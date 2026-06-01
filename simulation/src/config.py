@@ -14,4 +14,6 @@ quietHeartbeatHours = 12  # hours
 burstHeartbeatHours = 0.5  # hours
 quietEntryRunLength = 48  # measurements before entering quiet mode
 
+
+
 numSamplesPerDay = (stdDevWindowHours * 60 * 60) // samplePeriodSec

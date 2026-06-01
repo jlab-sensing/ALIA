@@ -58,14 +58,22 @@ def compute(sensors: list[Sensor]) -> dict:
 def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
     """Side-by-side comparison of raw and filtered runs.
 
-    Includes drop counts (overall, per sensor, per reason) read from
-    filter_algo.last_drops, plus distribution-shift deltas per sensor.
+    `in_run` samples are encoded into a downstream packet's run_length and so
+    are reconstructable on receive — they are reported as `n_compressed`, not
+    `n_dropped`. `n_dropped` covers only unrecoverable loss.
     """
     raw_stats = compute(raw)
     filt_stats = compute(filtered)
 
     drops_by_reason = Counter(d.reason for d in filter_algo.last_drops)
     drops_by_sensor = Counter(d.sensor_name for d in filter_algo.last_drops)
+
+    compressed_by_sensor = Counter(
+        d.sensor_name for d in filter_algo.last_drops if d.reason == "in_run"
+    )
+    dropped_by_sensor = Counter(
+        d.sensor_name for d in filter_algo.last_drops if d.reason != "in_run"
+    )
 
     per_sensor = {}
     raw_by_name = {s.name: s for s in raw}
@@ -75,11 +83,18 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
             continue
         n_raw = len(rs.data)
         n_filt = len(fs.data)
+        n_compressed = compressed_by_sensor.get(fs.name, 0)
+        n_dropped = dropped_by_sensor.get(fs.name, 0)
+        # Transmitted packets plus samples the receiver can backfill from run_length.
+        n_reconstructable = n_filt + sum(d.run_length for d in fs.data)
         per_sensor[fs.name] = {
             "n_raw": n_raw,
             "n_filtered": n_filt,
-            "n_dropped": n_raw - n_filt,
-            "drop_rate": (n_raw - n_filt) / n_raw if n_raw else 0.0,
+            "n_compressed": n_compressed,
+            "n_dropped": n_dropped,
+            "n_reconstructable": n_reconstructable,
+            "compression_rate": (n_raw - n_filt) / n_raw if n_raw else 0.0,
+            "drop_rate": n_dropped / n_raw if n_raw else 0.0,
             "vwc_mean_delta": (
                 (filt_stats[fs.name]["VWC"]["mean"] or 0)
                 - (raw_stats[fs.name]["VWC"]["mean"] or 0)
@@ -92,16 +107,29 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
 
     total_raw = sum(len(s.data) for s in raw)
     total_filt = sum(len(s.data) for s in filtered)
+    total_compressed = sum(
+        1 for d in filter_algo.last_drops if d.reason == "in_run"
+    )
+    total_dropped = sum(
+        1 for d in filter_algo.last_drops if d.reason != "in_run"
+    )
+    total_reconstructable = total_filt + sum(
+        d.run_length for s in filtered for d in s.data
+    )
 
     return {
         "totals": {
             "n_raw": total_raw,
             "n_filtered": total_filt,
-            "n_dropped": total_raw - total_filt,
-            "overall_drop_rate": (total_raw - total_filt) / total_raw if total_raw else 0.0,
+            "n_compressed": total_compressed,
+            "n_dropped": total_dropped,
+            "n_reconstructable": total_reconstructable,
+            "overall_compression_rate": (total_raw - total_filt) / total_raw if total_raw else 0.0,
+            "overall_drop_rate": total_dropped / total_raw if total_raw else 0.0,
         },
         "drops_by_reason": dict(drops_by_reason),
         "drops_by_sensor": dict(drops_by_sensor),
+        "compressed_by_sensor": dict(compressed_by_sensor),
         "per_sensor": per_sensor,
         "raw_stats": raw_stats,
         "filtered_stats": filt_stats,

@@ -52,6 +52,12 @@ class HeartbeatState:
 
 
 @dataclass
+class RunState:
+
+    run_count: int = 0
+
+
+@dataclass
 class RollingStats:
     W: int
     window: deque[float] = field(init=False)
@@ -81,7 +87,11 @@ def _select_heartbeat_hours(state: HeartbeatState) -> float:
 
 
 def _should_log(
-    datum: Datum, prev: Datum | None, delta: float, state: HeartbeatState
+    datum: Datum,
+    prev: Datum | None,
+    delta: float,
+    heartbeatState: HeartbeatState,
+    runState: RunState,
 ) -> tuple[bool, str]:
     """Return (keep, reason). `delta` is the current event threshold from
     update_delta. `prev` is the most recently kept Datum, or None on first
@@ -92,17 +102,26 @@ def _should_log(
 
     # An event always transmits and resets the run, dropping us into burst mode.
     if abs(datum.VWC - prev.VWC) >= delta:
-        state.quiet_run = 0
+        heartbeatState.quiet_run = 0
+        if runState.run_count > 0:
+            datum.run_length = runState.run_count
+            runState.run_count = 0
+
         return True, "event"
 
     # Non-event: select the heartbeat for the current tier before advancing the
     # run, then force a transmission if we have been silent past that interval.
-    heartbeatHours = _select_heartbeat_hours(state)
-    state.quiet_run += 1
+    heartbeatHours = _select_heartbeat_hours(heartbeatState)
+    heartbeatState.quiet_run += 1
     hoursSinceLastTx = (datum.timestamp - prev.timestamp).total_seconds() / 3600
     if hoursSinceLastTx >= heartbeatHours:
+        if runState.run_count > 0:
+            datum.run_length = runState.run_count
+            runState.run_count = 0
         return True, "heartbeat"
-    return False, "below_delta"
+    else:
+        runState.run_count += 1
+        return False, "in_run"
 
 
 def filter(sensors: list[Sensor]) -> list[Sensor]:
@@ -122,14 +141,22 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
         prev: Datum | None = None
         stats = RollingStats(W=W)
         heartbeat = HeartbeatState()
+        runState = RunState()
         for datum in sensor.data:
             delta = update_delta(datum, stats, sensorResolution)
-            keep, reason = _should_log(datum, prev, delta, heartbeat)
+            keep, reason = _should_log(datum, prev, delta, heartbeat, runState)
             if keep:
                 kept.append(datum)
                 prev = datum
             else:
                 last_drops.append(Drop(sensor.name, datum, reason))
+        if sensor.data and runState.run_count > 0:
+            flush = Datum(
+                timestamp=datum.timestamp,
+                VWC=prev.VWC,
+                run_length=runState.run_count - 1,
+            )
+            kept.append(flush)
 
         new_sensor = deepcopy(sensor)
         new_sensor.data = kept
