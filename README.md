@@ -50,7 +50,6 @@ Outputs land in `<output>/`:
 
 The decision logic lives in `simulation/src/filter_algo.py` in `_should_log(datum, prev, sensor)`, which returns `(keep: bool, reason: str)`. `prev` is the most recently kept datum for the sensor (or `None` for the first sample); `sensor` exposes `depth`, `coordinates`, and `name` for context. Rejected points are recorded in `filter_algo.last_drops` and surfaced by `metrics.diff` as `drops_by_reason` — name reasons clearly so the metrics output is useful.
 
-Until `_should_log` is edited, every datum is kept and the raw and filtered branches are identical.
 
 ## Running ingestion only
 
@@ -59,3 +58,40 @@ The original ingest-and-plot path still works:
 ```sh
 python data/UCSC_Haybarn_Field/data_transformer.py --dir data/UCSC_Haybarn_Field/data
 ```
+
+# Algorithm Specifications
+## Configurables:
+α: Confidence Interval (Usually just 3)
+Δmin: Sensor Resolutino
+ω: Sampling raet x desired time for delta window
+Tmax: Time for heartbeat (Max amount of time without Tx)
+Δburst: Required Δ from previous value to enter burst mode
+θquiet: Required RLE count to enter quiet mode
+Tburst: Time for heartbeat in Burst mode (Max amount of time without Tx in Burst mode)
+Tquiet: Time for heartbeat in Quiet mode (Max amount of time without Tx in Quiet mode)
+
+## Reporting Tiers (Subject to Change)
+| Tier        | Tmax | Tquiet | Tburst | θquiet |
+|-------------|------|--------|--------|--------|
+|  Responsive | 1 H  | 6 H    | 15 min | 24     |
+| Standard    | 3 H  | 12 H   | 30 min | 48     |
+| Low Power   | 6 H  | 24 H   | 60 min | 96     |
+
+### Rule 1: Delta Supression 
+Is new value - prev value > Δ? If so, transmit. 
+    - Δ = α x σ over ω
+
+### Rule 2: Run Length Encoding (RLE)
+Is new value - prev value < Δ? If so, add to a new packet and begin incrementing data for every value new value seen < Δ. 
+
+### Rule 3: Heartbeat
+Send current value if time since last transmission > Tmax
+    - Does NOT stop current RLE Run
+
+### Rule 4: Burst Mode
+Is new value - prev value > Δburst? If so, enter burst mode
+    - If burst mode, change Tmax to Tburst
+
+### Rule 5: Quiet Mode
+Is RLE count > θquiet? If so, enter quiet mode
+    - If quiet mode, change Tmax to Tquiet 
