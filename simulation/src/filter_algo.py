@@ -21,7 +21,7 @@ from simulation.src.config import (
     eventDeltaThreshold,
     normalHeartbeatHours,
     quietEntryRunLength,
-    quietHeartbeatHours,
+    quietHeartbeatHours, 
     samplePeriodSec,
     sensorResolution,
     stdDevWindowHours,

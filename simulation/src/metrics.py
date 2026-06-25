@@ -55,6 +55,92 @@ def compute(sensors: list[Sensor]) -> dict:
     return out
 
 
+def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
+    """Zero-order-hold reconstruction error of VWC, raw vs received signal.
+
+    The receiver only ever sees the transmitted packets in `filtered`; every
+    other sample is reconstructed by holding the most recently transmitted VWC
+    (the held samples were, by construction, within `delta` of it). We align
+    that step function onto the raw timestamps and compare against the true
+    VWC.
+
+    Returns `sse` (sum of squared errors) and `n` so callers can pool across
+    sensors, plus the derived `rmse` and `mae` for a single sensor.
+    """
+    tx = sorted(
+        (d for d in filtered.data if d.VWC is not None),
+        key=lambda d: d.timestamp,
+    )
+    raw_data = sorted(raw.data, key=lambda d: d.timestamp)
+    if not tx or not raw_data:
+        return {"sse": 0.0, "abs_sum": 0.0, "n": 0, "rmse": None, "mae": None}
+
+    sse = 0.0
+    abs_sum = 0.0
+    n = 0
+    j = 0
+    held = tx[0].VWC
+    for d in raw_data:
+        # Advance the held value to the latest packet transmitted at or before d.
+        while j < len(tx) and tx[j].timestamp <= d.timestamp:
+            held = tx[j].VWC
+            j += 1
+        if d.VWC is None or (isinstance(d.VWC, float) and math.isnan(d.VWC)):
+            continue
+        err = d.VWC - held
+        sse += err * err
+        abs_sum += abs(err)
+        n += 1
+
+    return {
+        "sse": sse,
+        "abs_sum": abs_sum,
+        "n": n,
+        "rmse": math.sqrt(sse / n) if n else None,
+        "mae": abs_sum / n if n else None,
+    }
+
+
+def transmission_latency(raw: Sensor, filtered: Sensor) -> dict:
+    """Mean delay (seconds) between a sample being taken and its information
+    reaching the receiver.
+
+    A transmitted sample has zero latency. A held (`in_run`) sample's
+    information is conveyed by the next transmitted packet (which carries the
+    run_length), so its latency is the gap to that packet. The trailing flush
+    packet shares the last raw timestamp, so every raw sample has a covering
+    transmission.
+
+    Returns `sum_sec` and `n` for pooling, plus `mean_sec` and `max_sec`.
+    """
+    tx_times = sorted(d.timestamp for d in filtered.data)
+    raw_times = sorted(d.timestamp for d in raw.data)
+    if not tx_times or not raw_times:
+        return {"sum_sec": 0.0, "n": 0, "mean_sec": None, "max_sec": None}
+
+    sum_sec = 0.0
+    max_sec = 0.0
+    n = 0
+    j = 0
+    for t in raw_times:
+        while j < len(tx_times) and tx_times[j] < t:
+            j += 1
+        if j >= len(tx_times):
+            # No transmission at or after this sample; its info never arrives.
+            continue
+        delay = (tx_times[j] - t).total_seconds()
+        sum_sec += delay
+        max_sec = max(max_sec, delay)
+        n += 1
+
+    return {
+        "sum_sec": sum_sec,
+        "n": n,
+        "mean_sec": sum_sec / n if n else None,
+        "max_sec": max_sec if n else None,
+    }
+
+
 def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
     """Side-by-side comparison of raw and filtered runs.
 
