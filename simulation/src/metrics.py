@@ -42,33 +42,38 @@ def _first_diff_var(values: list[float]) -> float | None:
 
 
 def compute(sensors: list[Sensor]) -> dict:
-    """Per-sensor descriptive stats for VWC, SC, ST plus first-diff variance."""
+    """Per-stream descriptive stats plus first-diff variance.
+
+    Each Sensor is single-channel after `pipeline.to_channel_streams` (its
+    reading in `.value`, the data type named by the stream's suffix), so we
+    report one `value` block per stream rather than separate VWC/SC/ST
+    blocks."""
     out = {}
     for sensor in sensors:
+        values = _series(sensor, "value")
         out[sensor.name] = {
-            "VWC": _stats(_series(sensor, "VWC")),
-            "SC": _stats(_series(sensor, "SC")),
-            "ST": _stats(_series(sensor, "ST")),
-            "VWC_first_diff_var": _first_diff_var(_series(sensor, "VWC")),
+            "value": _stats(values),
+            "value_first_diff_var": _first_diff_var(values),
             "n_samples": len(sensor.data),
         }
     return out
 
 
 def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
-    """Zero-order-hold reconstruction error of VWC, raw vs received signal.
+    """Zero-order-hold reconstruction error of the channel value, raw vs
+    received signal.
 
     The receiver only ever sees the transmitted packets in `filtered`; every
-    other sample is reconstructed by holding the most recently transmitted VWC
-    (the held samples were, by construction, within `delta` of it). We align
-    that step function onto the raw timestamps and compare against the true
-    VWC.
+    other sample is reconstructed by holding the most recently transmitted
+    value (the held samples were, by construction, within `delta` of it). We
+    align that step function onto the raw timestamps and compare against the
+    true value.
 
     Returns `sse` (sum of squared errors) and `n` so callers can pool across
     sensors, plus the derived `rmse` and `mae` for a single sensor.
     """
     tx = sorted(
-        (d for d in filtered.data if d.VWC is not None),
+        (d for d in filtered.data if d.value is not None),
         key=lambda d: d.timestamp,
     )
     raw_data = sorted(raw.data, key=lambda d: d.timestamp)
@@ -79,15 +84,15 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     abs_sum = 0.0
     n = 0
     j = 0
-    held = tx[0].VWC
+    held = tx[0].value
     for d in raw_data:
         # Advance the held value to the latest packet transmitted at or before d.
         while j < len(tx) and tx[j].timestamp <= d.timestamp:
-            held = tx[j].VWC
+            held = tx[j].value
             j += 1
-        if d.VWC is None or (isinstance(d.VWC, float) and math.isnan(d.VWC)):
+        if d.value is None or (isinstance(d.value, float) and math.isnan(d.value)):
             continue
-        err = d.VWC - held
+        err = d.value - held
         sse += err * err
         abs_sum += abs(err)
         n += 1
@@ -181,13 +186,13 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
             "n_reconstructable": n_reconstructable,
             "compression_rate": (n_raw - n_filt) / n_raw if n_raw else 0.0,
             "drop_rate": n_dropped / n_raw if n_raw else 0.0,
-            "vwc_mean_delta": (
-                (filt_stats[fs.name]["VWC"]["mean"] or 0)
-                - (raw_stats[fs.name]["VWC"]["mean"] or 0)
+            "value_mean_delta": (
+                (filt_stats[fs.name]["value"]["mean"] or 0)
+                - (raw_stats[fs.name]["value"]["mean"] or 0)
             ),
-            "vwc_std_delta": (
-                (filt_stats[fs.name]["VWC"]["std"] or 0)
-                - (raw_stats[fs.name]["VWC"]["std"] or 0)
+            "value_std_delta": (
+                (filt_stats[fs.name]["value"]["std"] or 0)
+                - (raw_stats[fs.name]["value"]["std"] or 0)
             ),
         }
 

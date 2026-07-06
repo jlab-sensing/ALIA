@@ -39,7 +39,7 @@ import sys
 
 import matplotlib.pyplot as plt
 
-from simulation.src import config, filter_algo, metrics, pipeline
+from simulation.src import config, filter_algo, metrics, pipeline, plots
 from simulation.src.compare import _ingest
 
 # Knob settings per mode.
@@ -229,7 +229,7 @@ def main():
                   if args.heartbeats else DEFAULT_HEARTBEAT_HRS)
 
     paths_files = args.files.split(",") if args.files else []
-    sensors_by_logger = _ingest(paths_files, args.dir)
+    sensors_by_logger, _fmt = _ingest(paths_files, args.dir, "auto")
 
     print(f"sweep mode: {args.mode}")
     saved = {k: getattr(filter_algo, k) for k in SWEPT_PARAMS}
@@ -254,13 +254,13 @@ def main():
     _plot_curves(
         series, "rmse", "Reconstruction RMSE (VWC, m³/m³)",
         "Error vs Compression Ratio",
-        os.path.join(plots_dir, f"error_vs_compression{suffix}.png"),
+        plots.plot_path(plots_dir, "sweep", f"error_vs_compression{suffix}"),
         annotate, legend,
     )
     _plot_curves(
         series, "mean_latency_hr", "Mean transmission latency (hours)",
         "Latency vs Compression Ratio",
-        os.path.join(plots_dir, f"latency_vs_compression{suffix}.png"),
+        plots.plot_path(plots_dir, "sweep", f"latency_vs_compression{suffix}"),
         annotate, legend,
     )
     _write_sweep_csv(series, os.path.join(args.output, f"sweep{suffix}.csv"))

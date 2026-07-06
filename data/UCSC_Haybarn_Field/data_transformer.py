@@ -43,19 +43,14 @@ def _ingest_sensor_data_single_dict(data_json: dict) -> Sensor:
     coordinates = data_json["features"][-1]["geometry"]["coordinates"]
     crs = None  # TODO(nubby)
     depth = data_json["features"][-1]["properties"]["depth"]
-    [
-        data.append(
-            Datum(
-                timestamp=datetime.strptime(
-                    entry["properties"]["ts"], "%Y-%m-%d %H:%M:%S"
-                ),
-                SC=entry["properties"]["SC"],
-                ST=entry["properties"]["ST"],
-                VWC=entry["properties"]["WC"],
-            )
-        )
-        for entry in data_json["features"]
-    ]
+    # A probe reports several quantities per reading; emit one Datum per
+    # channel, tagged with its name, all sharing the reading's timestamp.
+    for entry in data_json["features"]:
+        ts = datetime.strptime(entry["properties"]["ts"], "%Y-%m-%d %H:%M:%S")
+        props = entry["properties"]
+        data.append(Datum(timestamp=ts, value=props["WC"], name="VWC"))
+        data.append(Datum(timestamp=ts, value=props["SC"], name="SC"))
+        data.append(Datum(timestamp=ts, value=props["ST"], name="ST"))
     return (
         Sensor(
             coordinates=coordinates, crs=crs, data=data, depth=depth, layer=0, name=name
@@ -182,18 +177,20 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
             for index_sensor, index_swc in enumerate(indices_vwc):
                 # Filter out entries with "nan".
                 if isinstance(row.iloc[index_swc], float):
-                    idx_st = indices_st[index_sensor]
-                    idx_sc = indices_sc[index_sensor]
-                    st_val = row.iloc[idx_st] if idx_st is not None else None
-                    sc_val = row.iloc[idx_sc] if idx_sc is not None else None
-                    data_sensors[index_sensor].append(
-                        Datum(
-                            timestamp=timestamps.iloc[index_row],
-                            VWC=row.iloc[index_swc],
-                            ST=st_val if isinstance(st_val, float) else None,
-                            SC=sc_val if isinstance(sc_val, float) else None,
-                        )
+                    ts = timestamps.iloc[index_row]
+                    data = data_sensors[index_sensor]
+                    # One Datum per channel present, each tagged with its name.
+                    data.append(
+                        Datum(timestamp=ts, value=row.iloc[index_swc], name="VWC")
                     )
+                    idx_st = indices_st[index_sensor]
+                    st_val = row.iloc[idx_st] if idx_st is not None else None
+                    if isinstance(st_val, float):
+                        data.append(Datum(timestamp=ts, value=st_val, name="ST"))
+                    idx_sc = indices_sc[index_sensor]
+                    sc_val = row.iloc[idx_sc] if idx_sc is not None else None
+                    if isinstance(sc_val, float):
+                        data.append(Datum(timestamp=ts, value=sc_val, name="SC"))
 
         # Form the Sensor data type.
         for index, data in enumerate(data_sensors):
@@ -216,8 +213,9 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
                         ]
                     ),
                 )
-                # Only generate sensor files when valid data are present.
-                if not np.isnan([datum.VWC for datum in data]).all():
+                # Only generate sensor files when valid VWC data are present.
+                vwc_vals = [datum.value for datum in data if datum.name == "VWC"]
+                if vwc_vals and not np.isnan(vwc_vals).all():
                     sensors.append(new_sensor)
             except Exception as e:
                 print(f"[WARNING]   Skipping {path}: {e}")
@@ -291,48 +289,54 @@ def transform(
         for sensor in sensorsFromXlsx:
             print(sensor.name)
 
-    # Compute the arithmetic means of each sensor.
-    print("Means of each sensor:")
+    # Compute the arithmetic mean VWC of each sensor.
+    print("Mean VWC of each sensor:")
     for sensors in sensors_by_logger.values():
         for sensor in sensors:
-            mean = np.mean([datum.VWC for datum in sensor.data])
+            vwc_vals = [datum.value for datum in sensor.data if datum.name == "VWC"]
+            mean = np.mean(vwc_vals) if vwc_vals else float("nan")
             print(f"\t+{sensor.name}: {str(mean)}")
 
-    # Display charts interactively — one figure per logger.
+    # Human-readable titles for the known soil channels; any other channel name
+    # falls back to itself.
+    channel_titles = {
+        "VWC": "Volumetric Water Content (VWC)",
+        "SC": "Soil Conductivity (SC)",
+        "ST": "Soil Temperature (ST)",
+    }
+
+    # Display charts interactively — one figure per logger, one axis per channel.
     for logger_name, sensors in sensors_by_logger.items():
-        fig, axes = plt.subplots(3, 1, sharex=True, layout="constrained")
+        # Channel names present across this logger's sensors, in first-seen order.
+        channels = []
+        for sensor in sensors:
+            for datum in sensor.data:
+                if datum.name not in channels:
+                    channels.append(datum.name)
+        if not channels:
+            continue
+
+        fig, axes = plt.subplots(
+            len(channels), 1, sharex=True, layout="constrained"
+        )
+        if len(channels) == 1:
+            axes = [axes]
         fig.suptitle(logger_name)
 
-        # VWC
-        for sensor in sensors:
-            timestamps = [datum.timestamp for datum in sensor.data]
-            values = [datum.VWC for datum in sensor.data]
-            if any(v is not None and not np.isnan(v) for v in values):
-                axes[0].plot(timestamps, values, label=sensor.name)
-        axes[0].set_title("Volumetric Water Content (VWC)")
-        axes[0].set_ylabel("VWC")
-        axes[0].legend(fontsize="small")
-
-        # SC
-        for sensor in sensors:
-            timestamps = [datum.timestamp for datum in sensor.data]
-            values = [datum.SC for datum in sensor.data]
-            if any(v is not None for v in values):
-                axes[1].plot(timestamps, values, label=sensor.name)
-        axes[1].set_title("Soil Conductivity (SC)")
-        axes[1].set_ylabel("SC")
-        axes[1].legend(fontsize="small")
-
-        # ST
-        for sensor in sensors:
-            timestamps = [datum.timestamp for datum in sensor.data]
-            values = [datum.ST for datum in sensor.data]
-            if any(v is not None for v in values):
-                axes[2].plot(timestamps, values, label=sensor.name)
-        axes[2].set_title("Soil Temperature (ST)")
-        axes[2].set_ylabel("ST")
-        axes[2].set_xlabel("Time")
-        axes[2].legend(fontsize="small")
+        for ax, channel in zip(axes, channels):
+            for sensor in sensors:
+                points = [
+                    (datum.timestamp, datum.value)
+                    for datum in sensor.data
+                    if datum.name == channel
+                ]
+                values = [v for _, v in points]
+                if any(v is not None and not np.isnan(v) for v in values):
+                    ax.plot([t for t, _ in points], values, label=sensor.name)
+            ax.set_title(channel_titles.get(channel, channel))
+            ax.set_ylabel(channel)
+            ax.legend(fontsize="small")
+        axes[-1].set_xlabel("Time")
 
     plt.show()
 
@@ -350,7 +354,7 @@ def transform(
         data = []
         for sensor in sensors:
             print(sensor.name)
-            data.append([datum.VWC for datum in sensor.data])
+            data.append([datum.value for datum in sensor.data])
         print(np.cov(data))
     except Exception as e:
         print(e)

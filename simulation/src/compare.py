@@ -16,14 +16,15 @@ import csv
 import json
 import os
 import sys
-
+import numpy as np
+from scipy import stats
 import matplotlib.pyplot as plt
 
-from simulation.src import metrics, pipeline
+from simulation.src import metrics, pipeline, plots
 
 
-def _ingest(paths_files: list[str], path_dir: str):
-    """Bridge to the site-specific ingestion in data_transformer.py."""
+def _ingest_xlsx(paths_files: list[str], path_dir: str):
+    """Bridge to the site-specific XLSX ingestion in data_transformer.py."""
     # Late import — data_transformer lives outside the simulation package.
     from data.UCSC_Haybarn_Field import data_transformer as dt
 
@@ -35,38 +36,127 @@ def _ingest(paths_files: list[str], path_dir: str):
     return sensors_by_logger
 
 
-def _plot_overlay(logger_name: str, raw, filtered, out_dir: str):
-    fig, axes = plt.subplots(3, 1, sharex=True, layout="constrained")
+def _ingest_sensorscope(paths_files: list[str], path_dir: str):
+    """Bridge to SensorScope meteo .txt ingestion (fishnet/genepi/luce/
+    plaine_morte). One logger == one station file, one Sensor per channel."""
+    from data.UCSC_Haybarn_Field import sensorscope_transformer as ss
+
+    paths_files = list(paths_files) + ss.get_txt_files_from_dir(path_dir)
+    sensors_by_logger = {}
+    for path in paths_files:
+        logger_name = os.path.splitext(os.path.basename(path))[0]
+        sensors = ss.convert_txt_to_sensors(path)
+        if sensors:  # skip -def.txt sidecars and empty files
+            sensors_by_logger[logger_name] = sensors
+    return sensors_by_logger
+
+
+def _detect_format(paths_files: list[str], path_dir: str) -> str:
+    """'sensorscope' if the inputs are .txt logs, else 'xlsx'."""
+    candidates = list(paths_files)
+    if path_dir and os.path.isdir(path_dir):
+        for root, _dirs, files in os.walk(path_dir):
+            candidates.extend(files)
+    if any(str(c).endswith(".txt") for c in candidates) and not any(
+        str(c).endswith(".xlsx") for c in candidates
+    ):
+        return "sensorscope"
+    return "xlsx"
+
+
+def _ingest(paths_files: list[str], path_dir: str, fmt: str):
+    if fmt == "auto":
+        fmt = _detect_format(paths_files, path_dir)
+    if fmt == "sensorscope":
+        return _ingest_sensorscope(paths_files, path_dir), fmt
+    return _ingest_xlsx(paths_files, path_dir), fmt
+
+
+def _plot_original_histogram(logger_name: str, raw, out_dir: str):
+    """One subplot per Sensor (channel): density histogram of raw values
+    with a fitted normal PDF overlaid.
+
+    Every Sensor is single-channel (its reading in `.value`) after the
+    per-channel split, and different channels carry different units, so each
+    gets its own axis rather than sharing one.
+    """
+    channels = [fs for fs in raw if fs.data]
+    if not channels:
+        return
+    fig, axes = plt.subplots(
+        len(channels),
+        1,
+        layout="constrained",
+        figsize=(10, 2.2 * len(channels)),
+    )
+    if len(channels) == 1:
+        axes = [axes]
+    fig.suptitle(f"{logger_name} — histogram of raw")
+
+    for ax, fs in zip(axes, channels):
+        # Strip the "<station>-" prefix for a compact axis label.
+        label = fs.name.split("-")[-1]
+        data = np.asarray([d.value for d in fs.data], dtype=float)
+        mu, sigma = data.mean(), data.std()
+        ax.hist(
+            data,
+            bins="auto",
+            density=True,
+            alpha=0.6,
+            edgecolor="black",
+        )
+        if sigma > 0:
+            x = np.linspace(data.min(), data.max(), 500)
+            ax.plot(x, stats.norm.pdf(x, mu, sigma), "r-", linewidth=2)
+        ax.set_title(f"{fs.name} — Histogram")
+        ax.set_xlabel(label, fontsize="small")
+        ax.set_ylabel("Density", fontsize="small")
+
+    fig.savefig(plots.plot_path(out_dir, "histogram", logger_name), dpi=120)
+    plt.close(fig)
+
+
+def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
+    """One subplot per Sensor (channel), raw faded vs filtered solid.
+
+    Every Sensor is single-channel (its reading in `.value`) after the
+    per-channel split, and different channels carry different units, so each
+    gets its own axis rather than sharing one.
+    """
+    raw_by_name = {s.name: s for s in raw}
+    channels = [fs for fs in filtered if fs.name in raw_by_name]
+    if not channels:
+        return
+    fig, axes = plt.subplots(
+        len(channels),
+        1,
+        sharex=True,
+        layout="constrained",
+        figsize=(10, 2.2 * len(channels)),
+    )
+    if len(channels) == 1:
+        axes = [axes]
     fig.suptitle(f"{logger_name} — raw (faded) vs filtered (solid)")
 
-    raw_by_name = {s.name: s for s in raw}
-    for ax, field, title in [
-        (axes[0], "VWC", "Volumetric Water Content"),
-        (axes[1], "SC", "Soil Conductivity"),
-        (axes[2], "ST", "Soil Temperature"),
-    ]:
-        for fs in filtered:
-            rs = raw_by_name.get(fs.name)
-            if rs is None:
-                continue
-            ax.plot(
-                [d.timestamp for d in rs.data],
-                [getattr(d, field) for d in rs.data],
-                alpha=0.25,
-                linewidth=0.8,
-            )
-            ax.plot(
-                [d.timestamp for d in fs.data],
-                [getattr(d, field) for d in fs.data],
-                label=fs.name,
-                linewidth=1.2,
-            )
-        ax.set_title(title)
-        ax.set_ylabel(field)
-    axes[2].set_xlabel("Time")
+    for ax, fs in zip(axes, channels):
+        rs = raw_by_name[fs.name]
+        # Strip the "<station>-" prefix for a compact axis label.
+        label = fs.name.split("-")[-1]
+        ax.plot(
+            [d.timestamp for d in rs.data],
+            [d.value for d in rs.data],
+            alpha=0.25,
+            linewidth=0.8,
+        )
+        ax.plot(
+            [d.timestamp for d in fs.data],
+            [d.value for d in fs.data],
+            linewidth=1.2,
+        )
+        ax.set_ylabel(label, fontsize="small")
+    axes[-1].set_xlabel("Time")
 
-    os.makedirs(out_dir, exist_ok=True)
-    fig.savefig(os.path.join(out_dir, f"{logger_name}.png"), dpi=120)
+    fig.savefig(plots.plot_path(out_dir, "overlay", logger_name), dpi=120)
     plt.close(fig)
 
 
@@ -86,8 +176,8 @@ def _write_metrics_csv(all_diffs: dict, csv_path: str):
                 "n_reconstructable",
                 "compression_rate",
                 "drop_rate",
-                "vwc_mean_delta",
-                "vwc_std_delta",
+                "value_mean_delta",
+                "value_std_delta",
             ]
         )
         for logger_name, d in all_diffs.items():
@@ -103,26 +193,55 @@ def _write_metrics_csv(all_diffs: dict, csv_path: str):
                         row["n_reconstructable"],
                         f"{row['compression_rate']:.4f}",
                         f"{row['drop_rate']:.4f}",
-                        f"{row['vwc_mean_delta']:.6f}",
-                        f"{row['vwc_std_delta']:.6f}",
+                        f"{row['value_mean_delta']:.6f}",
+                        f"{row['value_std_delta']:.6f}",
                     ]
                 )
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--files", default="", type=str,
-                        help="Comma-separated XLSX paths.")
-    parser.add_argument("-d", "--dir", default="", type=str,
-                        help="Directory of XLSX files.")
-    parser.add_argument("-o", "--output", default="./out", type=str,
-                        help="Output directory for plots and metrics.")
-    parser.add_argument("--show", action="store_true",
-                        help="Display plots interactively in addition to saving.")
+    parser.add_argument(
+        "-f", "--files", default="", type=str, help="Comma-separated XLSX paths."
+    )
+    parser.add_argument(
+        "-d", "--dir", default="", type=str, help="Directory of XLSX files."
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="./out",
+        type=str,
+        help="Output directory for plots and metrics.",
+    )
+    parser.add_argument(
+        "--show",
+        action="store_true",
+        help="Display plots interactively in addition to saving.",
+    )
+    parser.add_argument(
+        "--format",
+        default="auto",
+        choices=["auto", "xlsx", "sensorscope"],
+        help="Input format. 'auto' detects .txt (SensorScope "
+        "meteo) vs .xlsx (Haybarn loggers).",
+    )
     args = parser.parse_args()
 
     paths_files = args.files.split(",") if args.files else []
-    sensors_by_logger = _ingest(paths_files, args.dir)
+    sensors_by_logger, fmt = _ingest(paths_files, args.dir, args.format)
+    if not sensors_by_logger:
+        print("No sensor data found for the given inputs.")
+        return
+
+    # Split every Sensor into one single-channel stream per data type present,
+    # so each channel is filtered and scored on its own dynamics rather than
+    # riding on another channel's keep/drop decision. After this, every Sensor
+    # is single-channel, so the per-channel plot is used for both formats.
+    sensors_by_logger = {
+        name: pipeline.to_channel_streams(sensors)
+        for name, sensors in sensors_by_logger.items()
+    }
 
     plots_dir = os.path.join(args.output, "plots")
     all_diffs = {}
@@ -136,7 +255,10 @@ def main():
         print(f"  totals: {d['totals']}")
         print(f"  drops_by_reason: {d['drops_by_reason']}")
 
-        _plot_overlay(logger_name, branches["raw"], branches["filtered"], plots_dir)
+        _plot_overlay_generic(
+            logger_name, branches["raw"], branches["filtered"], plots_dir
+        )
+        _plot_original_histogram(logger_name, branches["raw"], plots_dir)
 
     _write_metrics_csv(all_diffs, os.path.join(args.output, "metrics.csv"))
     with open(os.path.join(args.output, "metrics.json"), "w") as fp:
@@ -148,5 +270,7 @@ def main():
 
 if __name__ == "__main__":
     # Allow `python simulation/src/compare.py` from the repo root.
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+    sys.path.insert(
+        0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    )
     main()

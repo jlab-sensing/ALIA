@@ -101,7 +101,7 @@ def _should_log(
         return True, "first"
 
     # An event always transmits and resets the run, dropping us into burst mode.
-    if abs(datum.VWC - prev.VWC) >= delta:
+    if abs(datum.value - prev.value) >= delta:
         heartbeatState.quiet_run = 0
         if runState.run_count > 0:
             datum.run_length = runState.run_count
@@ -153,7 +153,8 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
         if sensor.data and runState.run_count > 0:
             flush = Datum(
                 timestamp=datum.timestamp,
-                VWC=prev.VWC,
+                value=prev.value,
+                name=prev.name,
                 run_length=runState.run_count - 1,
             )
             kept.append(flush)
@@ -177,7 +178,7 @@ def update_delta(
     passes _should_log. Once the window fills, seeds mean/variance directly
     from it; thereafter uses an O(1) incremental update.
     """
-    x = datum.VWC
+    x = datum.value
 
     if not stats.warmed_up:
         stats.window.append(x)
