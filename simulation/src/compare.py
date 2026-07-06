@@ -25,8 +25,7 @@ from simulation.src import metrics, pipeline, plots
 
 def _ingest_xlsx(paths_files: list[str], path_dir: str):
     """Bridge to the site-specific XLSX ingestion in data_transformer.py."""
-    # Late import — data_transformer lives outside the simulation package.
-    from data.UCSC_Haybarn_Field import data_transformer as dt
+    from simulation import data_transformer as dt
 
     paths_files = list(paths_files) + dt._get_xlsx_files_from_dir(path_dir)
     sensors_by_logger = {}
@@ -39,7 +38,7 @@ def _ingest_xlsx(paths_files: list[str], path_dir: str):
 def _ingest_sensorscope(paths_files: list[str], path_dir: str):
     """Bridge to SensorScope meteo .txt ingestion (fishnet/genepi/luce/
     plaine_morte). One logger == one station file, one Sensor per channel."""
-    from data.UCSC_Haybarn_Field import sensorscope_transformer as ss
+    from simulation import sensorscope_transformer as ss
 
     paths_files = list(paths_files) + ss.get_txt_files_from_dir(path_dir)
     sensors_by_logger = {}
@@ -160,43 +159,61 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
     plt.close(fig)
 
 
+_METRICS_HEADER = ["logger", "sensor", "n_raw", "compression_ratio", "nrmse", "mean_latency_hr"]
+
+
+def _metric_rows(all_diffs: dict) -> list[list[str]]:
+    """One lean row per (logger, sensor): compression, fidelity, timeliness.
+
+    The full per-sensor detail (counts, rates, mean/std deltas, interp errors)
+    is still written to metrics.json; these rows are the at-a-glance summary.
+    """
+    rows = []
+    for logger_name, d in all_diffs.items():
+        for sensor_name, row in d["per_sensor"].items():
+            ratio = (
+                row["n_raw"] / row["n_filtered"] if row["n_filtered"] else float("inf")
+            )
+            nrmse = row["nrmse"]
+            lat_hr = row["mean_latency_hr"]
+            rows.append(
+                [
+                    logger_name,
+                    sensor_name,
+                    str(row["n_raw"]),
+                    f"{ratio:.2f}",
+                    f"{nrmse:.4f}" if nrmse is not None else "",
+                    f"{lat_hr:.2f}" if lat_hr is not None else "",
+                ]
+            )
+    return rows
+
+
 def _write_metrics_csv(all_diffs: dict, csv_path: str):
-    """One row per (logger, sensor) with the headline metrics."""
+    """Machine-readable comma-separated summary (one row per logger/sensor)."""
     os.makedirs(os.path.dirname(csv_path), exist_ok=True)
     with open(csv_path, "w", newline="") as fp:
         w = csv.writer(fp)
-        w.writerow(
-            [
-                "logger",
-                "sensor",
-                "n_raw",
-                "n_filtered",
-                "n_compressed",
-                "n_dropped",
-                "n_reconstructable",
-                "compression_rate",
-                "drop_rate",
-                "value_mean_delta",
-                "value_std_delta",
-            ]
-        )
-        for logger_name, d in all_diffs.items():
-            for sensor_name, row in d["per_sensor"].items():
-                w.writerow(
-                    [
-                        logger_name,
-                        sensor_name,
-                        row["n_raw"],
-                        row["n_filtered"],
-                        row["n_compressed"],
-                        row["n_dropped"],
-                        row["n_reconstructable"],
-                        f"{row['compression_rate']:.4f}",
-                        f"{row['drop_rate']:.4f}",
-                        f"{row['value_mean_delta']:.6f}",
-                        f"{row['value_std_delta']:.6f}",
-                    ]
-                )
+        w.writerow(_METRICS_HEADER)
+        w.writerows(_metric_rows(all_diffs))
+
+
+def _write_metrics_table(all_diffs: dict, table_path: str):
+    """Human-readable, column-aligned version of the same summary."""
+    os.makedirs(os.path.dirname(table_path), exist_ok=True)
+    rows = [_METRICS_HEADER] + _metric_rows(all_diffs)
+    widths = [max(len(r[i]) for r in rows) for i in range(len(_METRICS_HEADER))]
+
+    def fmt(r):
+        # Left-align the text columns, right-align the numeric ones.
+        cells = [r[i].ljust(widths[i]) if i < 2 else r[i].rjust(widths[i])
+                 for i in range(len(r))]
+        return "  ".join(cells)
+
+    lines = [fmt(rows[0]), "  ".join("-" * w for w in widths)]
+    lines += [fmt(r) for r in rows[1:]]
+    with open(table_path, "w") as fp:
+        fp.write("\n".join(lines) + "\n")
 
 
 def main():
@@ -261,6 +278,7 @@ def main():
         _plot_original_histogram(logger_name, branches["raw"], plots_dir)
 
     _write_metrics_csv(all_diffs, os.path.join(args.output, "metrics.csv"))
+    _write_metrics_table(all_diffs, os.path.join(args.output, "metrics.txt"))
     with open(os.path.join(args.output, "metrics.json"), "w") as fp:
         json.dump(all_diffs, fp, indent=2, default=str)
 

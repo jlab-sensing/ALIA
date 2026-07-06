@@ -21,11 +21,9 @@ from simulation.src.config import (
     eventDeltaThreshold,
     normalHeartbeatHours,
     quietEntryRunLength,
-    quietHeartbeatHours, 
+    quietHeartbeatHours,
     samplePeriodSec,
-    sensorResolution,
     stdDevWindowHours,
-    numSamplesPerDay,
 )
 
 
@@ -124,6 +122,29 @@ def _should_log(
         return False, "in_run"
 
 
+def _estimate_period_sec(data: list[Datum]) -> float:
+    """Median interval (seconds) between consecutive present samples.
+
+    Different deployments log at different cadences (UCSC Haybarn ZL6 at 600 s,
+    the SensorScope meteo stations at 120 s), so the stddev window is sized from
+    each stream's own timing rather than a global constant. Falls back to
+    `config.samplePeriodSec` when a stream is too short to infer a cadence.
+    """
+    ts = sorted(d.timestamp for d in data if d.is_present())
+    diffs = [(b - a).total_seconds() for a, b in zip(ts, ts[1:])
+             if (b - a).total_seconds() > 0]
+    if not diffs:
+        return samplePeriodSec
+    diffs.sort()
+    return diffs[len(diffs) // 2]
+
+
+def _window_size(data: list[Datum]) -> int:
+    """Number of samples spanning `stdDevWindowHours` at this stream's cadence."""
+    period = _estimate_period_sec(data)
+    return max(2, round(stdDevWindowHours * 3600 / period))
+
+
 def filter(sensors: list[Sensor]) -> list[Sensor]:
     """Run the algorithm over every datum in every sensor.
 
@@ -133,17 +154,16 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
     global last_drops
     last_drops = []
 
-    W = numSamplesPerDay
-
     out: list[Sensor] = []
     for sensor in sensors:
         kept: list[Datum] = []
         prev: Datum | None = None
-        stats = RollingStats(W=W)
+        # Size the rolling stddev window from this stream's own sampling cadence.
+        stats = RollingStats(W=_window_size(sensor.data))
         heartbeat = HeartbeatState()
         runState = RunState()
         for datum in sensor.data:
-            delta = update_delta(datum, stats, sensorResolution)
+            delta = update_delta(datum, stats, config.resolution_for(datum.name))
             keep, reason = _should_log(datum, prev, delta, heartbeat, runState)
             if keep:
                 kept.append(datum)

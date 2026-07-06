@@ -16,7 +16,11 @@ from simulation.src.models import Sensor
 
 def _series(sensor: Sensor, field: str) -> list[float]:
     vals = [getattr(d, field) for d in sensor.data]
-    return [v for v in vals if v is not None and not (isinstance(v, float) and math.isnan(v))]
+    return [
+        v
+        for v in vals
+        if v is not None and not (isinstance(v, float) and math.isnan(v))
+    ]
 
 
 def _stats(values: list[float]) -> dict:
@@ -60,49 +64,110 @@ def compute(sensors: list[Sensor]) -> dict:
 
 
 def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
-    """Zero-order-hold reconstruction error of the channel value, raw vs
-    received signal.
+    """Reconstruction error of the channel value, raw vs received signal, under
+    two reconstruction strategies.
 
-    The receiver only ever sees the transmitted packets in `filtered`; every
-    other sample is reconstructed by holding the most recently transmitted
-    value (the held samples were, by construction, within `delta` of it). We
-    align that step function onto the raw timestamps and compare against the
-    true value.
+    The receiver only ever sees the transmitted packets in `filtered`. We score
+    the reconstruction two ways:
 
-    Returns `sse` (sum of squared errors) and `n` so callers can pool across
-    sensors, plus the derived `rmse` and `mae` for a single sensor.
+    - Zero-order hold (`sse`/`rmse`/`mae`): the live, causal reconstruction —
+      hold the most recently transmitted value until the next packet arrives.
+      The held samples were, by construction, within `delta` of it, so ZOH is
+      the error the algorithm actually bounds.
+    - Linear interpolation (`sse_interp`/`rmse_interp`/`mae_interp`): the offline
+      reconstruction — a straight line between the bracketing transmitted
+      packets. This is non-causal (it needs the *next* packet, so it's only
+      available in post-hoc analysis of the archived series), but it is a
+      strictly better reconstruction on the trends between packets. Samples
+      before the first / after the last packet have no bracket on one side and
+      fall back to the held endpoint value.
+
+    Both are aligned onto the raw timestamps and compared against the true
+    value. Returns `sse`/`abs_sum`/`n` (and the interp counterparts) so callers
+    can pool across sensors, plus the derived per-sensor `rmse`/`mae`.
     """
     tx = sorted(
         (d for d in filtered.data if d.value is not None),
         key=lambda d: d.timestamp,
     )
     raw_data = sorted(raw.data, key=lambda d: d.timestamp)
+    raw_vals = _series(raw, "value")
+    sigma = float(np.std(raw_vals)) if raw_vals else 0.0
+    empty = {
+        "sigma": sigma,
+        "sse": 0.0,
+        "abs_sum": 0.0,
+        "n": 0,
+        "rmse": None,
+        "nrmse": None,
+        "mae": None,
+        "sse_interp": 0.0,
+        "abs_sum_interp": 0.0,
+        "rmse_interp": None,
+        "nrmse_interp": None,
+        "mae_interp": None,
+    }
     if not tx or not raw_data:
-        return {"sse": 0.0, "abs_sum": 0.0, "n": 0, "rmse": None, "mae": None}
+        return empty
 
     sse = 0.0
     abs_sum = 0.0
+    sse_interp = 0.0
+    abs_sum_interp = 0.0
     n = 0
-    j = 0
-    held = tx[0].value
+    # `k` indexes the latest packet transmitted at or before the current sample,
+    # so tx[k] is the held value and tx[k + 1] (if any) is the next packet used
+    # for the interpolation bracket.
+    k = -1
     for d in raw_data:
-        # Advance the held value to the latest packet transmitted at or before d.
-        while j < len(tx) and tx[j].timestamp <= d.timestamp:
-            held = tx[j].value
-            j += 1
+        while k + 1 < len(tx) and tx[k + 1].timestamp <= d.timestamp:
+            k += 1
         if d.value is None or (isinstance(d.value, float) and math.isnan(d.value)):
             continue
+
+        held = tx[k].value if k >= 0 else tx[0].value
+
+        # Linear interpolation between the bracketing packets. Falls back to the
+        # held value at the leading/trailing tails where only one side exists.
+        if 0 <= k < len(tx) - 1:
+            lo, hi = tx[k], tx[k + 1]
+            span = (hi.timestamp - lo.timestamp).total_seconds()
+            if span > 0:
+                frac = (d.timestamp - lo.timestamp).total_seconds() / span
+                interp = lo.value + frac * (hi.value - lo.value)
+            else:
+                interp = held
+        else:
+            interp = held
+
         err = d.value - held
         sse += err * err
         abs_sum += abs(err)
+
+        err_i = d.value - interp
+        sse_interp += err_i * err_i
+        abs_sum_interp += abs(err_i)
+
         n += 1
 
+    rmse = math.sqrt(sse / n) if n else None
+    rmse_interp = math.sqrt(sse_interp / n) if n else None
+
     return {
+        "sigma": sigma,
         "sse": sse,
         "abs_sum": abs_sum,
         "n": n,
-        "rmse": math.sqrt(sse / n) if n else None,
+        "rmse": rmse,
+        "nrmse": (rmse / sigma) if (rmse is not None and sigma > 0) else None,
         "mae": abs_sum / n if n else None,
+        "sse_interp": sse_interp,
+        "abs_sum_interp": abs_sum_interp,
+        "rmse_interp": rmse_interp,
+        "nrmse_interp": (
+            (rmse_interp / sigma) if (rmse_interp is not None and sigma > 0) else None
+        ),
+        "mae_interp": abs_sum_interp / n if n else None,
     }
 
 
@@ -178,11 +243,16 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
         n_dropped = dropped_by_sensor.get(fs.name, 0)
         # Transmitted packets plus samples the receiver can backfill from run_length.
         n_reconstructable = n_filt + sum(d.run_length for d in fs.data)
+        err = reconstruction_error(rs, fs)
+        lat = transmission_latency(rs, fs)
         per_sensor[fs.name] = {
             "n_raw": n_raw,
             "n_filtered": n_filt,
             "n_compressed": n_compressed,
             "n_dropped": n_dropped,
+            "rmse": err["rmse"],
+            "nrmse": err["nrmse"],
+            "mean_latency_hr": (lat["mean_sec"] / 3600) if lat["mean_sec"] else None,
             "n_reconstructable": n_reconstructable,
             "compression_rate": (n_raw - n_filt) / n_raw if n_raw else 0.0,
             "drop_rate": n_dropped / n_raw if n_raw else 0.0,
@@ -198,12 +268,8 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
 
     total_raw = sum(len(s.data) for s in raw)
     total_filt = sum(len(s.data) for s in filtered)
-    total_compressed = sum(
-        1 for d in filter_algo.last_drops if d.reason == "in_run"
-    )
-    total_dropped = sum(
-        1 for d in filter_algo.last_drops if d.reason != "in_run"
-    )
+    total_compressed = sum(1 for d in filter_algo.last_drops if d.reason == "in_run")
+    total_dropped = sum(1 for d in filter_algo.last_drops if d.reason != "in_run")
     total_reconstructable = total_filt + sum(
         d.run_length for s in filtered for d in s.data
     )
@@ -215,7 +281,9 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
             "n_compressed": total_compressed,
             "n_dropped": total_dropped,
             "n_reconstructable": total_reconstructable,
-            "overall_compression_rate": (total_raw - total_filt) / total_raw if total_raw else 0.0,
+            "overall_compression_rate": (
+                (total_raw - total_filt) / total_raw if total_raw else 0.0
+            ),
             "overall_drop_rate": total_dropped / total_raw if total_raw else 0.0,
         },
         "drops_by_reason": dict(drops_by_reason),
