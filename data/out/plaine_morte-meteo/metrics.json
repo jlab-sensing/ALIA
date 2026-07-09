@@ -1,0 +1,4031 @@
+{
+  "plaine_morte-meteo-101": {
+    "totals": {
+      "n_raw": 41295,
+      "n_filtered": 1508,
+      "n_compressed": 39793,
+      "n_dropped": 0,
+      "n_reconstructable": 41295,
+      "overall_compression_rate": 0.9634822617750333,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 39793
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-101-AmbientTemp_C": 6793,
+      "plaine_morte-meteo-101-SurfaceTemp_C": 5947,
+      "plaine_morte-meteo-101-SolarRadiation_Wm2": 6709,
+      "plaine_morte-meteo-101-RelativeHumidity_pct": 6790,
+      "plaine_morte-meteo-101-WindSpeed_ms": 6799,
+      "plaine_morte-meteo-101-WindDirection_deg": 6755
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-101-AmbientTemp_C": 6793,
+      "plaine_morte-meteo-101-SurfaceTemp_C": 5947,
+      "plaine_morte-meteo-101-SolarRadiation_Wm2": 6709,
+      "plaine_morte-meteo-101-RelativeHumidity_pct": 6790,
+      "plaine_morte-meteo-101-WindSpeed_ms": 6799,
+      "plaine_morte-meteo-101-WindDirection_deg": 6755
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-101-AmbientTemp_C": {
+        "n_raw": 7033,
+        "n_filtered": 241,
+        "n_compressed": 6793,
+        "n_dropped": 0,
+        "n_reconstructable": 7033,
+        "compression_rate": 0.9657329731266885,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.8544234618895024,
+        "vwc_std_delta": -0.7186301489256186
+      },
+      "plaine_morte-meteo-101-SurfaceTemp_C": {
+        "n_raw": 6130,
+        "n_filtered": 184,
+        "n_compressed": 5947,
+        "n_dropped": 0,
+        "n_reconstructable": 6130,
+        "compression_rate": 0.9699836867862969,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 7.592406548336761,
+        "vwc_std_delta": -1.0006900783072252
+      },
+      "plaine_morte-meteo-101-SolarRadiation_Wm2": {
+        "n_raw": 7033,
+        "n_filtered": 325,
+        "n_compressed": 6709,
+        "n_dropped": 0,
+        "n_reconstructable": 7033,
+        "compression_rate": 0.9537892791127541,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -142.1725973098251,
+        "vwc_std_delta": -156.89856896727864
+      },
+      "plaine_morte-meteo-101-RelativeHumidity_pct": {
+        "n_raw": 7033,
+        "n_filtered": 244,
+        "n_compressed": 6790,
+        "n_dropped": 0,
+        "n_reconstructable": 7033,
+        "compression_rate": 0.9653064126261908,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -10.07855421222667,
+        "vwc_std_delta": -0.9104406699720293
+      },
+      "plaine_morte-meteo-101-WindSpeed_ms": {
+        "n_raw": 7033,
+        "n_filtered": 235,
+        "n_compressed": 6799,
+        "n_dropped": 0,
+        "n_reconstructable": 7033,
+        "compression_rate": 0.9665860941276838,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.8020589772833846,
+        "vwc_std_delta": 0.703712656128803
+      },
+      "plaine_morte-meteo-101-WindDirection_deg": {
+        "n_raw": 7033,
+        "n_filtered": 279,
+        "n_compressed": 6755,
+        "n_dropped": 0,
+        "n_reconstructable": 7033,
+        "compression_rate": 0.9603298734537182,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 4.316515415549958,
+        "vwc_std_delta": -0.49689270421117726
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-101-AmbientTemp_C": {
+        "VWC": {
+          "n": 7033,
+          "mean": -6.2682823830513295,
+          "std": 4.863206022898432,
+          "min": -18.36,
+          "max": 6.82
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.9367566604995076,
+        "n_samples": 7033
+      },
+      "plaine_morte-meteo-101-SurfaceTemp_C": {
+        "VWC": {
+          "n": 6130,
+          "mean": -11.540248939641108,
+          "std": 6.1644551009293,
+          "min": -19.962,
+          "max": 3.913
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.08918582594632007,
+        "n_samples": 6130
+      },
+      "plaine_morte-meteo-101-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 7033,
+          "mean": 207.53331423290203,
+          "std": 286.8801210975827,
+          "min": 0.0,
+          "max": 805.556
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 15.834913997668629,
+        "n_samples": 7033
+      },
+      "plaine_morte-meteo-101-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 7033,
+          "mean": 51.336386179439785,
+          "std": 13.664721147860629,
+          "min": 23.754,
+          "max": 93.879
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.143781611346344,
+        "n_samples": 7033
+      },
+      "plaine_morte-meteo-101-WindSpeed_ms": {
+        "VWC": {
+          "n": 7033,
+          "mean": 1.9166005971847007,
+          "std": 1.6536167928279963,
+          "min": 0.0,
+          "max": 8.514
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.3184050954469597,
+        "n_samples": 7033
+      },
+      "plaine_morte-meteo-101-WindDirection_deg": {
+        "VWC": {
+          "n": 7033,
+          "mean": 174.7228107493246,
+          "std": 48.76240495928697,
+          "min": 0.097,
+          "max": 357.062
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 189.46114110868243,
+        "n_samples": 7033
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-101-AmbientTemp_C": {
+        "VWC": {
+          "n": 241,
+          "mean": -4.413858921161827,
+          "std": 4.144575873972814,
+          "min": -17.6,
+          "max": 4.18
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 12.007561972222224,
+        "n_samples": 241
+      },
+      "plaine_morte-meteo-101-SurfaceTemp_C": {
+        "VWC": {
+          "n": 184,
+          "mean": -3.947842391304347,
+          "std": 5.163765022622075,
+          "min": -19.837,
+          "max": 3.913
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.9104130570635136,
+        "n_samples": 184
+      },
+      "plaine_morte-meteo-101-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 325,
+          "mean": 65.36071692307692,
+          "std": 129.98155213030404,
+          "min": 0.0,
+          "max": 789.605
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3144.6175310393523,
+        "n_samples": 325
+      },
+      "plaine_morte-meteo-101-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 244,
+          "mean": 41.257831967213114,
+          "std": 12.7542804778886,
+          "min": 26.119,
+          "max": 87.763
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 72.47837655970466,
+        "n_samples": 244
+      },
+      "plaine_morte-meteo-101-WindSpeed_ms": {
+        "VWC": {
+          "n": 235,
+          "mean": 3.7186595744680853,
+          "std": 2.3573294489567993,
+          "min": 0.0,
+          "max": 8.447
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.015034714369201,
+        "n_samples": 235
+      },
+      "plaine_morte-meteo-101-WindDirection_deg": {
+        "VWC": {
+          "n": 279,
+          "mean": 179.03932616487455,
+          "std": 48.26551225507579,
+          "min": 0.484,
+          "max": 356.771
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4129.277615319032,
+        "n_samples": 279
+      }
+    }
+  },
+  "plaine_morte-meteo-102": {
+    "totals": {
+      "n_raw": 32254,
+      "n_filtered": 1139,
+      "n_compressed": 31119,
+      "n_dropped": 0,
+      "n_reconstructable": 32254,
+      "overall_compression_rate": 0.9646865505053637,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 31119
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-102-AmbientTemp_C": 7891,
+      "plaine_morte-meteo-102-SurfaceTemp_C": 7649,
+      "plaine_morte-meteo-102-SolarRadiation_Wm2": 7697,
+      "plaine_morte-meteo-102-RelativeHumidity_pct": 7882
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-102-AmbientTemp_C": 7891,
+      "plaine_morte-meteo-102-SurfaceTemp_C": 7649,
+      "plaine_morte-meteo-102-SolarRadiation_Wm2": 7697,
+      "plaine_morte-meteo-102-RelativeHumidity_pct": 7882
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-102-AmbientTemp_C": {
+        "n_raw": 8121,
+        "n_filtered": 231,
+        "n_compressed": 7891,
+        "n_dropped": 0,
+        "n_reconstructable": 8121,
+        "compression_rate": 0.9715552271887699,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 2.189542775904061,
+        "vwc_std_delta": -0.3936882125826511
+      },
+      "plaine_morte-meteo-102-SurfaceTemp_C": {
+        "n_raw": 7891,
+        "n_filtered": 243,
+        "n_compressed": 7649,
+        "n_dropped": 0,
+        "n_reconstructable": 7891,
+        "compression_rate": 0.9692054239006463,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.9213615302738472,
+        "vwc_std_delta": -1.1200211908390427
+      },
+      "plaine_morte-meteo-102-SolarRadiation_Wm2": {
+        "n_raw": 8121,
+        "n_filtered": 425,
+        "n_compressed": 7697,
+        "n_dropped": 0,
+        "n_reconstructable": 8121,
+        "compression_rate": 0.947666543529122,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -87.14771861622371,
+        "vwc_std_delta": -111.60204412799672
+      },
+      "plaine_morte-meteo-102-RelativeHumidity_pct": {
+        "n_raw": 8121,
+        "n_filtered": 240,
+        "n_compressed": 7882,
+        "n_dropped": 0,
+        "n_reconstructable": 8121,
+        "compression_rate": 0.9704469892870337,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -7.007923500800388,
+        "vwc_std_delta": 0.11564763002726863
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-102-AmbientTemp_C": {
+        "VWC": {
+          "n": 8121,
+          "mean": -5.582962689323975,
+          "std": 3.9487955065038576,
+          "min": -17.01,
+          "max": 11.26
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.8468566461452596,
+        "n_samples": 8121
+      },
+      "plaine_morte-meteo-102-SurfaceTemp_C": {
+        "VWC": {
+          "n": 7891,
+          "mean": -11.974797744265617,
+          "std": 6.318370130116879,
+          "min": -19.962,
+          "max": 1.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.1580532849119146,
+        "n_samples": 7891
+      },
+      "plaine_morte-meteo-102-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 8121,
+          "mean": 180.03989508681195,
+          "std": 247.19689474613318,
+          "min": 0.0,
+          "max": 705.061
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 10.734882156513809,
+        "n_samples": 8121
+      },
+      "plaine_morte-meteo-102-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 8121,
+          "mean": 50.00517350080039,
+          "std": 11.725532075242812,
+          "min": 26.871,
+          "max": 90.745
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 6.024778424647998,
+        "n_samples": 8121
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-102-AmbientTemp_C": {
+        "VWC": {
+          "n": 231,
+          "mean": -3.393419913419914,
+          "std": 3.5551072939212065,
+          "min": -15.9,
+          "max": 10.7
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.639949383742909,
+        "n_samples": 231
+      },
+      "plaine_morte-meteo-102-SurfaceTemp_C": {
+        "VWC": {
+          "n": 243,
+          "mean": -10.05343621399177,
+          "std": 5.198348939277836,
+          "min": -19.962,
+          "max": 0.6
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.297329231404959,
+        "n_samples": 243
+      },
+      "plaine_morte-meteo-102-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 425,
+          "mean": 92.89217647058824,
+          "std": 135.59485061813646,
+          "min": 0.0,
+          "max": 694.959
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1606.1844578980456,
+        "n_samples": 425
+      },
+      "plaine_morte-meteo-102-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 240,
+          "mean": 42.99725,
+          "std": 11.841179705270081,
+          "min": 29.756,
+          "max": 88.087
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 66.56269838406192,
+        "n_samples": 240
+      }
+    }
+  },
+  "plaine_morte-meteo-110": {
+    "totals": {
+      "n_raw": 21606,
+      "n_filtered": 694,
+      "n_compressed": 20915,
+      "n_dropped": 0,
+      "n_reconstructable": 21606,
+      "overall_compression_rate": 0.9678792927890401,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 20915
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-110-AmbientTemp_C": 6948,
+      "plaine_morte-meteo-110-SurfaceTemp_C": 6992,
+      "plaine_morte-meteo-110-RelativeHumidity_pct": 6975
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-110-AmbientTemp_C": 6948,
+      "plaine_morte-meteo-110-SurfaceTemp_C": 6992,
+      "plaine_morte-meteo-110-RelativeHumidity_pct": 6975
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-110-AmbientTemp_C": {
+        "n_raw": 7202,
+        "n_filtered": 255,
+        "n_compressed": 6948,
+        "n_dropped": 0,
+        "n_reconstructable": 7202,
+        "compression_rate": 0.9645931685642877,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.321498390969829,
+        "vwc_std_delta": -0.17663534325132035
+      },
+      "plaine_morte-meteo-110-SurfaceTemp_C": {
+        "n_raw": 7202,
+        "n_filtered": 211,
+        "n_compressed": 6992,
+        "n_dropped": 0,
+        "n_reconstructable": 7202,
+        "compression_rate": 0.97070258261594,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 4.465141520720283,
+        "vwc_std_delta": -0.5362996766454264
+      },
+      "plaine_morte-meteo-110-RelativeHumidity_pct": {
+        "n_raw": 7202,
+        "n_filtered": 228,
+        "n_compressed": 6975,
+        "n_dropped": 0,
+        "n_reconstructable": 7202,
+        "compression_rate": 0.9683421271868925,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -6.405091849486247,
+        "vwc_std_delta": -3.140792616009124
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-110-AmbientTemp_C": {
+        "VWC": {
+          "n": 7202,
+          "mean": -4.543733685087476,
+          "std": 3.6541882499871012,
+          "min": -16.1,
+          "max": 7.19
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.6727478609732662,
+        "n_samples": 7202
+      },
+      "plaine_morte-meteo-110-SurfaceTemp_C": {
+        "VWC": {
+          "n": 7202,
+          "mean": -10.38038322688142,
+          "std": 5.367837593112665,
+          "min": -19.025,
+          "max": 0.787
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.07339076588708449,
+        "n_samples": 7202
+      },
+      "plaine_morte-meteo-110-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 7202,
+          "mean": 46.354841849486256,
+          "std": 12.630082562443471,
+          "min": 22.217,
+          "max": 89.294
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.948034896999311,
+        "n_samples": 7202
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-110-AmbientTemp_C": {
+        "VWC": {
+          "n": 255,
+          "mean": -3.222235294117647,
+          "std": 3.477552906735781,
+          "min": -12.64,
+          "max": 5.44
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 6.278745813441627,
+        "n_samples": 255
+      },
+      "plaine_morte-meteo-110-SurfaceTemp_C": {
+        "VWC": {
+          "n": 211,
+          "mean": -5.9152417061611375,
+          "std": 4.831537916467239,
+          "min": -18.837,
+          "max": 0.6
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.606150840113379,
+        "n_samples": 211
+      },
+      "plaine_morte-meteo-110-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 228,
+          "mean": 39.94975000000001,
+          "std": 9.489289946434347,
+          "min": 25.476,
+          "max": 86.363
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 47.585356678414094,
+        "n_samples": 228
+      }
+    }
+  },
+  "plaine_morte-meteo-2": {
+    "totals": {
+      "n_raw": 20437,
+      "n_filtered": 734,
+      "n_compressed": 19706,
+      "n_dropped": 0,
+      "n_reconstructable": 20437,
+      "overall_compression_rate": 0.9640847482507218,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 19706
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-2-AmbientTemp_C": 6561,
+      "plaine_morte-meteo-2-SurfaceTemp_C": 6538,
+      "plaine_morte-meteo-2-RelativeHumidity_pct": 6607
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-2-AmbientTemp_C": 6561,
+      "plaine_morte-meteo-2-SurfaceTemp_C": 6538,
+      "plaine_morte-meteo-2-RelativeHumidity_pct": 6607
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-2-AmbientTemp_C": {
+        "n_raw": 6844,
+        "n_filtered": 284,
+        "n_compressed": 6561,
+        "n_dropped": 0,
+        "n_reconstructable": 6844,
+        "compression_rate": 0.9585037989479837,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.937778212230719,
+        "vwc_std_delta": 0.35604528273172154
+      },
+      "plaine_morte-meteo-2-SurfaceTemp_C": {
+        "n_raw": 6749,
+        "n_filtered": 212,
+        "n_compressed": 6538,
+        "n_dropped": 0,
+        "n_reconstructable": 6749,
+        "compression_rate": 0.9685879389539191,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 4.161978404208031,
+        "vwc_std_delta": -0.5488511674972427
+      },
+      "plaine_morte-meteo-2-RelativeHumidity_pct": {
+        "n_raw": 6844,
+        "n_filtered": 238,
+        "n_compressed": 6607,
+        "n_dropped": 0,
+        "n_reconstructable": 6844,
+        "compression_rate": 0.9652250146113384,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -5.605162368804912,
+        "vwc_std_delta": -2.8436870346654004
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-2-AmbientTemp_C": {
+        "VWC": {
+          "n": 6844,
+          "mean": -4.972989479836353,
+          "std": 3.4976571108716805,
+          "min": -15.8,
+          "max": 9.24
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.748664784435034,
+        "n_samples": 6844
+      },
+      "plaine_morte-meteo-2-SurfaceTemp_C": {
+        "VWC": {
+          "n": 6749,
+          "mean": -12.05272840420803,
+          "std": 5.309176286086288,
+          "min": -19.962,
+          "max": 5.1
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.1322620196763167,
+        "n_samples": 6749
+      },
+      "plaine_morte-meteo-2-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 6844,
+          "mean": 47.45849430157802,
+          "std": 12.0500047500832,
+          "min": 23.966,
+          "max": 90.29
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.978205665521913,
+        "n_samples": 6844
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-2-AmbientTemp_C": {
+        "VWC": {
+          "n": 284,
+          "mean": -4.035211267605634,
+          "std": 3.853702393603402,
+          "min": -15.64,
+          "max": 9.01
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 9.685623024385372,
+        "n_samples": 284
+      },
+      "plaine_morte-meteo-2-SurfaceTemp_C": {
+        "VWC": {
+          "n": 212,
+          "mean": -7.89075,
+          "std": 4.760325118589045,
+          "min": -19.962,
+          "max": 5.1
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.6941570810628694,
+        "n_samples": 212
+      },
+      "plaine_morte-meteo-2-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 238,
+          "mean": 41.85333193277311,
+          "std": 9.2063177154178,
+          "min": 26.969,
+          "max": 84.524
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 54.48515892531468,
+        "n_samples": 238
+      }
+    }
+  },
+  "plaine_morte-meteo-20": {
+    "totals": {
+      "n_raw": 18737,
+      "n_filtered": 1170,
+      "n_compressed": 17573,
+      "n_dropped": 0,
+      "n_reconstructable": 18737,
+      "overall_compression_rate": 0.9375567059828147,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 17573
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-20-AmbientTemp_C": 3138,
+      "plaine_morte-meteo-20-SurfaceTemp_C": 2026,
+      "plaine_morte-meteo-20-SolarRadiation_Wm2": 3083,
+      "plaine_morte-meteo-20-RelativeHumidity_pct": 3133,
+      "plaine_morte-meteo-20-WindSpeed_ms": 3102,
+      "plaine_morte-meteo-20-WindDirection_deg": 3091
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-20-AmbientTemp_C": 3138,
+      "plaine_morte-meteo-20-SurfaceTemp_C": 2026,
+      "plaine_morte-meteo-20-SolarRadiation_Wm2": 3083,
+      "plaine_morte-meteo-20-RelativeHumidity_pct": 3133,
+      "plaine_morte-meteo-20-WindSpeed_ms": 3102,
+      "plaine_morte-meteo-20-WindDirection_deg": 3091
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-20-AmbientTemp_C": {
+        "n_raw": 3310,
+        "n_filtered": 173,
+        "n_compressed": 3138,
+        "n_dropped": 0,
+        "n_reconstructable": 3310,
+        "compression_rate": 0.9477341389728097,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 3.5449655274784773,
+        "vwc_std_delta": -2.0482443018180847
+      },
+      "plaine_morte-meteo-20-SurfaceTemp_C": {
+        "n_raw": 2187,
+        "n_filtered": 162,
+        "n_compressed": 2026,
+        "n_dropped": 0,
+        "n_reconstructable": 2187,
+        "compression_rate": 0.9259259259259259,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 2.1086234567901236,
+        "vwc_std_delta": -2.7314931682367574
+      },
+      "plaine_morte-meteo-20-SolarRadiation_Wm2": {
+        "n_raw": 3310,
+        "n_filtered": 228,
+        "n_compressed": 3083,
+        "n_dropped": 0,
+        "n_reconstructable": 3310,
+        "compression_rate": 0.9311178247734139,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 199.2875820665713,
+        "vwc_std_delta": 20.558271144012622
+      },
+      "plaine_morte-meteo-20-RelativeHumidity_pct": {
+        "n_raw": 3310,
+        "n_filtered": 178,
+        "n_compressed": 3133,
+        "n_dropped": 0,
+        "n_reconstructable": 3310,
+        "compression_rate": 0.9462235649546827,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -15.860300417529444,
+        "vwc_std_delta": -2.8352542781460244
+      },
+      "plaine_morte-meteo-20-WindSpeed_ms": {
+        "n_raw": 3310,
+        "n_filtered": 209,
+        "n_compressed": 3102,
+        "n_dropped": 0,
+        "n_reconstructable": 3310,
+        "compression_rate": 0.9368580060422961,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.5204256392835975,
+        "vwc_std_delta": -0.23608946896300753
+      },
+      "plaine_morte-meteo-20-WindDirection_deg": {
+        "n_raw": 3310,
+        "n_filtered": 220,
+        "n_compressed": 3091,
+        "n_dropped": 0,
+        "n_reconstructable": 3310,
+        "compression_rate": 0.9335347432024169,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.6448203240868224,
+        "vwc_std_delta": 20.545253935778177
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-20-AmbientTemp_C": {
+        "VWC": {
+          "n": 3310,
+          "mean": -5.013404833836859,
+          "std": 5.286253287060839,
+          "min": -15.42,
+          "max": 11.44
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.5025463075555818,
+        "n_samples": 3310
+      },
+      "plaine_morte-meteo-20-SurfaceTemp_C": {
+        "VWC": {
+          "n": 2187,
+          "mean": -6.279444444444444,
+          "std": 5.4005830415653415,
+          "min": -16.962,
+          "max": 1.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.09282420254568498,
+        "n_samples": 2187
+      },
+      "plaine_morte-meteo-20-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 3310,
+          "mean": 244.24420302114805,
+          "std": 283.4884097586316,
+          "min": 0.0,
+          "max": 737.496
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.021944140569954,
+        "n_samples": 3310
+      },
+      "plaine_morte-meteo-20-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 3310,
+          "mean": 55.73677794561933,
+          "std": 13.876704027854515,
+          "min": 23.954,
+          "max": 90.906
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.907885397469524,
+        "n_samples": 3310
+      },
+      "plaine_morte-meteo-20-WindSpeed_ms": {
+        "VWC": {
+          "n": 3310,
+          "mean": 1.5111864048338368,
+          "std": 1.2938614617383373,
+          "min": 0.0,
+          "max": 6.0
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.10335094410794449,
+        "n_samples": 3310
+      },
+      "plaine_morte-meteo-20-WindDirection_deg": {
+        "VWC": {
+          "n": 3310,
+          "mean": 261.5182930513595,
+          "std": 62.28207424582986,
+          "min": 1.066,
+          "max": 357.45
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 108.89882315349432,
+        "n_samples": 3310
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-20-AmbientTemp_C": {
+        "VWC": {
+          "n": 173,
+          "mean": -1.4684393063583816,
+          "std": 3.2380089852427547,
+          "min": -13.7,
+          "max": 7.74
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.058928785830178,
+        "n_samples": 173
+      },
+      "plaine_morte-meteo-20-SurfaceTemp_C": {
+        "VWC": {
+          "n": 162,
+          "mean": -4.17082098765432,
+          "std": 2.669089873328584,
+          "min": -16.962,
+          "max": 1.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.6004521921993753,
+        "n_samples": 162
+      },
+      "plaine_morte-meteo-20-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 228,
+          "mean": 443.53178508771936,
+          "std": 304.0466809026442,
+          "min": 0.0,
+          "max": 734.838
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1830.7575853400992,
+        "n_samples": 228
+      },
+      "plaine_morte-meteo-20-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 178,
+          "mean": 39.876477528089886,
+          "std": 11.041449749708491,
+          "min": 28.129,
+          "max": 89.277
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 33.1337645361167,
+        "n_samples": 178
+      },
+      "plaine_morte-meteo-20-WindSpeed_ms": {
+        "VWC": {
+          "n": 209,
+          "mean": 0.9907607655502393,
+          "std": 1.0577719927753297,
+          "min": 0.0,
+          "max": 6.0
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.6941048942076553,
+        "n_samples": 209
+      },
+      "plaine_morte-meteo-20-WindDirection_deg": {
+        "VWC": {
+          "n": 220,
+          "mean": 259.87347272727266,
+          "std": 82.82732818160804,
+          "min": 1.066,
+          "max": 357.45
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1334.4296910367175,
+        "n_samples": 220
+      }
+    }
+  },
+  "plaine_morte-meteo-38": {
+    "totals": {
+      "n_raw": 15744,
+      "n_filtered": 609,
+      "n_compressed": 15137,
+      "n_dropped": 0,
+      "n_reconstructable": 15744,
+      "overall_compression_rate": 0.9613185975609756,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 15137
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-38-AmbientTemp_C": 5130,
+      "plaine_morte-meteo-38-SurfaceTemp_C": 4898,
+      "plaine_morte-meteo-38-RelativeHumidity_pct": 5109
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-38-AmbientTemp_C": 5130,
+      "plaine_morte-meteo-38-SurfaceTemp_C": 4898,
+      "plaine_morte-meteo-38-RelativeHumidity_pct": 5109
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-38-AmbientTemp_C": {
+        "n_raw": 5317,
+        "n_filtered": 188,
+        "n_compressed": 5130,
+        "n_dropped": 0,
+        "n_reconstructable": 5317,
+        "compression_rate": 0.9646417152529622,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.3390034774048729,
+        "vwc_std_delta": -1.1843461100145891
+      },
+      "plaine_morte-meteo-38-SurfaceTemp_C": {
+        "n_raw": 5110,
+        "n_filtered": 212,
+        "n_compressed": 4898,
+        "n_dropped": 0,
+        "n_reconstructable": 5110,
+        "compression_rate": 0.9585127201565558,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.23473767861758255,
+        "vwc_std_delta": 0.7869173495341828
+      },
+      "plaine_morte-meteo-38-RelativeHumidity_pct": {
+        "n_raw": 5317,
+        "n_filtered": 209,
+        "n_compressed": 5109,
+        "n_dropped": 0,
+        "n_reconstructable": 5317,
+        "compression_rate": 0.960692119616325,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 7.280970868920036,
+        "vwc_std_delta": -1.275632424674889
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-38-AmbientTemp_C": {
+        "VWC": {
+          "n": 5317,
+          "mean": -6.73291141621215,
+          "std": 5.24217955788172,
+          "min": -17.72,
+          "max": 12.4
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.053066191260847,
+        "n_samples": 5317
+      },
+      "plaine_morte-meteo-38-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5110,
+          "mean": -11.803440508806261,
+          "std": 6.712194055145928,
+          "min": -19.962,
+          "max": 27.975
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.0910017722472953,
+        "n_samples": 5110
+      },
+      "plaine_morte-meteo-38-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 5317,
+          "mean": 55.36978032725221,
+          "std": 11.434536400298615,
+          "min": 27.002,
+          "max": 87.428
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.601863419401713,
+        "n_samples": 5317
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-38-AmbientTemp_C": {
+        "VWC": {
+          "n": 188,
+          "mean": -7.071914893617023,
+          "std": 4.0578334478671305,
+          "min": -16.62,
+          "max": 8.26
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 8.994332711830479,
+        "n_samples": 188
+      },
+      "plaine_morte-meteo-38-SurfaceTemp_C": {
+        "VWC": {
+          "n": 212,
+          "mean": -11.568702830188679,
+          "std": 7.499111404680111,
+          "min": -19.9,
+          "max": 27.975
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 47.19196075690124,
+        "n_samples": 212
+      },
+      "plaine_morte-meteo-38-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 209,
+          "mean": 62.650751196172244,
+          "std": 10.158903975623726,
+          "min": 28.895,
+          "max": 84.793
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 53.002302613073226,
+        "n_samples": 209
+      }
+    }
+  },
+  "plaine_morte-meteo-58": {
+    "totals": {
+      "n_raw": 26998,
+      "n_filtered": 1273,
+      "n_compressed": 25731,
+      "n_dropped": 0,
+      "n_reconstructable": 26998,
+      "overall_compression_rate": 0.9528483591377139,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 25731
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-58-AmbientTemp_C": 4079,
+      "plaine_morte-meteo-58-SurfaceTemp_C": 4077,
+      "plaine_morte-meteo-58-SolarRadiation_Wm2": 4459,
+      "plaine_morte-meteo-58-RelativeHumidity_pct": 4087,
+      "plaine_morte-meteo-58-WindSpeed_ms": 4516,
+      "plaine_morte-meteo-58-WindDirection_deg": 4513
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-58-AmbientTemp_C": 4079,
+      "plaine_morte-meteo-58-SurfaceTemp_C": 4077,
+      "plaine_morte-meteo-58-SolarRadiation_Wm2": 4459,
+      "plaine_morte-meteo-58-RelativeHumidity_pct": 4087,
+      "plaine_morte-meteo-58-WindSpeed_ms": 4516,
+      "plaine_morte-meteo-58-WindDirection_deg": 4513
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-58-AmbientTemp_C": {
+        "n_raw": 4270,
+        "n_filtered": 192,
+        "n_compressed": 4079,
+        "n_dropped": 0,
+        "n_reconstructable": 4270,
+        "compression_rate": 0.9550351288056206,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.1841860362997654,
+        "vwc_std_delta": -1.285814579543561
+      },
+      "plaine_morte-meteo-58-SurfaceTemp_C": {
+        "n_raw": 4262,
+        "n_filtered": 186,
+        "n_compressed": 4077,
+        "n_dropped": 0,
+        "n_reconstructable": 4262,
+        "compression_rate": 0.9563585171281088,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.4282010540762844,
+        "vwc_std_delta": -0.11803646655579136
+      },
+      "plaine_morte-meteo-58-SolarRadiation_Wm2": {
+        "n_raw": 4732,
+        "n_filtered": 274,
+        "n_compressed": 4459,
+        "n_dropped": 0,
+        "n_reconstructable": 4732,
+        "compression_rate": 0.9420963651732882,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 179.63408692640877,
+        "vwc_std_delta": 69.39949523297088
+      },
+      "plaine_morte-meteo-58-RelativeHumidity_pct": {
+        "n_raw": 4270,
+        "n_filtered": 184,
+        "n_compressed": 4087,
+        "n_dropped": 0,
+        "n_reconstructable": 4270,
+        "compression_rate": 0.9569086651053864,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 10.799580508604016,
+        "vwc_std_delta": -1.608557053039707
+      },
+      "plaine_morte-meteo-58-WindSpeed_ms": {
+        "n_raw": 4732,
+        "n_filtered": 217,
+        "n_compressed": 4516,
+        "n_dropped": 0,
+        "n_reconstructable": 4732,
+        "compression_rate": 0.9541420118343196,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.8196848703405776,
+        "vwc_std_delta": -0.17845393551272304
+      },
+      "plaine_morte-meteo-58-WindDirection_deg": {
+        "n_raw": 4732,
+        "n_filtered": 220,
+        "n_compressed": 4513,
+        "n_dropped": 0,
+        "n_reconstructable": 4732,
+        "compression_rate": 0.9535080304311073,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 8.64594359486668,
+        "vwc_std_delta": 6.436658846330147
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-58-AmbientTemp_C": {
+        "VWC": {
+          "n": 4270,
+          "mean": -7.206126463700235,
+          "std": 5.04816796902517,
+          "min": -17.56,
+          "max": 7.58
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.080604648009332,
+        "n_samples": 4270
+      },
+      "plaine_morte-meteo-58-SurfaceTemp_C": {
+        "VWC": {
+          "n": 4262,
+          "mean": -11.204180666353823,
+          "std": 6.1178382696881375,
+          "min": -19.962,
+          "max": 22.163
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.7514366385701001,
+        "n_samples": 4262
+      },
+      "plaine_morte-meteo-58-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 4732,
+          "mean": 212.85320139475908,
+          "std": 269.37104578194817,
+          "min": 0.0,
+          "max": 730.052
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 9.926308360819313,
+        "n_samples": 4732
+      },
+      "plaine_morte-meteo-58-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4270,
+          "mean": 55.66122927400469,
+          "std": 12.035468386621792,
+          "min": 23.994,
+          "max": 91.937
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.795120467235916,
+        "n_samples": 4270
+      },
+      "plaine_morte-meteo-58-WindSpeed_ms": {
+        "VWC": {
+          "n": 4732,
+          "mean": 1.541108833474218,
+          "std": 1.1869072088908497,
+          "min": 0.0,
+          "max": 6.905
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.09640761317360577,
+        "n_samples": 4732
+      },
+      "plaine_morte-meteo-58-WindDirection_deg": {
+        "VWC": {
+          "n": 4732,
+          "mean": 71.73660185967877,
+          "std": 69.74876338834154,
+          "min": 0.0,
+          "max": 356.384
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 112.66085884570846,
+        "n_samples": 4732
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-58-AmbientTemp_C": {
+        "VWC": {
+          "n": 192,
+          "mean": -8.3903125,
+          "std": 3.762353389481609,
+          "min": -15.86,
+          "max": 5.82
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 8.650243052547905,
+        "n_samples": 192
+      },
+      "plaine_morte-meteo-58-SurfaceTemp_C": {
+        "VWC": {
+          "n": 186,
+          "mean": -11.632381720430107,
+          "std": 5.999801803132346,
+          "min": -19.962,
+          "max": 22.163
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 16.99215368560993,
+        "n_samples": 186
+      },
+      "plaine_morte-meteo-58-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 274,
+          "mean": 392.48728832116785,
+          "std": 338.77054101491905,
+          "min": 0.0,
+          "max": 726.862
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2814.1547794238213,
+        "n_samples": 274
+      },
+      "plaine_morte-meteo-58-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 184,
+          "mean": 66.4608097826087,
+          "std": 10.426911333582085,
+          "min": 35.298,
+          "max": 91.601
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 41.90808023816775,
+        "n_samples": 184
+      },
+      "plaine_morte-meteo-58-WindSpeed_ms": {
+        "VWC": {
+          "n": 217,
+          "mean": 0.7214239631336404,
+          "std": 1.0084532733781266,
+          "min": 0.0,
+          "max": 5.263
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.8025493494513031,
+        "n_samples": 217
+      },
+      "plaine_morte-meteo-58-WindDirection_deg": {
+        "VWC": {
+          "n": 220,
+          "mean": 80.38254545454545,
+          "std": 76.18542223467169,
+          "min": 0.194,
+          "max": 356.384
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1993.6882786516962,
+        "n_samples": 220
+      }
+    }
+  },
+  "plaine_morte-meteo-6": {
+    "totals": {
+      "n_raw": 16200,
+      "n_filtered": 626,
+      "n_compressed": 15577,
+      "n_dropped": 0,
+      "n_reconstructable": 16200,
+      "overall_compression_rate": 0.961358024691358,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 15577
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-6-AmbientTemp_C": 5207,
+      "plaine_morte-meteo-6-SurfaceTemp_C": 5159,
+      "plaine_morte-meteo-6-RelativeHumidity_pct": 5211
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-6-AmbientTemp_C": 5207,
+      "plaine_morte-meteo-6-SurfaceTemp_C": 5159,
+      "plaine_morte-meteo-6-RelativeHumidity_pct": 5211
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-6-AmbientTemp_C": {
+        "n_raw": 5427,
+        "n_filtered": 221,
+        "n_compressed": 5207,
+        "n_dropped": 0,
+        "n_reconstructable": 5427,
+        "compression_rate": 0.9592776856458448,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.4098437675874034,
+        "vwc_std_delta": -0.3163209200373043
+      },
+      "plaine_morte-meteo-6-SurfaceTemp_C": {
+        "n_raw": 5346,
+        "n_filtered": 188,
+        "n_compressed": 5159,
+        "n_dropped": 0,
+        "n_reconstructable": 5346,
+        "compression_rate": 0.964833520389076,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 4.010060456814003,
+        "vwc_std_delta": -2.028575015484255
+      },
+      "plaine_morte-meteo-6-RelativeHumidity_pct": {
+        "n_raw": 5427,
+        "n_filtered": 217,
+        "n_compressed": 5211,
+        "n_dropped": 0,
+        "n_reconstructable": 5427,
+        "compression_rate": 0.9600147411092684,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -8.807808121026547,
+        "vwc_std_delta": -2.537468865473363
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-6-AmbientTemp_C": {
+        "VWC": {
+          "n": 5427,
+          "mean": -5.065273631840796,
+          "std": 3.7659675569102937,
+          "min": -15.56,
+          "max": 8.9
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.7158746117110433,
+        "n_samples": 5427
+      },
+      "plaine_morte-meteo-6-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5346,
+          "mean": -11.1296189674523,
+          "std": 6.689293471170271,
+          "min": -19.962,
+          "max": 20.538
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.4839399506693001,
+        "n_samples": 5346
+      },
+      "plaine_morte-meteo-6-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 5427,
+          "mean": 51.091471715496596,
+          "std": 12.139343935916537,
+          "min": 23.747,
+          "max": 90.287
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.723949172477359,
+        "n_samples": 5427
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-6-AmbientTemp_C": {
+        "VWC": {
+          "n": 221,
+          "mean": -3.6554298642533927,
+          "std": 3.4496466368729894,
+          "min": -14.02,
+          "max": 6.58
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 6.0742714132231415,
+        "n_samples": 221
+      },
+      "plaine_morte-meteo-6-SurfaceTemp_C": {
+        "VWC": {
+          "n": 188,
+          "mean": -7.1195585106382975,
+          "std": 4.660718455686016,
+          "min": -19.462,
+          "max": 20.538
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 14.290229938002229,
+        "n_samples": 188
+      },
+      "plaine_morte-meteo-6-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 217,
+          "mean": 42.28366359447005,
+          "std": 9.601875070443175,
+          "min": 28.675,
+          "max": 87.01
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 51.04042064291838,
+        "n_samples": 217
+      }
+    }
+  },
+  "plaine_morte-meteo-74": {
+    "totals": {
+      "n_raw": 28853,
+      "n_filtered": 1315,
+      "n_compressed": 27543,
+      "n_dropped": 0,
+      "n_reconstructable": 28853,
+      "overall_compression_rate": 0.954424150001733,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 27543
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-74-AmbientTemp_C": 4641,
+      "plaine_morte-meteo-74-SurfaceTemp_C": 4422,
+      "plaine_morte-meteo-74-SolarRadiation_Wm2": 4553,
+      "plaine_morte-meteo-74-RelativeHumidity_pct": 4656,
+      "plaine_morte-meteo-74-WindSpeed_ms": 4637,
+      "plaine_morte-meteo-74-WindDirection_deg": 4634
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-74-AmbientTemp_C": 4641,
+      "plaine_morte-meteo-74-SurfaceTemp_C": 4422,
+      "plaine_morte-meteo-74-SolarRadiation_Wm2": 4553,
+      "plaine_morte-meteo-74-RelativeHumidity_pct": 4656,
+      "plaine_morte-meteo-74-WindSpeed_ms": 4637,
+      "plaine_morte-meteo-74-WindDirection_deg": 4634
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-74-AmbientTemp_C": {
+        "n_raw": 4851,
+        "n_filtered": 211,
+        "n_compressed": 4641,
+        "n_dropped": 0,
+        "n_reconstructable": 4851,
+        "compression_rate": 0.9565038136466708,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 2.8551565856846834,
+        "vwc_std_delta": 0.420653024331223
+      },
+      "plaine_morte-meteo-74-SurfaceTemp_C": {
+        "n_raw": 4599,
+        "n_filtered": 178,
+        "n_compressed": 4422,
+        "n_dropped": 0,
+        "n_reconstructable": 4599,
+        "compression_rate": 0.9612959338986736,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 8.176885054396292,
+        "vwc_std_delta": -0.5606956584924259
+      },
+      "plaine_morte-meteo-74-SolarRadiation_Wm2": {
+        "n_raw": 4851,
+        "n_filtered": 299,
+        "n_compressed": 4553,
+        "n_dropped": 0,
+        "n_reconstructable": 4851,
+        "compression_rate": 0.9383632240775098,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 136.8868212077777,
+        "vwc_std_delta": 58.58244582981189
+      },
+      "plaine_morte-meteo-74-RelativeHumidity_pct": {
+        "n_raw": 4851,
+        "n_filtered": 196,
+        "n_compressed": 4656,
+        "n_dropped": 0,
+        "n_reconstructable": 4851,
+        "compression_rate": 0.9595959595959596,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -6.199527571634718,
+        "vwc_std_delta": -4.060949423966967
+      },
+      "plaine_morte-meteo-74-WindSpeed_ms": {
+        "n_raw": 4851,
+        "n_filtered": 215,
+        "n_compressed": 4637,
+        "n_dropped": 0,
+        "n_reconstructable": 4851,
+        "compression_rate": 0.9556792413935271,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.0428165106211615,
+        "vwc_std_delta": -0.10319438682093018
+      },
+      "plaine_morte-meteo-74-WindDirection_deg": {
+        "n_raw": 4850,
+        "n_filtered": 216,
+        "n_compressed": 4634,
+        "n_dropped": 0,
+        "n_reconstructable": 4850,
+        "compression_rate": 0.9554639175257732,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -23.981035122184068,
+        "vwc_std_delta": 41.23812603994442
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-74-AmbientTemp_C": {
+        "VWC": {
+          "n": 4851,
+          "mean": -4.992455163883736,
+          "std": 3.5766503084855072,
+          "min": -14.6,
+          "max": 6.22
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.7229072126687214,
+        "n_samples": 4851
+      },
+      "plaine_morte-meteo-74-SurfaceTemp_C": {
+        "VWC": {
+          "n": 4599,
+          "mean": -12.322587301587303,
+          "std": 5.947584644787679,
+          "min": -19.962,
+          "max": 15.412
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.11260024702331005,
+        "n_samples": 4599
+      },
+      "plaine_morte-meteo-74-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 4851,
+          "mean": 198.39580086580088,
+          "std": 259.6993095362642,
+          "min": 0.0,
+          "max": 720.481
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 8.018732298481067,
+        "n_samples": 4851
+      },
+      "plaine_morte-meteo-74-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4851,
+          "mean": 52.49881838796125,
+          "std": 12.20413307920752,
+          "min": 25.642,
+          "max": 91.083
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.079759575845297,
+        "n_samples": 4851
+      },
+      "plaine_morte-meteo-74-WindSpeed_ms": {
+        "VWC": {
+          "n": 4851,
+          "mean": 1.7935281385281383,
+          "std": 1.2152266561388338,
+          "min": 0.0,
+          "max": 5.833
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.05866152553954724,
+        "n_samples": 4851
+      },
+      "plaine_morte-meteo-74-WindDirection_deg": {
+        "VWC": {
+          "n": 4850,
+          "mean": 209.5804193814433,
+          "std": 52.06975888110772,
+          "min": 0.872,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 109.62888130688455,
+        "n_samples": 4850
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-74-AmbientTemp_C": {
+        "VWC": {
+          "n": 211,
+          "mean": -2.137298578199052,
+          "std": 3.9973033328167302,
+          "min": -12.3,
+          "max": 4.48
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.761667482993198,
+        "n_samples": 211
+      },
+      "plaine_morte-meteo-74-SurfaceTemp_C": {
+        "VWC": {
+          "n": 178,
+          "mean": -4.145702247191011,
+          "std": 5.386888986295253,
+          "min": -19.337,
+          "max": 15.412
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.0761905956781255,
+        "n_samples": 178
+      },
+      "plaine_morte-meteo-74-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 299,
+          "mean": 335.2826220735786,
+          "std": 318.2817553660761,
+          "min": 0.0,
+          "max": 714.101
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2465.1405659426723,
+        "n_samples": 299
+      },
+      "plaine_morte-meteo-74-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 196,
+          "mean": 46.29929081632653,
+          "std": 8.143183655240552,
+          "min": 30.023,
+          "max": 86.343
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 41.705451649598956,
+        "n_samples": 196
+      },
+      "plaine_morte-meteo-74-WindSpeed_ms": {
+        "VWC": {
+          "n": 215,
+          "mean": 0.7507116279069769,
+          "std": 1.1120322693179037,
+          "min": 0.0,
+          "max": 5.43
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.48805798130841127,
+        "n_samples": 215
+      },
+      "plaine_morte-meteo-74-WindDirection_deg": {
+        "VWC": {
+          "n": 216,
+          "mean": 185.59938425925924,
+          "std": 93.30788492105214,
+          "min": 0.872,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2242.8118714369707,
+        "n_samples": 216
+      }
+    }
+  },
+  "plaine_morte-meteo-78": {
+    "totals": {
+      "n_raw": 27867,
+      "n_filtered": 1327,
+      "n_compressed": 26546,
+      "n_dropped": 0,
+      "n_reconstructable": 27867,
+      "overall_compression_rate": 0.9523809523809523,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 26546
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-78-AmbientTemp_C": 4537,
+      "plaine_morte-meteo-78-SurfaceTemp_C": 4016,
+      "plaine_morte-meteo-78-SolarRadiation_Wm2": 4449,
+      "plaine_morte-meteo-78-RelativeHumidity_pct": 4511,
+      "plaine_morte-meteo-78-WindSpeed_ms": 4506,
+      "plaine_morte-meteo-78-WindDirection_deg": 4527
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-78-AmbientTemp_C": 4537,
+      "plaine_morte-meteo-78-SurfaceTemp_C": 4016,
+      "plaine_morte-meteo-78-SolarRadiation_Wm2": 4449,
+      "plaine_morte-meteo-78-RelativeHumidity_pct": 4511,
+      "plaine_morte-meteo-78-WindSpeed_ms": 4506,
+      "plaine_morte-meteo-78-WindDirection_deg": 4527
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-78-AmbientTemp_C": {
+        "n_raw": 4731,
+        "n_filtered": 195,
+        "n_compressed": 4537,
+        "n_dropped": 0,
+        "n_reconstructable": 4731,
+        "compression_rate": 0.9587824984147115,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 4.893928036030763,
+        "vwc_std_delta": -0.43383867876498705
+      },
+      "plaine_morte-meteo-78-SurfaceTemp_C": {
+        "n_raw": 4214,
+        "n_filtered": 199,
+        "n_compressed": 4016,
+        "n_dropped": 0,
+        "n_reconstructable": 4214,
+        "compression_rate": 0.9527764594209777,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 5.646477293920959,
+        "vwc_std_delta": -0.5203933482088727
+      },
+      "plaine_morte-meteo-78-SolarRadiation_Wm2": {
+        "n_raw": 4731,
+        "n_filtered": 283,
+        "n_compressed": 4449,
+        "n_dropped": 0,
+        "n_reconstructable": 4731,
+        "compression_rate": 0.9401817797505813,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 150.85387832975945,
+        "vwc_std_delta": 61.4589247367129
+      },
+      "plaine_morte-meteo-78-RelativeHumidity_pct": {
+        "n_raw": 4731,
+        "n_filtered": 221,
+        "n_compressed": 4511,
+        "n_dropped": 0,
+        "n_reconstructable": 4731,
+        "compression_rate": 0.953286831536673,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -7.307857434022829,
+        "vwc_std_delta": -1.0464674880171092
+      },
+      "plaine_morte-meteo-78-WindSpeed_ms": {
+        "n_raw": 4731,
+        "n_filtered": 226,
+        "n_compressed": 4506,
+        "n_dropped": 0,
+        "n_reconstructable": 4731,
+        "compression_rate": 0.9522299725216656,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.7975173296820258,
+        "vwc_std_delta": -0.25681593805673975
+      },
+      "plaine_morte-meteo-78-WindDirection_deg": {
+        "n_raw": 4729,
+        "n_filtered": 203,
+        "n_compressed": 4527,
+        "n_dropped": 0,
+        "n_reconstructable": 4729,
+        "compression_rate": 0.957073377035314,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 42.42988881620275,
+        "vwc_std_delta": -12.525088904766335
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-78-AmbientTemp_C": {
+        "VWC": {
+          "n": 4731,
+          "mean": -6.736799830902558,
+          "std": 5.5418733712334,
+          "min": -18.28,
+          "max": 7.21
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.9067581515315404,
+        "n_samples": 4731
+      },
+      "plaine_morte-meteo-78-SurfaceTemp_C": {
+        "VWC": {
+          "n": 4214,
+          "mean": -10.372668248694827,
+          "std": 7.046959363617437,
+          "min": -19.962,
+          "max": 2.225
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.12579247973604013,
+        "n_samples": 4214
+      },
+      "plaine_morte-meteo-78-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 4731,
+          "mean": 206.68772944409213,
+          "std": 257.51439236731136,
+          "min": 0.0,
+          "max": 688.578
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 16.41508528630303,
+        "n_samples": 4731
+      },
+      "plaine_morte-meteo-78-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4731,
+          "mean": 55.621907207778484,
+          "std": 11.132498364614523,
+          "min": 27.008,
+          "max": 88.753
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.959181007057825,
+        "n_samples": 4731
+      },
+      "plaine_morte-meteo-78-WindSpeed_ms": {
+        "VWC": {
+          "n": 4731,
+          "mean": 1.1612164447262736,
+          "std": 1.0937870774810963,
+          "min": 0.0,
+          "max": 5.766
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.11528532217459517,
+        "n_samples": 4731
+      },
+      "plaine_morte-meteo-78-WindDirection_deg": {
+        "VWC": {
+          "n": 4729,
+          "mean": 215.60743138084163,
+          "std": 63.417961560315334,
+          "min": 16.565,
+          "max": 324.611
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 102.21966257993525,
+        "n_samples": 4729
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-78-AmbientTemp_C": {
+        "VWC": {
+          "n": 195,
+          "mean": -1.8428717948717948,
+          "std": 5.108034692468413,
+          "min": -17.48,
+          "max": 7.21
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.84453097034754,
+        "n_samples": 195
+      },
+      "plaine_morte-meteo-78-SurfaceTemp_C": {
+        "VWC": {
+          "n": 199,
+          "mean": -4.726190954773869,
+          "std": 6.526566015408564,
+          "min": -19.962,
+          "max": 1.288
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.2924639185032136,
+        "n_samples": 199
+      },
+      "plaine_morte-meteo-78-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 283,
+          "mean": 357.5416077738516,
+          "std": 318.97331710402426,
+          "min": 0.0,
+          "max": 682.197
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2732.633595823249,
+        "n_samples": 283
+      },
+      "plaine_morte-meteo-78-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 221,
+          "mean": 48.314049773755656,
+          "std": 10.086030876597414,
+          "min": 27.008,
+          "max": 88.69
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 57.971737400495876,
+        "n_samples": 221
+      },
+      "plaine_morte-meteo-78-WindSpeed_ms": {
+        "VWC": {
+          "n": 226,
+          "mean": 0.3636991150442478,
+          "std": 0.8369711394243565,
+          "min": 0.0,
+          "max": 4.827
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.6370886300444445,
+        "n_samples": 226
+      },
+      "plaine_morte-meteo-78-WindDirection_deg": {
+        "VWC": {
+          "n": 203,
+          "mean": 258.0373201970444,
+          "std": 50.892872655549,
+          "min": 16.565,
+          "max": 323.448
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1693.4083522579401,
+        "n_samples": 203
+      }
+    }
+  },
+  "plaine_morte-meteo-83": {
+    "totals": {
+      "n_raw": 19272,
+      "n_filtered": 1131,
+      "n_compressed": 18147,
+      "n_dropped": 0,
+      "n_reconstructable": 19272,
+      "overall_compression_rate": 0.9413138231631383,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 18147
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-83-AmbientTemp_C": 3017,
+      "plaine_morte-meteo-83-SurfaceTemp_C": 3040,
+      "plaine_morte-meteo-83-SolarRadiation_Wm2": 3017,
+      "plaine_morte-meteo-83-RelativeHumidity_pct": 3027,
+      "plaine_morte-meteo-83-WindSpeed_ms": 3023,
+      "plaine_morte-meteo-83-WindDirection_deg": 3023
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-83-AmbientTemp_C": 3017,
+      "plaine_morte-meteo-83-SurfaceTemp_C": 3040,
+      "plaine_morte-meteo-83-SolarRadiation_Wm2": 3017,
+      "plaine_morte-meteo-83-RelativeHumidity_pct": 3027,
+      "plaine_morte-meteo-83-WindSpeed_ms": 3023,
+      "plaine_morte-meteo-83-WindDirection_deg": 3023
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-83-AmbientTemp_C": {
+        "n_raw": 3212,
+        "n_filtered": 196,
+        "n_compressed": 3017,
+        "n_dropped": 0,
+        "n_reconstructable": 3212,
+        "compression_rate": 0.9389788293897883,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 2.834687015528503,
+        "vwc_std_delta": -0.38772532360271006
+      },
+      "plaine_morte-meteo-83-SurfaceTemp_C": {
+        "n_raw": 3212,
+        "n_filtered": 173,
+        "n_compressed": 3040,
+        "n_dropped": 0,
+        "n_reconstructable": 3212,
+        "compression_rate": 0.9461394769613948,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 5.0770959623953535,
+        "vwc_std_delta": -1.8751374885569714
+      },
+      "plaine_morte-meteo-83-SolarRadiation_Wm2": {
+        "n_raw": 3212,
+        "n_filtered": 196,
+        "n_compressed": 3017,
+        "n_dropped": 0,
+        "n_reconstructable": 3212,
+        "compression_rate": 0.9389788293897883,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 220.89727867435886,
+        "vwc_std_delta": -1.6029736775900005
+      },
+      "plaine_morte-meteo-83-RelativeHumidity_pct": {
+        "n_raw": 3212,
+        "n_filtered": 186,
+        "n_compressed": 3027,
+        "n_dropped": 0,
+        "n_reconstructable": 3212,
+        "compression_rate": 0.9420921544209215,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -10.606891786847719,
+        "vwc_std_delta": -3.340187600165782
+      },
+      "plaine_morte-meteo-83-WindSpeed_ms": {
+        "n_raw": 3212,
+        "n_filtered": 190,
+        "n_compressed": 3023,
+        "n_dropped": 0,
+        "n_reconstructable": 3212,
+        "compression_rate": 0.9408468244084682,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.6288432784951168,
+        "vwc_std_delta": -0.2882216941686542
+      },
+      "plaine_morte-meteo-83-WindDirection_deg": {
+        "n_raw": 3212,
+        "n_filtered": 190,
+        "n_compressed": 3023,
+        "n_dropped": 0,
+        "n_reconstructable": 3212,
+        "compression_rate": 0.9408468244084682,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 8.031354053876896,
+        "vwc_std_delta": -11.448435298436728
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-83-AmbientTemp_C": {
+        "VWC": {
+          "n": 3212,
+          "mean": -3.658309464508095,
+          "std": 4.168313988529588,
+          "min": -15.54,
+          "max": 8.28
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.6899922446596055,
+        "n_samples": 3212
+      },
+      "plaine_morte-meteo-83-SurfaceTemp_C": {
+        "VWC": {
+          "n": 3212,
+          "mean": -8.168032378580325,
+          "std": 5.749171382891688,
+          "min": -18.087,
+          "max": 0.6
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.0677641016557747,
+        "n_samples": 3212
+      },
+      "plaine_morte-meteo-83-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 3212,
+          "mean": 314.6510121419676,
+          "std": 272.51514130541784,
+          "min": 0.0,
+          "max": 701.339
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 48.78354805876695,
+        "n_samples": 3212
+      },
+      "plaine_morte-meteo-83-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 3212,
+          "mean": 54.60434339975094,
+          "std": 14.29452660842519,
+          "min": 26.442,
+          "max": 90.322
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.788210125753296,
+        "n_samples": 3212
+      },
+      "plaine_morte-meteo-83-WindSpeed_ms": {
+        "VWC": {
+          "n": 3212,
+          "mean": 0.9649327521793274,
+          "std": 1.1319100548144536,
+          "min": 0.0,
+          "max": 5.799
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.07317666013851289,
+        "n_samples": 3212
+      },
+      "plaine_morte-meteo-83-WindDirection_deg": {
+        "VWC": {
+          "n": 3212,
+          "mean": 85.00396699875466,
+          "std": 55.98382330047014,
+          "min": 0.0,
+          "max": 357.45
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 177.45881029482564,
+        "n_samples": 3212
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-83-AmbientTemp_C": {
+        "VWC": {
+          "n": 196,
+          "mean": -0.8236224489795919,
+          "std": 3.7805886649268783,
+          "min": -11.63,
+          "max": 7.21
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.999273804076266,
+        "n_samples": 196
+      },
+      "plaine_morte-meteo-83-SurfaceTemp_C": {
+        "VWC": {
+          "n": 173,
+          "mean": -3.090936416184971,
+          "std": 3.8740338943347163,
+          "min": -17.587,
+          "max": -0.15
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.9866059632233637,
+        "n_samples": 173
+      },
+      "plaine_morte-meteo-83-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 196,
+          "mean": 535.5482908163265,
+          "std": 270.91216762782784,
+          "min": 0.0,
+          "max": 696.554
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2961.574602381433,
+        "n_samples": 196
+      },
+      "plaine_morte-meteo-83-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 186,
+          "mean": 43.99745161290322,
+          "std": 10.954339008259408,
+          "min": 26.442,
+          "max": 89.354
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 58.532857879035795,
+        "n_samples": 186
+      },
+      "plaine_morte-meteo-83-WindSpeed_ms": {
+        "VWC": {
+          "n": 190,
+          "mean": 0.33608947368421055,
+          "std": 0.8436883606457994,
+          "min": 0.0,
+          "max": 5.196
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.40261873071862486,
+        "n_samples": 190
+      },
+      "plaine_morte-meteo-83-WindDirection_deg": {
+        "VWC": {
+          "n": 190,
+          "mean": 93.03532105263156,
+          "std": 44.535388002033415,
+          "min": 0.194,
+          "max": 350.862
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2600.0455572391593,
+        "n_samples": 190
+      }
+    }
+  },
+  "plaine_morte-meteo-90": {
+    "totals": {
+      "n_raw": 20320,
+      "n_filtered": 857,
+      "n_compressed": 19467,
+      "n_dropped": 0,
+      "n_reconstructable": 20320,
+      "overall_compression_rate": 0.9578248031496063,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 19467
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-90-AmbientTemp_C": 4929,
+      "plaine_morte-meteo-90-SurfaceTemp_C": 4730,
+      "plaine_morte-meteo-90-SolarRadiation_Wm2": 4897,
+      "plaine_morte-meteo-90-RelativeHumidity_pct": 4911
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-90-AmbientTemp_C": 4929,
+      "plaine_morte-meteo-90-SurfaceTemp_C": 4730,
+      "plaine_morte-meteo-90-SolarRadiation_Wm2": 4897,
+      "plaine_morte-meteo-90-RelativeHumidity_pct": 4911
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-90-AmbientTemp_C": {
+        "n_raw": 5135,
+        "n_filtered": 207,
+        "n_compressed": 4929,
+        "n_dropped": 0,
+        "n_reconstructable": 5135,
+        "compression_rate": 0.9596884128529698,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.4967656369802773,
+        "vwc_std_delta": -1.4743823322165475
+      },
+      "plaine_morte-meteo-90-SurfaceTemp_C": {
+        "n_raw": 4915,
+        "n_filtered": 186,
+        "n_compressed": 4730,
+        "n_dropped": 0,
+        "n_reconstructable": 4915,
+        "compression_rate": 0.9621566632756867,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.0235095702206358,
+        "vwc_std_delta": -1.8241892710973104
+      },
+      "plaine_morte-meteo-90-SolarRadiation_Wm2": {
+        "n_raw": 5135,
+        "n_filtered": 239,
+        "n_compressed": 4897,
+        "n_dropped": 0,
+        "n_reconstructable": 5135,
+        "compression_rate": 0.9534566699123661,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -4.6390073415277016,
+        "vwc_std_delta": -87.64244111804325
+      },
+      "plaine_morte-meteo-90-RelativeHumidity_pct": {
+        "n_raw": 5135,
+        "n_filtered": 225,
+        "n_compressed": 4911,
+        "n_dropped": 0,
+        "n_reconstructable": 5135,
+        "compression_rate": 0.9561830574488802,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -6.2128906934977834,
+        "vwc_std_delta": -2.481772711507393
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-90-AmbientTemp_C": {
+        "VWC": {
+          "n": 5135,
+          "mean": -5.947195715676728,
+          "std": 5.090365071056503,
+          "min": -17.57,
+          "max": 9.9
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.1756289925060956,
+        "n_samples": 5135
+      },
+      "plaine_morte-meteo-90-SurfaceTemp_C": {
+        "VWC": {
+          "n": 4915,
+          "mean": -11.095737741607323,
+          "std": 6.727785400812011,
+          "min": -19.962,
+          "max": 31.1
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.1059764043946185,
+        "n_samples": 4915
+      },
+      "plaine_morte-meteo-90-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 5135,
+          "mean": 228.01049269717626,
+          "std": 266.42782866802236,
+          "min": 0.0,
+          "max": 711.442
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 16.681072044198118,
+        "n_samples": 5135
+      },
+      "plaine_morte-meteo-90-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 5135,
+          "mean": 54.28010847127556,
+          "std": 12.707491585955268,
+          "min": 23.643,
+          "max": 91.028
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.575185212689179,
+        "n_samples": 5135
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-90-AmbientTemp_C": {
+        "VWC": {
+          "n": 207,
+          "mean": -6.443961352657006,
+          "std": 3.6159827388399557,
+          "min": -16.1,
+          "max": 6.6
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 9.63743642190593,
+        "n_samples": 207
+      },
+      "plaine_morte-meteo-90-SurfaceTemp_C": {
+        "VWC": {
+          "n": 186,
+          "mean": -12.119247311827959,
+          "std": 4.903596129714701,
+          "min": -19.962,
+          "max": 30.85
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 30.306646310007306,
+        "n_samples": 186
+      },
+      "plaine_morte-meteo-90-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 239,
+          "mean": 223.37148535564856,
+          "std": 178.7853875499791,
+          "min": 0.0,
+          "max": 697.086
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3166.884269993662,
+        "n_samples": 239
+      },
+      "plaine_morte-meteo-90-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 225,
+          "mean": 48.06721777777778,
+          "std": 10.225718874447875,
+          "min": 24.633,
+          "max": 86.558
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 62.83845083432318,
+        "n_samples": 225
+      }
+    }
+  },
+  "plaine_morte-meteo-91": {
+    "totals": {
+      "n_raw": 25458,
+      "n_filtered": 773,
+      "n_compressed": 24688,
+      "n_dropped": 0,
+      "n_reconstructable": 25458,
+      "overall_compression_rate": 0.9696362636499333,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 24688
+    },
+    "drops_by_sensor": {
+      "plaine_morte-meteo-91-AmbientTemp_C": 8297,
+      "plaine_morte-meteo-91-SurfaceTemp_C": 8097,
+      "plaine_morte-meteo-91-RelativeHumidity_pct": 8294
+    },
+    "compressed_by_sensor": {
+      "plaine_morte-meteo-91-AmbientTemp_C": 8297,
+      "plaine_morte-meteo-91-SurfaceTemp_C": 8097,
+      "plaine_morte-meteo-91-RelativeHumidity_pct": 8294
+    },
+    "per_sensor": {
+      "plaine_morte-meteo-91-AmbientTemp_C": {
+        "n_raw": 8556,
+        "n_filtered": 260,
+        "n_compressed": 8297,
+        "n_dropped": 0,
+        "n_reconstructable": 8556,
+        "compression_rate": 0.9696119682094436,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.9366718991620817,
+        "vwc_std_delta": -0.04118542093021427
+      },
+      "plaine_morte-meteo-91-SurfaceTemp_C": {
+        "n_raw": 8346,
+        "n_filtered": 250,
+        "n_compressed": 8097,
+        "n_dropped": 0,
+        "n_reconstructable": 8346,
+        "compression_rate": 0.9700455307931943,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.639100133237477,
+        "vwc_std_delta": -0.9504717621718957
+      },
+      "plaine_morte-meteo-91-RelativeHumidity_pct": {
+        "n_raw": 8556,
+        "n_filtered": 263,
+        "n_compressed": 8294,
+        "n_dropped": 0,
+        "n_reconstructable": 8556,
+        "compression_rate": 0.9692613370733988,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -5.902951797773383,
+        "vwc_std_delta": -1.359594822762988
+      }
+    },
+    "raw_stats": {
+      "plaine_morte-meteo-91-AmbientTemp_C": {
+        "VWC": {
+          "n": 8556,
+          "mean": -4.784787283777466,
+          "std": 3.1295491752496565,
+          "min": -13.96,
+          "max": 6.7
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.4379206017596458,
+        "n_samples": 8556
+      },
+      "plaine_morte-meteo-91-SurfaceTemp_C": {
+        "VWC": {
+          "n": 8346,
+          "mean": -11.916228133237478,
+          "std": 6.144096927662374,
+          "min": -19.962,
+          "max": 1.475
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.20287889845508314,
+        "n_samples": 8346
+      },
+      "plaine_morte-meteo-91-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 8556,
+          "mean": 48.03188335670874,
+          "std": 10.681181483908578,
+          "min": 26.253,
+          "max": 85.33
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.577987980617813,
+        "n_samples": 8556
+      }
+    },
+    "filtered_stats": {
+      "plaine_morte-meteo-91-AmbientTemp_C": {
+        "VWC": {
+          "n": 260,
+          "mean": -3.8481153846153844,
+          "std": 3.088363754319442,
+          "min": -13.23,
+          "max": 3.95
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 6.231335129172195,
+        "n_samples": 260
+      },
+      "plaine_morte-meteo-91-SurfaceTemp_C": {
+        "VWC": {
+          "n": 250,
+          "mean": -10.277128000000001,
+          "std": 5.193625165490478,
+          "min": -19.962,
+          "max": 1.475
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.098518942565442,
+        "n_samples": 250
+      },
+      "plaine_morte-meteo-91-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 263,
+          "mean": 42.128931558935356,
+          "std": 9.32158666114559,
+          "min": 28.69,
+          "max": 83.805
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 49.57998024230815,
+        "n_samples": 263
+      }
+    }
+  }
+}

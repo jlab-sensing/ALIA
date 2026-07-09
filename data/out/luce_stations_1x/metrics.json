@@ -1,0 +1,3116 @@
+{
+  "sensorscope-meteo-10": {
+    "totals": {
+      "n_raw": 1244246,
+      "n_filtered": 14704,
+      "n_compressed": 1229545,
+      "n_dropped": 0,
+      "n_reconstructable": 1244246,
+      "overall_compression_rate": 0.9881824012293389,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 1229545
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-10-AmbientTemp_C": 336966,
+      "sensorscope-meteo-10-SurfaceTemp_C": 335910,
+      "sensorscope-meteo-10-RelativeHumidity_pct": 334239,
+      "sensorscope-meteo-10-SoilMoisture_pct": 116674,
+      "sensorscope-meteo-10-Watermark_kPa": 105756
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-10-AmbientTemp_C": 336966,
+      "sensorscope-meteo-10-SurfaceTemp_C": 335910,
+      "sensorscope-meteo-10-RelativeHumidity_pct": 334239,
+      "sensorscope-meteo-10-SoilMoisture_pct": 116674,
+      "sensorscope-meteo-10-Watermark_kPa": 105756
+    },
+    "per_sensor": {
+      "sensorscope-meteo-10-AmbientTemp_C": {
+        "n_raw": 339798,
+        "n_filtered": 2832,
+        "n_compressed": 336966,
+        "n_dropped": 0,
+        "n_reconstructable": 339798,
+        "compression_rate": 0.9916656366429467,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.19463615266288237,
+        "vwc_std_delta": 0.8344103138727439
+      },
+      "sensorscope-meteo-10-SurfaceTemp_C": {
+        "n_raw": 339767,
+        "n_filtered": 3858,
+        "n_compressed": 335910,
+        "n_dropped": 0,
+        "n_reconstructable": 339767,
+        "compression_rate": 0.988645159771255,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.35849549741069797,
+        "vwc_std_delta": 0.11403707876832048
+      },
+      "sensorscope-meteo-10-RelativeHumidity_pct": {
+        "n_raw": 337339,
+        "n_filtered": 3101,
+        "n_compressed": 334239,
+        "n_dropped": 0,
+        "n_reconstructable": 337339,
+        "compression_rate": 0.9908074666729907,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.9477923054538877,
+        "vwc_std_delta": 2.4929981697496277
+      },
+      "sensorscope-meteo-10-SoilMoisture_pct": {
+        "n_raw": 119621,
+        "n_filtered": 2947,
+        "n_compressed": 116674,
+        "n_dropped": 0,
+        "n_reconstructable": 119621,
+        "compression_rate": 0.9753638575166568,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.20779616793437938,
+        "vwc_std_delta": 0.7088012542283799
+      },
+      "sensorscope-meteo-10-Watermark_kPa": {
+        "n_raw": 107721,
+        "n_filtered": 1966,
+        "n_compressed": 105756,
+        "n_dropped": 0,
+        "n_reconstructable": 107721,
+        "compression_rate": 0.9817491482626415,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 3.232075100508087,
+        "vwc_std_delta": -1.4593499176974234
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-10-AmbientTemp_C": {
+        "VWC": {
+          "n": 339798,
+          "mean": 5.95713997728062,
+          "std": 4.682283520637561,
+          "min": -19.97,
+          "max": 42.32
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.07090314687774936,
+        "n_samples": 339798
+      },
+      "sensorscope-meteo-10-SurfaceTemp_C": {
+        "VWC": {
+          "n": 339767,
+          "mean": 6.350207783569329,
+          "std": 4.574390808440868,
+          "min": -7.213,
+          "max": 30.288
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.03437267890209825,
+        "n_samples": 339767
+      },
+      "sensorscope-meteo-10-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 337339,
+          "mean": 80.82714831964286,
+          "std": 10.5880987718701,
+          "min": 0.035,
+          "max": 95.639
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.4862456223484073,
+        "n_samples": 337339
+      },
+      "sensorscope-meteo-10-SoilMoisture_pct": {
+        "VWC": {
+          "n": 119621,
+          "mean": 22.247340450255386,
+          "std": 1.268509232716416,
+          "min": 0.393,
+          "max": 29.38
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.22561101207601345,
+        "n_samples": 119621
+      },
+      "sensorscope-meteo-10-Watermark_kPa": {
+        "VWC": {
+          "n": 107721,
+          "mean": -30.520600532858033,
+          "std": 27.34326753416553,
+          "min": -199.902,
+          "max": -4.199
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 12.859001714708546,
+        "n_samples": 107721
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-10-AmbientTemp_C": {
+        "VWC": {
+          "n": 2832,
+          "mean": 6.151776129943502,
+          "std": 5.5166938345103045,
+          "min": -19.97,
+          "max": 42.32
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.66410771961184,
+        "n_samples": 2832
+      },
+      "sensorscope-meteo-10-SurfaceTemp_C": {
+        "VWC": {
+          "n": 3858,
+          "mean": 5.991712286158631,
+          "std": 4.688427887209189,
+          "min": -6.9,
+          "max": 30.288
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.0165988018906935,
+        "n_samples": 3858
+      },
+      "sensorscope-meteo-10-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 3101,
+          "mean": 78.87935601418897,
+          "std": 13.081096941619728,
+          "min": 0.686,
+          "max": 95.639
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 67.89305777041197,
+        "n_samples": 3101
+      },
+      "sensorscope-meteo-10-SoilMoisture_pct": {
+        "VWC": {
+          "n": 2947,
+          "mean": 22.039544282321007,
+          "std": 1.977310486944796,
+          "min": 4.534,
+          "max": 29.38
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.3892868437021404,
+        "n_samples": 2947
+      },
+      "sensorscope-meteo-10-Watermark_kPa": {
+        "VWC": {
+          "n": 1966,
+          "mean": -27.288525432349946,
+          "std": 25.883917616468107,
+          "min": -199.153,
+          "max": -4.212
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 302.39555320864486,
+        "n_samples": 1966
+      }
+    }
+  },
+  "sensorscope-meteo-11": {
+    "totals": {
+      "n_raw": 1416166,
+      "n_filtered": 13290,
+      "n_compressed": 1402879,
+      "n_dropped": 0,
+      "n_reconstructable": 1416166,
+      "overall_compression_rate": 0.9906155069391582,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 1402879
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-11-AmbientTemp_C": 468137,
+      "sensorscope-meteo-11-SurfaceTemp_C": 466605,
+      "sensorscope-meteo-11-RelativeHumidity_pct": 468137
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-11-AmbientTemp_C": 468137,
+      "sensorscope-meteo-11-SurfaceTemp_C": 466605,
+      "sensorscope-meteo-11-RelativeHumidity_pct": 468137
+    },
+    "per_sensor": {
+      "sensorscope-meteo-11-AmbientTemp_C": {
+        "n_raw": 472058,
+        "n_filtered": 3922,
+        "n_compressed": 468137,
+        "n_dropped": 0,
+        "n_reconstructable": 472058,
+        "compression_rate": 0.9916916989014062,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.1467947779643124,
+        "vwc_std_delta": 0.20359409843368415
+      },
+      "sensorscope-meteo-11-SurfaceTemp_C": {
+        "n_raw": 472051,
+        "n_filtered": 5447,
+        "n_compressed": 466605,
+        "n_dropped": 0,
+        "n_reconstructable": 472051,
+        "compression_rate": 0.9884609925622443,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.209934413266203,
+        "vwc_std_delta": -0.6148937968483059
+      },
+      "sensorscope-meteo-11-RelativeHumidity_pct": {
+        "n_raw": 472057,
+        "n_filtered": 3921,
+        "n_compressed": 468137,
+        "n_dropped": 0,
+        "n_reconstructable": 472057,
+        "compression_rate": 0.9916937996894443,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.184233388079008,
+        "vwc_std_delta": 0.295077626825881
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-11-AmbientTemp_C": {
+        "VWC": {
+          "n": 472058,
+          "mean": 7.912957899241195,
+          "std": 5.467576926181757,
+          "min": -5.38,
+          "max": 34.94
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.019593913446489183,
+        "n_samples": 472058
+      },
+      "sensorscope-meteo-11-SurfaceTemp_C": {
+        "VWC": {
+          "n": 472051,
+          "mean": 8.507026206914084,
+          "std": 7.68700214123569,
+          "min": -16.775,
+          "max": 43.038
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.04544512981321582,
+        "n_samples": 472051
+      },
+      "sensorscope-meteo-11-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 472057,
+          "mean": 72.99912117180764,
+          "std": 12.162639524950812,
+          "min": 20.497,
+          "max": 98.845
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.35107512868221596,
+        "n_samples": 472057
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-11-AmbientTemp_C": {
+        "VWC": {
+          "n": 3922,
+          "mean": 8.059752677205507,
+          "std": 5.671171024615441,
+          "min": -5.36,
+          "max": 34.94
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.57979166237865,
+        "n_samples": 3922
+      },
+      "sensorscope-meteo-11-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5447,
+          "mean": 7.297091793647881,
+          "std": 7.0721083443873844,
+          "min": -16.775,
+          "max": 42.538
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.2079749748940594,
+        "n_samples": 5447
+      },
+      "sensorscope-meteo-11-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 3921,
+          "mean": 71.81488778372864,
+          "std": 12.457717151776693,
+          "min": 20.497,
+          "max": 98.845
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 18.56710074365473,
+        "n_samples": 3921
+      }
+    }
+  },
+  "sensorscope-meteo-12": {
+    "totals": {
+      "n_raw": 1468184,
+      "n_filtered": 13853,
+      "n_compressed": 1454334,
+      "n_dropped": 0,
+      "n_reconstructable": 1468184,
+      "overall_compression_rate": 0.990564534145584,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 1454334
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-12-AmbientTemp_C": 483197,
+      "sensorscope-meteo-12-SurfaceTemp_C": 488235,
+      "sensorscope-meteo-12-RelativeHumidity_pct": 482902
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-12-AmbientTemp_C": 483197,
+      "sensorscope-meteo-12-SurfaceTemp_C": 488235,
+      "sensorscope-meteo-12-RelativeHumidity_pct": 482902
+    },
+    "per_sensor": {
+      "sensorscope-meteo-12-AmbientTemp_C": {
+        "n_raw": 487176,
+        "n_filtered": 3980,
+        "n_compressed": 483197,
+        "n_dropped": 0,
+        "n_reconstructable": 487176,
+        "compression_rate": 0.9918304678391382,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.35705174712998833,
+        "vwc_std_delta": 0.1470149253180768
+      },
+      "sensorscope-meteo-12-SurfaceTemp_C": {
+        "n_raw": 493846,
+        "n_filtered": 5612,
+        "n_compressed": 488235,
+        "n_dropped": 0,
+        "n_reconstructable": 493846,
+        "compression_rate": 0.9886361335315058,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.2975150168177274,
+        "vwc_std_delta": 0.5474077996697035
+      },
+      "sensorscope-meteo-12-RelativeHumidity_pct": {
+        "n_raw": 487162,
+        "n_filtered": 4261,
+        "n_compressed": 482902,
+        "n_dropped": 0,
+        "n_reconstructable": 487162,
+        "compression_rate": 0.9912534228860215,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.073232369525769,
+        "vwc_std_delta": 1.1811413404331415
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-12-AmbientTemp_C": {
+        "VWC": {
+          "n": 487176,
+          "mean": 7.639279911161468,
+          "std": 5.526143125707147,
+          "min": -19.54,
+          "max": 41.94
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.07140022127215609,
+        "n_samples": 487176
+      },
+      "sensorscope-meteo-12-SurfaceTemp_C": {
+        "VWC": {
+          "n": 493846,
+          "mean": 7.801185446475217,
+          "std": 6.7405023537554545,
+          "min": -16.712,
+          "max": 64.412
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.11899341574422949,
+        "n_samples": 493846
+      },
+      "sensorscope-meteo-12-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 487162,
+          "mean": 74.86006503791347,
+          "std": 13.247232673442234,
+          "min": 21.221,
+          "max": 98.651
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.45654014768316264,
+        "n_samples": 487162
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-12-AmbientTemp_C": {
+        "VWC": {
+          "n": 3980,
+          "mean": 7.9963316582914565,
+          "std": 5.673158051025224,
+          "min": -19.54,
+          "max": 41.94
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.857286469749041,
+        "n_samples": 3980
+      },
+      "sensorscope-meteo-12-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5612,
+          "mean": 8.098700463292944,
+          "std": 7.287910153425158,
+          "min": -16.712,
+          "max": 64.412
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 8.51197724644068,
+        "n_samples": 5612
+      },
+      "sensorscope-meteo-12-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4261,
+          "mean": 73.7868326683877,
+          "std": 14.428374013875375,
+          "min": 21.221,
+          "max": 98.651
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 24.45257913895452,
+        "n_samples": 4261
+      }
+    }
+  },
+  "sensorscope-meteo-13": {
+    "totals": {
+      "n_raw": 2225834,
+      "n_filtered": 41868,
+      "n_compressed": 2183971,
+      "n_dropped": 0,
+      "n_reconstructable": 2225834,
+      "overall_compression_rate": 0.9811899719386081,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 2183971
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-13-AmbientTemp_C": 438734,
+      "sensorscope-meteo-13-SurfaceTemp_C": 370379,
+      "sensorscope-meteo-13-SolarRadiation_Wm2": 431807,
+      "sensorscope-meteo-13-RelativeHumidity_pct": 438035,
+      "sensorscope-meteo-13-WindSpeed_ms": 72327,
+      "sensorscope-meteo-13-WindDirection_deg": 432689
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-13-AmbientTemp_C": 438734,
+      "sensorscope-meteo-13-SurfaceTemp_C": 370379,
+      "sensorscope-meteo-13-SolarRadiation_Wm2": 431807,
+      "sensorscope-meteo-13-RelativeHumidity_pct": 438035,
+      "sensorscope-meteo-13-WindSpeed_ms": 72327,
+      "sensorscope-meteo-13-WindDirection_deg": 432689
+    },
+    "per_sensor": {
+      "sensorscope-meteo-13-AmbientTemp_C": {
+        "n_raw": 443100,
+        "n_filtered": 4367,
+        "n_compressed": 438734,
+        "n_dropped": 0,
+        "n_reconstructable": 443100,
+        "compression_rate": 0.9901444369216881,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.7445337974272785,
+        "vwc_std_delta": 2.6760708031311333
+      },
+      "sensorscope-meteo-13-SurfaceTemp_C": {
+        "n_raw": 374664,
+        "n_filtered": 4286,
+        "n_compressed": 370379,
+        "n_dropped": 0,
+        "n_reconstructable": 374664,
+        "compression_rate": 0.9885604168001195,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.348111507977098,
+        "vwc_std_delta": 2.092815578161936
+      },
+      "sensorscope-meteo-13-SolarRadiation_Wm2": {
+        "n_raw": 444921,
+        "n_filtered": 13115,
+        "n_compressed": 431807,
+        "n_dropped": 0,
+        "n_reconstructable": 444921,
+        "compression_rate": 0.9705228568667247,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -32.24675792146704,
+        "vwc_std_delta": 31.451914700017483
+      },
+      "sensorscope-meteo-13-RelativeHumidity_pct": {
+        "n_raw": 442611,
+        "n_filtered": 4576,
+        "n_compressed": 438035,
+        "n_dropped": 0,
+        "n_reconstructable": 442611,
+        "compression_rate": 0.9896613504860927,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -3.383468946111563,
+        "vwc_std_delta": 4.4355512166360285
+      },
+      "sensorscope-meteo-13-WindSpeed_ms": {
+        "n_raw": 74898,
+        "n_filtered": 2572,
+        "n_compressed": 72327,
+        "n_dropped": 0,
+        "n_reconstructable": 74898,
+        "compression_rate": 0.9656599642180032,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.6277314610078095,
+        "vwc_std_delta": 0.8751034507537232
+      },
+      "sensorscope-meteo-13-WindDirection_deg": {
+        "n_raw": 445640,
+        "n_filtered": 12952,
+        "n_compressed": 432689,
+        "n_dropped": 0,
+        "n_reconstructable": 445640,
+        "compression_rate": 0.9709361816713042,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 10.87875399509953,
+        "vwc_std_delta": 19.95170584241832
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-13-AmbientTemp_C": {
+        "VWC": {
+          "n": 443100,
+          "mean": 7.686890521327015,
+          "std": 5.6560091992014625,
+          "min": -19.95,
+          "max": 58.19
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.6743838329294727,
+        "n_samples": 443100
+      },
+      "sensorscope-meteo-13-SurfaceTemp_C": {
+        "VWC": {
+          "n": 374664,
+          "mean": 8.665838562018235,
+          "std": 6.864102276897137,
+          "min": -17.15,
+          "max": 68.475
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.8918801187409303,
+        "n_samples": 374664
+      },
+      "sensorscope-meteo-13-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 444921,
+          "mean": 206.42730713991918,
+          "std": 314.99989227542034,
+          "min": 0.0,
+          "max": 1499.98
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5759.853671271765,
+        "n_samples": 444921
+      },
+      "sensorscope-meteo-13-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 442611,
+          "mean": 73.24332755625142,
+          "std": 12.51125158511337,
+          "min": 0.628,
+          "max": 99.954
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.2733820218763783,
+        "n_samples": 442611
+      },
+      "sensorscope-meteo-13-WindSpeed_ms": {
+        "VWC": {
+          "n": 74898,
+          "mean": 2.4923910117760157,
+          "std": 1.4072118050925957,
+          "min": 1.207,
+          "max": 9.989
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.8675291393641648,
+        "n_samples": 74898
+      },
+      "sensorscope-meteo-13-WindDirection_deg": {
+        "VWC": {
+          "n": 445640,
+          "mean": 106.04123697154655,
+          "std": 87.26220004244496,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 846.4314848275832,
+        "n_samples": 445640
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-13-AmbientTemp_C": {
+        "VWC": {
+          "n": 4367,
+          "mean": 9.431424318754294,
+          "std": 8.332080002332596,
+          "min": -19.95,
+          "max": 58.19
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 65.65667835939291,
+        "n_samples": 4367
+      },
+      "sensorscope-meteo-13-SurfaceTemp_C": {
+        "VWC": {
+          "n": 4286,
+          "mean": 9.013950069995333,
+          "std": 8.956917855059073,
+          "min": -17.15,
+          "max": 68.475
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 73.41252153835215,
+        "n_samples": 4286
+      },
+      "sensorscope-meteo-13-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 13115,
+          "mean": 174.18054921845214,
+          "std": 346.4518069754378,
+          "min": 0.0,
+          "max": 1498.92
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 70947.592470252,
+        "n_samples": 13115
+      },
+      "sensorscope-meteo-13-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4576,
+          "mean": 69.85985861013985,
+          "std": 16.9468028017494,
+          "min": 0.628,
+          "max": 99.954
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 276.95152143387963,
+        "n_samples": 4576
+      },
+      "sensorscope-meteo-13-WindSpeed_ms": {
+        "VWC": {
+          "n": 2572,
+          "mean": 3.1201224727838253,
+          "std": 2.282315255846319,
+          "min": 1.207,
+          "max": 9.989
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 11.722248842877978,
+        "n_samples": 2572
+      },
+      "sensorscope-meteo-13-WindDirection_deg": {
+        "VWC": {
+          "n": 12952,
+          "mean": 116.91999096664608,
+          "std": 107.21390588486328,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 15954.01381800111,
+        "n_samples": 12952
+      }
+    }
+  },
+  "sensorscope-meteo-14": {
+    "totals": {
+      "n_raw": 2551738,
+      "n_filtered": 52068,
+      "n_compressed": 2499676,
+      "n_dropped": 0,
+      "n_reconstructable": 2551738,
+      "overall_compression_rate": 0.9795950838213014,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 2499676
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-14-AmbientTemp_C": 475960,
+      "sensorscope-meteo-14-SurfaceTemp_C": 491082,
+      "sensorscope-meteo-14-SolarRadiation_Wm2": 490317,
+      "sensorscope-meteo-14-RelativeHumidity_pct": 475572,
+      "sensorscope-meteo-14-WindSpeed_ms": 74180,
+      "sensorscope-meteo-14-WindDirection_deg": 492565
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-14-AmbientTemp_C": 475960,
+      "sensorscope-meteo-14-SurfaceTemp_C": 491082,
+      "sensorscope-meteo-14-SolarRadiation_Wm2": 490317,
+      "sensorscope-meteo-14-RelativeHumidity_pct": 475572,
+      "sensorscope-meteo-14-WindSpeed_ms": 74180,
+      "sensorscope-meteo-14-WindDirection_deg": 492565
+    },
+    "per_sensor": {
+      "sensorscope-meteo-14-AmbientTemp_C": {
+        "n_raw": 480502,
+        "n_filtered": 4543,
+        "n_compressed": 475960,
+        "n_dropped": 0,
+        "n_reconstructable": 480502,
+        "compression_rate": 0.9905453047021656,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 1.343362186749749,
+        "vwc_std_delta": 2.3106317108846346
+      },
+      "sensorscope-meteo-14-SurfaceTemp_C": {
+        "n_raw": 499730,
+        "n_filtered": 8649,
+        "n_compressed": 491082,
+        "n_dropped": 0,
+        "n_reconstructable": 499730,
+        "compression_rate": 0.982692654033178,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.33162795230154973,
+        "vwc_std_delta": 1.7821034422621223
+      },
+      "sensorscope-meteo-14-SolarRadiation_Wm2": {
+        "n_raw": 507396,
+        "n_filtered": 17080,
+        "n_compressed": 490317,
+        "n_dropped": 0,
+        "n_reconstructable": 507396,
+        "compression_rate": 0.9663379293490686,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -40.633885024045625,
+        "vwc_std_delta": -27.601067428801628
+      },
+      "sensorscope-meteo-14-RelativeHumidity_pct": {
+        "n_raw": 480245,
+        "n_filtered": 4674,
+        "n_compressed": 475572,
+        "n_dropped": 0,
+        "n_reconstructable": 480245,
+        "compression_rate": 0.990267467646722,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -2.9829900756296723,
+        "vwc_std_delta": 3.61542766323511
+      },
+      "sensorscope-meteo-14-WindSpeed_ms": {
+        "n_raw": 76926,
+        "n_filtered": 2747,
+        "n_compressed": 74180,
+        "n_dropped": 0,
+        "n_reconstructable": 76926,
+        "compression_rate": 0.9642903569664353,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.4671369169493218,
+        "vwc_std_delta": 0.7803640568330465
+      },
+      "sensorscope-meteo-14-WindDirection_deg": {
+        "n_raw": 506939,
+        "n_filtered": 14375,
+        "n_compressed": 492565,
+        "n_dropped": 0,
+        "n_reconstructable": 506939,
+        "compression_rate": 0.971643531075731,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -13.383006966213628,
+        "vwc_std_delta": 15.109278493428675
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-14-AmbientTemp_C": {
+        "VWC": {
+          "n": 480502,
+          "mean": 7.768486811709421,
+          "std": 5.4336238351178485,
+          "min": -19.86,
+          "max": 59.96
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.4424113764346203,
+        "n_samples": 480502
+      },
+      "sensorscope-meteo-14-SurfaceTemp_C": {
+        "VWC": {
+          "n": 499730,
+          "mean": 7.197023142496948,
+          "std": 5.956831416592432,
+          "min": -19.775,
+          "max": 68.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.0034304957495364,
+        "n_samples": 499730
+      },
+      "sensorscope-meteo-14-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 507396,
+          "mean": 78.98339035191448,
+          "std": 164.53377668395945,
+          "min": 0.0,
+          "max": 1434.05
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 643.8703359428685,
+        "n_samples": 507396
+      },
+      "sensorscope-meteo-14-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 480245,
+          "mean": 75.32191604909994,
+          "std": 13.434324237669799,
+          "min": 0.087,
+          "max": 99.973
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.4290338179693003,
+        "n_samples": 480245
+      },
+      "sensorscope-meteo-14-WindSpeed_ms": {
+        "VWC": {
+          "n": 76926,
+          "mean": 2.080910407404519,
+          "std": 0.9066464544499768,
+          "min": 1.207,
+          "max": 9.989
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.5228890557081955,
+        "n_samples": 76926
+      },
+      "sensorscope-meteo-14-WindDirection_deg": {
+        "VWC": {
+          "n": 506939,
+          "mean": 176.25002310534404,
+          "std": 126.23040802374386,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7956.566105675933,
+        "n_samples": 506939
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-14-AmbientTemp_C": {
+        "VWC": {
+          "n": 4543,
+          "mean": 9.11184899845917,
+          "std": 7.744255546002483,
+          "min": -19.86,
+          "max": 59.96
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 45.3756066686948,
+        "n_samples": 4543
+      },
+      "sensorscope-meteo-14-SurfaceTemp_C": {
+        "VWC": {
+          "n": 8649,
+          "mean": 6.8653951901953985,
+          "std": 7.738934858854554,
+          "min": -19.775,
+          "max": 68.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 54.97646018525999,
+        "n_samples": 8649
+      },
+      "sensorscope-meteo-14-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 17080,
+          "mean": 38.349505327868854,
+          "std": 136.93270925515782,
+          "min": 0.0,
+          "max": 1434.05
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 14998.152946405777,
+        "n_samples": 17080
+      },
+      "sensorscope-meteo-14-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4674,
+          "mean": 72.33892597347027,
+          "std": 17.04975190090491,
+          "min": 0.087,
+          "max": 99.973
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 228.47727308243776,
+        "n_samples": 4674
+      },
+      "sensorscope-meteo-14-WindSpeed_ms": {
+        "VWC": {
+          "n": 2747,
+          "mean": 2.5480473243538406,
+          "std": 1.6870105112830234,
+          "min": 1.207,
+          "max": 9.989
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 6.194193165360036,
+        "n_samples": 2747
+      },
+      "sensorscope-meteo-14-WindDirection_deg": {
+        "VWC": {
+          "n": 14375,
+          "mean": 162.8670161391304,
+          "std": 141.33968651717254,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 58086.598824986,
+        "n_samples": 14375
+      }
+    }
+  },
+  "sensorscope-meteo-15": {
+    "totals": {
+      "n_raw": 2557541,
+      "n_filtered": 49062,
+      "n_compressed": 2508485,
+      "n_dropped": 0,
+      "n_reconstructable": 2557541,
+      "overall_compression_rate": 0.9808167298197761,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 2508485
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-15-AmbientTemp_C": 475166,
+      "sensorscope-meteo-15-SurfaceTemp_C": 481723,
+      "sensorscope-meteo-15-SolarRadiation_Wm2": 490530,
+      "sensorscope-meteo-15-RelativeHumidity_pct": 475124,
+      "sensorscope-meteo-15-WindSpeed_ms": 93683,
+      "sensorscope-meteo-15-WindDirection_deg": 492259
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-15-AmbientTemp_C": 475166,
+      "sensorscope-meteo-15-SurfaceTemp_C": 481723,
+      "sensorscope-meteo-15-SolarRadiation_Wm2": 490530,
+      "sensorscope-meteo-15-RelativeHumidity_pct": 475124,
+      "sensorscope-meteo-15-WindSpeed_ms": 93683,
+      "sensorscope-meteo-15-WindDirection_deg": 492259
+    },
+    "per_sensor": {
+      "sensorscope-meteo-15-AmbientTemp_C": {
+        "n_raw": 479089,
+        "n_filtered": 3924,
+        "n_compressed": 475166,
+        "n_dropped": 0,
+        "n_reconstructable": 479089,
+        "compression_rate": 0.991809455028189,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.19899670582212803,
+        "vwc_std_delta": -0.09529001342135413
+      },
+      "sensorscope-meteo-15-SurfaceTemp_C": {
+        "n_raw": 486581,
+        "n_filtered": 4859,
+        "n_compressed": 481723,
+        "n_dropped": 0,
+        "n_reconstructable": 486581,
+        "compression_rate": 0.9900139956142965,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.36412052205982537,
+        "vwc_std_delta": -0.2176521140802441
+      },
+      "sensorscope-meteo-15-SolarRadiation_Wm2": {
+        "n_raw": 507966,
+        "n_filtered": 17437,
+        "n_compressed": 490530,
+        "n_dropped": 0,
+        "n_reconstructable": 507966,
+        "compression_rate": 0.9656728993672805,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -58.59212581226778,
+        "vwc_std_delta": -60.48442157090945
+      },
+      "sensorscope-meteo-15-RelativeHumidity_pct": {
+        "n_raw": 479088,
+        "n_filtered": 3965,
+        "n_compressed": 475124,
+        "n_dropped": 0,
+        "n_reconstructable": 479088,
+        "compression_rate": 0.9917238586647964,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.4197163357868305,
+        "vwc_std_delta": 0.799493905444157
+      },
+      "sensorscope-meteo-15-WindSpeed_ms": {
+        "n_raw": 96959,
+        "n_filtered": 3277,
+        "n_compressed": 93683,
+        "n_dropped": 0,
+        "n_reconstructable": 96959,
+        "compression_rate": 0.9662022091812003,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.26238387901882,
+        "vwc_std_delta": 0.3371741587244491
+      },
+      "sensorscope-meteo-15-WindDirection_deg": {
+        "n_raw": 507858,
+        "n_filtered": 15600,
+        "n_compressed": 492259,
+        "n_dropped": 0,
+        "n_reconstructable": 507858,
+        "compression_rate": 0.9692827522653971,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -11.340330472336746,
+        "vwc_std_delta": 13.548896690522724
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-15-AmbientTemp_C": {
+        "VWC": {
+          "n": 479089,
+          "mean": 7.90655120447349,
+          "std": 5.162544826027479,
+          "min": -5.49,
+          "max": 36.01
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.02485724708505115,
+        "n_samples": 479089
+      },
+      "sensorscope-meteo-15-SurfaceTemp_C": {
+        "VWC": {
+          "n": 486581,
+          "mean": 8.147601073613643,
+          "std": 6.461994386002387,
+          "min": -15.4,
+          "max": 44.163
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.06760162315298483,
+        "n_samples": 486581
+      },
+      "sensorscope-meteo-15-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 507966,
+          "mean": 95.027331065465,
+          "std": 184.06476773475146,
+          "min": 0.0,
+          "max": 1234.12
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 349.22429489254114,
+        "n_samples": 507966
+      },
+      "sensorscope-meteo-15-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 479088,
+          "mean": 75.91424496125971,
+          "std": 13.238442993664437,
+          "min": 22.93,
+          "max": 98.974
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.39481402173216357,
+        "n_samples": 479088
+      },
+      "sensorscope-meteo-15-WindSpeed_ms": {
+        "VWC": {
+          "n": 96959,
+          "mean": 1.9504040367578048,
+          "std": 0.7835433919456841,
+          "min": 1.207,
+          "max": 8.079
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.36426428434854363,
+        "n_samples": 96959
+      },
+      "sensorscope-meteo-15-WindDirection_deg": {
+        "VWC": {
+          "n": 507858,
+          "mean": 153.9699225236188,
+          "std": 85.77815457685894,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1229.8466118330975,
+        "n_samples": 507858
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-15-AmbientTemp_C": {
+        "VWC": {
+          "n": 3924,
+          "mean": 8.105547910295618,
+          "std": 5.067254812606125,
+          "min": -5.2,
+          "max": 36.01
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.952064200945956,
+        "n_samples": 3924
+      },
+      "sensorscope-meteo-15-SurfaceTemp_C": {
+        "VWC": {
+          "n": 4859,
+          "mean": 7.783480551553818,
+          "std": 6.244342271922143,
+          "min": -15.4,
+          "max": 44.163
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.130452316661698,
+        "n_samples": 4859
+      },
+      "sensorscope-meteo-15-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 17437,
+          "mean": 36.435205253197225,
+          "std": 123.58034616384201,
+          "min": 0.0,
+          "max": 1234.12
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5044.179713615734,
+        "n_samples": 17437
+      },
+      "sensorscope-meteo-15-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 3965,
+          "mean": 74.49452862547288,
+          "std": 14.037936899108594,
+          "min": 24.269,
+          "max": 98.974
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 25.32101933620241,
+        "n_samples": 3965
+      },
+      "sensorscope-meteo-15-WindSpeed_ms": {
+        "VWC": {
+          "n": 3277,
+          "mean": 2.212787915776625,
+          "std": 1.1207175506701332,
+          "min": 1.207,
+          "max": 7.944
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.7232293790370194,
+        "n_samples": 3277
+      },
+      "sensorscope-meteo-15-WindDirection_deg": {
+        "VWC": {
+          "n": 15600,
+          "mean": 142.62959205128206,
+          "std": 99.32705126738166,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 18847.802090306086,
+        "n_samples": 15600
+      }
+    }
+  },
+  "sensorscope-meteo-17": {
+    "totals": {
+      "n_raw": 2529923,
+      "n_filtered": 49669,
+      "n_compressed": 2480260,
+      "n_dropped": 0,
+      "n_reconstructable": 2529923,
+      "overall_compression_rate": 0.9803673866754048,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 2480260
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-17-AmbientTemp_C": 478397,
+      "sensorscope-meteo-17-SurfaceTemp_C": 499726,
+      "sensorscope-meteo-17-SolarRadiation_Wm2": 489814,
+      "sensorscope-meteo-17-RelativeHumidity_pct": 477785,
+      "sensorscope-meteo-17-WindSpeed_ms": 50950,
+      "sensorscope-meteo-17-WindDirection_deg": 483588
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-17-AmbientTemp_C": 478397,
+      "sensorscope-meteo-17-SurfaceTemp_C": 499726,
+      "sensorscope-meteo-17-SolarRadiation_Wm2": 489814,
+      "sensorscope-meteo-17-RelativeHumidity_pct": 477785,
+      "sensorscope-meteo-17-WindSpeed_ms": 50950,
+      "sensorscope-meteo-17-WindDirection_deg": 483588
+    },
+    "per_sensor": {
+      "sensorscope-meteo-17-AmbientTemp_C": {
+        "n_raw": 482232,
+        "n_filtered": 3836,
+        "n_compressed": 478397,
+        "n_dropped": 0,
+        "n_reconstructable": 482232,
+        "compression_rate": 0.9920453225833209,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.238423983672309,
+        "vwc_std_delta": 0.012386401137114866
+      },
+      "sensorscope-meteo-17-SurfaceTemp_C": {
+        "n_raw": 505163,
+        "n_filtered": 5438,
+        "n_compressed": 499726,
+        "n_dropped": 0,
+        "n_reconstructable": 505163,
+        "compression_rate": 0.9892351577609603,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.3365326417686081,
+        "vwc_std_delta": -0.08955804224623165
+      },
+      "sensorscope-meteo-17-SolarRadiation_Wm2": {
+        "n_raw": 508041,
+        "n_filtered": 18228,
+        "n_compressed": 489814,
+        "n_dropped": 0,
+        "n_reconstructable": 508041,
+        "compression_rate": 0.9641210059818007,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -59.1652816346437,
+        "vwc_std_delta": -63.74919739997367
+      },
+      "sensorscope-meteo-17-RelativeHumidity_pct": {
+        "n_raw": 482227,
+        "n_filtered": 4443,
+        "n_compressed": 477785,
+        "n_dropped": 0,
+        "n_reconstructable": 482227,
+        "compression_rate": 0.990786496815815,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -2.939300556412377,
+        "vwc_std_delta": 1.3081430105875747
+      },
+      "sensorscope-meteo-17-WindSpeed_ms": {
+        "n_raw": 53362,
+        "n_filtered": 2413,
+        "n_compressed": 50950,
+        "n_dropped": 0,
+        "n_reconstructable": 53362,
+        "compression_rate": 0.9547805554514448,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.2752150383823686,
+        "vwc_std_delta": 0.3243486718242746
+      },
+      "sensorscope-meteo-17-WindDirection_deg": {
+        "n_raw": 498898,
+        "n_filtered": 15311,
+        "n_compressed": 483588,
+        "n_dropped": 0,
+        "n_reconstructable": 498898,
+        "compression_rate": 0.9693103600335139,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -16.46837533257073,
+        "vwc_std_delta": 10.196764063045634
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-17-AmbientTemp_C": {
+        "VWC": {
+          "n": 482232,
+          "mean": 7.566907090363145,
+          "std": 5.3856315865984365,
+          "min": -5.82,
+          "max": 36.28
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.021413383208810057,
+        "n_samples": 482232
+      },
+      "sensorscope-meteo-17-SurfaceTemp_C": {
+        "VWC": {
+          "n": 505163,
+          "mean": 7.720408147469233,
+          "std": 6.123140914071848,
+          "min": -15.775,
+          "max": 46.663
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.05654271836406288,
+        "n_samples": 505163
+      },
+      "sensorscope-meteo-17-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 508041,
+          "mean": 93.09313351087806,
+          "std": 179.64653040064513,
+          "min": 0.0,
+          "max": 1154.37
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 341.6047027296411,
+        "n_samples": 508041
+      },
+      "sensorscope-meteo-17-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 482227,
+          "mean": 74.25514007925729,
+          "std": 12.572617665563742,
+          "min": 11.068,
+          "max": 98.338
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.6352228409495296,
+        "n_samples": 482227
+      },
+      "sensorscope-meteo-17-WindSpeed_ms": {
+        "VWC": {
+          "n": 53362,
+          "mean": 1.8025019114725835,
+          "std": 0.575094444480583,
+          "min": 1.207,
+          "max": 9.319
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.3404555463782689,
+        "n_samples": 53362
+      },
+      "sensorscope-meteo-17-WindDirection_deg": {
+        "VWC": {
+          "n": 498898,
+          "mean": 158.8041694675064,
+          "std": 115.86783250339958,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4622.659942386466,
+        "n_samples": 498898
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-17-AmbientTemp_C": {
+        "VWC": {
+          "n": 3836,
+          "mean": 7.805331074035454,
+          "std": 5.398017987735551,
+          "min": -5.46,
+          "max": 36.28
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.5089691515972596,
+        "n_samples": 3836
+      },
+      "sensorscope-meteo-17-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5438,
+          "mean": 7.383875505700625,
+          "std": 6.033582871825616,
+          "min": -15.775,
+          "max": 46.663
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.955915814639161,
+        "n_samples": 5438
+      },
+      "sensorscope-meteo-17-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 18228,
+          "mean": 33.927851876234364,
+          "std": 115.89733300067147,
+          "min": 0.0,
+          "max": 979.961
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4573.351926140697,
+        "n_samples": 18228
+      },
+      "sensorscope-meteo-17-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4443,
+          "mean": 71.31583952284491,
+          "std": 13.880760676151317,
+          "min": 11.068,
+          "max": 98.338
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 26.076413470543244,
+        "n_samples": 4443
+      },
+      "sensorscope-meteo-17-WindSpeed_ms": {
+        "VWC": {
+          "n": 2413,
+          "mean": 2.077716949854952,
+          "std": 0.8994431163048576,
+          "min": 1.207,
+          "max": 9.319
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 2.1451110698820712,
+        "n_samples": 2413
+      },
+      "sensorscope-meteo-17-WindDirection_deg": {
+        "VWC": {
+          "n": 15311,
+          "mean": 142.33579413493567,
+          "std": 126.06459656644522,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 39097.80340632238,
+        "n_samples": 15311
+      }
+    }
+  },
+  "sensorscope-meteo-18": {
+    "totals": {
+      "n_raw": 2609133,
+      "n_filtered": 47937,
+      "n_compressed": 2561202,
+      "n_dropped": 0,
+      "n_reconstructable": 2609133,
+      "overall_compression_rate": 0.9816272301948579,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 2561202
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-18-AmbientTemp_C": 502676,
+      "sensorscope-meteo-18-SurfaceTemp_C": 500830,
+      "sensorscope-meteo-18-SolarRadiation_Wm2": 493218,
+      "sensorscope-meteo-18-RelativeHumidity_pct": 502272,
+      "sensorscope-meteo-18-WindSpeed_ms": 66207,
+      "sensorscope-meteo-18-WindDirection_deg": 495999
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-18-AmbientTemp_C": 502676,
+      "sensorscope-meteo-18-SurfaceTemp_C": 500830,
+      "sensorscope-meteo-18-SolarRadiation_Wm2": 493218,
+      "sensorscope-meteo-18-RelativeHumidity_pct": 502272,
+      "sensorscope-meteo-18-WindSpeed_ms": 66207,
+      "sensorscope-meteo-18-WindDirection_deg": 495999
+    },
+    "per_sensor": {
+      "sensorscope-meteo-18-AmbientTemp_C": {
+        "n_raw": 507037,
+        "n_filtered": 4362,
+        "n_compressed": 502676,
+        "n_dropped": 0,
+        "n_reconstructable": 507037,
+        "compression_rate": 0.9913970775308311,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.8590540463548111,
+        "vwc_std_delta": 1.3886617084990425
+      },
+      "sensorscope-meteo-18-SurfaceTemp_C": {
+        "n_raw": 506572,
+        "n_filtered": 5743,
+        "n_compressed": 500830,
+        "n_dropped": 0,
+        "n_reconstructable": 506572,
+        "compression_rate": 0.9886630133524948,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.4978478925216594,
+        "vwc_std_delta": 1.6832439514804038
+      },
+      "sensorscope-meteo-18-SolarRadiation_Wm2": {
+        "n_raw": 510125,
+        "n_filtered": 16908,
+        "n_compressed": 493218,
+        "n_dropped": 0,
+        "n_reconstructable": 510125,
+        "compression_rate": 0.9668551825532957,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -53.58913049620718,
+        "vwc_std_delta": -49.46649671283606
+      },
+      "sensorscope-meteo-18-RelativeHumidity_pct": {
+        "n_raw": 506907,
+        "n_filtered": 4636,
+        "n_compressed": 502272,
+        "n_dropped": 0,
+        "n_reconstructable": 506907,
+        "compression_rate": 0.9908543381724852,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -2.4496218780989807,
+        "vwc_std_delta": 2.8331699113358706
+      },
+      "sensorscope-meteo-18-WindSpeed_ms": {
+        "n_raw": 69005,
+        "n_filtered": 2799,
+        "n_compressed": 66207,
+        "n_dropped": 0,
+        "n_reconstructable": 69005,
+        "compression_rate": 0.9594377219042098,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.4813599388480141,
+        "vwc_std_delta": 0.837269210643161
+      },
+      "sensorscope-meteo-18-WindDirection_deg": {
+        "n_raw": 509487,
+        "n_filtered": 13489,
+        "n_compressed": 495999,
+        "n_dropped": 0,
+        "n_reconstructable": 509487,
+        "compression_rate": 0.9735243490020353,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -23.114284838474276,
+        "vwc_std_delta": 19.75449097689406
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-18-AmbientTemp_C": {
+        "VWC": {
+          "n": 507037,
+          "mean": 7.640253610683245,
+          "std": 5.71198784928047,
+          "min": -19.56,
+          "max": 50.59
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.28489857227500986,
+        "n_samples": 507037
+      },
+      "sensorscope-meteo-18-SurfaceTemp_C": {
+        "VWC": {
+          "n": 506572,
+          "mean": 7.4258681095678405,
+          "std": 6.2002445950898135,
+          "min": -16.9,
+          "max": 69.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.5772583633962316,
+        "n_samples": 506572
+      },
+      "sensorscope-meteo-18-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 510125,
+          "mean": 96.14517958539574,
+          "std": 182.85814249683335,
+          "min": 0.0,
+          "max": 1420.76
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 458.88499281487884,
+        "n_samples": 510125
+      },
+      "sensorscope-meteo-18-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 506907,
+          "mean": 75.67244413866844,
+          "std": 13.871053668017643,
+          "min": 0.166,
+          "max": 99.449
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.4422466619013419,
+        "n_samples": 506907
+      },
+      "sensorscope-meteo-18-WindSpeed_ms": {
+        "VWC": {
+          "n": 69005,
+          "mean": 1.76711987537135,
+          "std": 0.5776759594762566,
+          "min": 1.207,
+          "max": 9.956
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.4144593173329828,
+        "n_samples": 69005
+      },
+      "sensorscope-meteo-18-WindDirection_deg": {
+        "VWC": {
+          "n": 509487,
+          "mean": 200.07615769784118,
+          "std": 124.43314274436884,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 11203.385395553893,
+        "n_samples": 509487
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-18-AmbientTemp_C": {
+        "VWC": {
+          "n": 4362,
+          "mean": 8.499307657038056,
+          "std": 7.100649557779512,
+          "min": -19.56,
+          "max": 50.59
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 30.894745509490566,
+        "n_samples": 4362
+      },
+      "sensorscope-meteo-18-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5743,
+          "mean": 7.9237160020895,
+          "std": 7.883488546570217,
+          "min": -16.9,
+          "max": 69.725
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 46.741925624547285,
+        "n_samples": 5743
+      },
+      "sensorscope-meteo-18-SolarRadiation_Wm2": {
+        "VWC": {
+          "n": 16908,
+          "mean": 42.556049089188555,
+          "std": 133.3916457839973,
+          "min": 0.0,
+          "max": 1420.76
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 8652.762044976263,
+        "n_samples": 16908
+      },
+      "sensorscope-meteo-18-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 4636,
+          "mean": 73.22282226056946,
+          "std": 16.704223579353513,
+          "min": 0.166,
+          "max": 99.449
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 130.76657355930143,
+        "n_samples": 4636
+      },
+      "sensorscope-meteo-18-WindSpeed_ms": {
+        "VWC": {
+          "n": 2799,
+          "mean": 2.248479814219364,
+          "std": 1.4149451701194176,
+          "min": 1.207,
+          "max": 9.956
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 4.695045825958728,
+        "n_samples": 2799
+      },
+      "sensorscope-meteo-18-WindDirection_deg": {
+        "VWC": {
+          "n": 13489,
+          "mean": 176.9618728593669,
+          "std": 144.1876337212629,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 63657.07573865258,
+        "n_samples": 13489
+      }
+    }
+  },
+  "sensorscope-meteo-19": {
+    "totals": {
+      "n_raw": 1730745,
+      "n_filtered": 20421,
+      "n_compressed": 1710329,
+      "n_dropped": 0,
+      "n_reconstructable": 1730745,
+      "overall_compression_rate": 0.9882010348144874,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 1710329
+    },
+    "drops_by_sensor": {
+      "sensorscope-meteo-19-AmbientTemp_C": 450369,
+      "sensorscope-meteo-19-SurfaceTemp_C": 448809,
+      "sensorscope-meteo-19-RelativeHumidity_pct": 450075,
+      "sensorscope-meteo-19-SoilMoisture_pct": 217009,
+      "sensorscope-meteo-19-Watermark_kPa": 144067
+    },
+    "compressed_by_sensor": {
+      "sensorscope-meteo-19-AmbientTemp_C": 450369,
+      "sensorscope-meteo-19-SurfaceTemp_C": 448809,
+      "sensorscope-meteo-19-RelativeHumidity_pct": 450075,
+      "sensorscope-meteo-19-SoilMoisture_pct": 217009,
+      "sensorscope-meteo-19-Watermark_kPa": 144067
+    },
+    "per_sensor": {
+      "sensorscope-meteo-19-AmbientTemp_C": {
+        "n_raw": 453989,
+        "n_filtered": 3621,
+        "n_compressed": 450369,
+        "n_dropped": 0,
+        "n_reconstructable": 453989,
+        "compression_rate": 0.9920240358246566,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 0.20994631664758945,
+        "vwc_std_delta": -0.08006490369567931
+      },
+      "sensorscope-meteo-19-SurfaceTemp_C": {
+        "n_raw": 453975,
+        "n_filtered": 5167,
+        "n_compressed": 448809,
+        "n_dropped": 0,
+        "n_reconstructable": 453975,
+        "compression_rate": 0.9886183159865631,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.4523984868947819,
+        "vwc_std_delta": -0.11653556779501884
+      },
+      "sensorscope-meteo-19-RelativeHumidity_pct": {
+        "n_raw": 453985,
+        "n_filtered": 3911,
+        "n_compressed": 450075,
+        "n_dropped": 0,
+        "n_reconstructable": 453985,
+        "compression_rate": 0.9913851779243807,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -1.647698804320882,
+        "vwc_std_delta": 0.7580434286172064
+      },
+      "sensorscope-meteo-19-SoilMoisture_pct": {
+        "n_raw": 222194,
+        "n_filtered": 5186,
+        "n_compressed": 217009,
+        "n_dropped": 0,
+        "n_reconstructable": 222194,
+        "compression_rate": 0.9766600358245497,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": -0.5884540310109578,
+        "vwc_std_delta": 0.36493552422931064
+      },
+      "sensorscope-meteo-19-Watermark_kPa": {
+        "n_raw": 146602,
+        "n_filtered": 2536,
+        "n_compressed": 144067,
+        "n_dropped": 0,
+        "n_reconstructable": 146602,
+        "compression_rate": 0.9827014638272329,
+        "drop_rate": 0.0,
+        "vwc_mean_delta": 2.3508148198848886,
+        "vwc_std_delta": -1.003637879954681
+      }
+    },
+    "raw_stats": {
+      "sensorscope-meteo-19-AmbientTemp_C": {
+        "VWC": {
+          "n": 453989,
+          "mean": 7.46651874825161,
+          "std": 5.619220779735276,
+          "min": -5.77,
+          "max": 27.57
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.012147831219771796,
+        "n_samples": 453989
+      },
+      "sensorscope-meteo-19-SurfaceTemp_C": {
+        "VWC": {
+          "n": 453975,
+          "mean": 6.817185016796079,
+          "std": 5.910672730073922,
+          "min": -17.025,
+          "max": 62.788
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.08645306283742718,
+        "n_samples": 453975
+      },
+      "sensorscope-meteo-19-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 453985,
+          "mean": 74.47516262431577,
+          "std": 12.327310709018736,
+          "min": 14.768,
+          "max": 94.169
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.5867286232693024,
+        "n_samples": 453985
+      },
+      "sensorscope-meteo-19-SoilMoisture_pct": {
+        "VWC": {
+          "n": 222194,
+          "mean": 17.650786078832013,
+          "std": 4.613188668927581,
+          "min": 0.466,
+          "max": 25.021
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 0.29678734856687544,
+        "n_samples": 222194
+      },
+      "sensorscope-meteo-19-Watermark_kPa": {
+        "VWC": {
+          "n": 146602,
+          "mean": -32.15756836878079,
+          "std": 29.127761825924974,
+          "min": -199.902,
+          "max": -3.615
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 7.951080422428258,
+        "n_samples": 146602
+      }
+    },
+    "filtered_stats": {
+      "sensorscope-meteo-19-AmbientTemp_C": {
+        "VWC": {
+          "n": 3621,
+          "mean": 7.676465064899199,
+          "std": 5.5391558760395965,
+          "min": -5.55,
+          "max": 27.28
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 1.3609068728366047,
+        "n_samples": 3621
+      },
+      "sensorscope-meteo-19-SurfaceTemp_C": {
+        "VWC": {
+          "n": 5167,
+          "mean": 6.364786529901297,
+          "std": 5.794137162278903,
+          "min": -17.025,
+          "max": 62.788
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 5.953707753249231,
+        "n_samples": 5167
+      },
+      "sensorscope-meteo-19-RelativeHumidity_pct": {
+        "VWC": {
+          "n": 3911,
+          "mean": 72.82746381999489,
+          "std": 13.085354137635942,
+          "min": 14.768,
+          "max": 94.169
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 28.188645337025594,
+        "n_samples": 3911
+      },
+      "sensorscope-meteo-19-SoilMoisture_pct": {
+        "VWC": {
+          "n": 5186,
+          "mean": 17.062332047821055,
+          "std": 4.978124193156892,
+          "min": 0.466,
+          "max": 24.367
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 3.6436688860450315,
+        "n_samples": 5186
+      },
+      "sensorscope-meteo-19-Watermark_kPa": {
+        "VWC": {
+          "n": 2536,
+          "mean": -29.806753548895898,
+          "std": 28.124123945970293,
+          "min": -199.867,
+          "max": -3.615
+        },
+        "SC": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "ST": {
+          "n": 0,
+          "mean": null,
+          "std": null,
+          "min": null,
+          "max": null
+        },
+        "VWC_first_diff_var": 115.49448337651793,
+        "n_samples": 2536
+      }
+    }
+  }
+}

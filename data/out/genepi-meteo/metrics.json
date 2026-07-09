@@ -1,0 +1,4262 @@
+{
+  "genepi-meteo-10": {
+    "totals": {
+      "n_raw": 245505,
+      "n_filtered": 6969,
+      "n_compressed": 238542,
+      "n_dropped": 0,
+      "n_reconstructable": 245505,
+      "overall_compression_rate": 0.9716136127573777,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 238542
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-10-AmbientTemp_C": 40478,
+      "genepi-meteo-10-SurfaceTemp_C": 40489,
+      "genepi-meteo-10-RelativeHumidity_pct": 37966,
+      "genepi-meteo-10-Rain_mm": 40460,
+      "genepi-meteo-10-WindSpeed_ms": 39697,
+      "genepi-meteo-10-WindDirection_deg": 39452
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-10-AmbientTemp_C": 40478,
+      "genepi-meteo-10-SurfaceTemp_C": 40489,
+      "genepi-meteo-10-RelativeHumidity_pct": 37966,
+      "genepi-meteo-10-Rain_mm": 40460,
+      "genepi-meteo-10-WindSpeed_ms": 39697,
+      "genepi-meteo-10-WindDirection_deg": 39452
+    },
+    "per_sensor": {
+      "genepi-meteo-10-AmbientTemp_C": {
+        "n_raw": 41329,
+        "n_filtered": 852,
+        "n_compressed": 40478,
+        "n_dropped": 0,
+        "rmse": 1.5294217284296379,
+        "nrmse": 0.3403364775056508,
+        "mean_latency_hr": 5.629373247464116,
+        "n_reconstructable": 41329,
+        "compression_rate": 0.9793849355174333,
+        "drop_rate": 0.0,
+        "value_mean_delta": -2.254187494895251,
+        "value_std_delta": -2.026259527388732
+      },
+      "genepi-meteo-10-SurfaceTemp_C": {
+        "n_raw": 41329,
+        "n_filtered": 841,
+        "n_compressed": 40489,
+        "n_dropped": 0,
+        "rmse": 3.8111033699209687,
+        "nrmse": 0.5783833185278036,
+        "mean_latency_hr": 5.751902686034289,
+        "n_reconstructable": 41329,
+        "compression_rate": 0.9796510924532411,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.2720718060685794,
+        "value_std_delta": -3.610274234518779
+      },
+      "genepi-meteo-10-RelativeHumidity_pct": {
+        "n_raw": 38860,
+        "n_filtered": 895,
+        "n_compressed": 37966,
+        "n_dropped": 0,
+        "rmse": 11.444903537964414,
+        "nrmse": 0.61590680975657,
+        "mean_latency_hr": 5.430969148510322,
+        "n_reconstructable": 38860,
+        "compression_rate": 0.976968605249614,
+        "drop_rate": 0.0,
+        "value_mean_delta": 15.736154657602,
+        "value_std_delta": -3.7826228771602057
+      },
+      "genepi-meteo-10-Rain_mm": {
+        "n_raw": 41329,
+        "n_filtered": 870,
+        "n_compressed": 40460,
+        "n_dropped": 0,
+        "rmse": 2.848395294729764,
+        "nrmse": 0.1596306513983965,
+        "mean_latency_hr": 5.736082364817817,
+        "n_reconstructable": 41329,
+        "compression_rate": 0.9789494059861115,
+        "drop_rate": 0.0,
+        "value_mean_delta": -12.748400891862133,
+        "value_std_delta": -8.087944257236359
+      },
+      "genepi-meteo-10-WindSpeed_ms": {
+        "n_raw": 41329,
+        "n_filtered": 1633,
+        "n_compressed": 39697,
+        "n_dropped": 0,
+        "rmse": 0.7201777951610524,
+        "nrmse": 1.0273095492583315,
+        "mean_latency_hr": 3.7863033490070195,
+        "n_reconstructable": 41329,
+        "compression_rate": 0.9604877930750805,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.3233176669633959,
+        "value_std_delta": 0.12951585991711367
+      },
+      "genepi-meteo-10-WindDirection_deg": {
+        "n_raw": 41329,
+        "n_filtered": 1878,
+        "n_compressed": 39452,
+        "n_dropped": 0,
+        "rmse": 73.93830675540248,
+        "nrmse": 1.1000396853942136,
+        "mean_latency_hr": 3.7626890453569057,
+        "n_reconstructable": 41329,
+        "compression_rate": 0.9545597522320889,
+        "drop_rate": 0.0,
+        "value_mean_delta": -4.6451126763109585,
+        "value_std_delta": 56.293237622498694
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-10-AmbientTemp_C": {
+        "value": {
+          "n": 41329,
+          "mean": 3.1506194197778803,
+          "std": 4.49385190690952,
+          "min": -10.94,
+          "max": 14.46
+        },
+        "value_first_diff_var": 0.09447173995227401,
+        "n_samples": 41329
+      },
+      "genepi-meteo-10-SurfaceTemp_C": {
+        "value": {
+          "n": 41329,
+          "mean": 3.1582171356674493,
+          "std": 6.589234592072289,
+          "min": -11.525,
+          "max": 24.225
+        },
+        "value_first_diff_var": 0.047170639878324164,
+        "n_samples": 41329
+      },
+      "genepi-meteo-10-RelativeHumidity_pct": {
+        "value": {
+          "n": 38860,
+          "mean": 62.69776266083376,
+          "std": 18.58220002874766,
+          "min": 0.046,
+          "max": 91.049
+        },
+        "value_first_diff_var": 5.501011891153448,
+        "n_samples": 38860
+      },
+      "genepi-meteo-10-Rain_mm": {
+        "value": {
+          "n": 41329,
+          "mean": 15.5582859493334,
+          "std": 17.843661413251468,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.1626325901667429,
+        "n_samples": 41329
+      },
+      "genepi-meteo-10-WindSpeed_ms": {
+        "value": {
+          "n": 41329,
+          "mean": 0.6941899876599966,
+          "std": 0.7010329025764303,
+          "min": 0.0,
+          "max": 9.352
+        },
+        "value_first_diff_var": 0.2249968002737628,
+        "n_samples": 41329
+      },
+      "genepi-meteo-10-WindDirection_deg": {
+        "value": {
+          "n": 41329,
+          "mean": 137.82812811827048,
+          "std": 67.21421757516477,
+          "min": 0.0,
+          "max": 359.484
+        },
+        "value_first_diff_var": 2684.9225853822263,
+        "n_samples": 41329
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-10-AmbientTemp_C": {
+        "value": {
+          "n": 852,
+          "mean": 0.8964319248826291,
+          "std": 2.4675923795207884,
+          "min": -10.7,
+          "max": 13.61
+        },
+        "value_first_diff_var": 1.195220422507011,
+        "n_samples": 852
+      },
+      "genepi-meteo-10-SurfaceTemp_C": {
+        "value": {
+          "n": 841,
+          "mean": 3.4302889417360287,
+          "std": 2.97896035755351,
+          "min": -9.025,
+          "max": 12.162
+        },
+        "value_first_diff_var": 2.4026765058673467,
+        "n_samples": 841
+      },
+      "genepi-meteo-10-RelativeHumidity_pct": {
+        "value": {
+          "n": 895,
+          "mean": 78.43391731843576,
+          "std": 14.799577151587455,
+          "min": 0.193,
+          "max": 90.758
+        },
+        "value_first_diff_var": 73.4803742566764,
+        "n_samples": 895
+      },
+      "genepi-meteo-10-Rain_mm": {
+        "value": {
+          "n": 870,
+          "mean": 2.8098850574712655,
+          "std": 9.755717156015109,
+          "min": 0.0,
+          "max": 50.2
+        },
+        "value_first_diff_var": 9.312854980593542,
+        "n_samples": 870
+      },
+      "genepi-meteo-10-WindSpeed_ms": {
+        "value": {
+          "n": 1633,
+          "mean": 1.0175076546233925,
+          "std": 0.8305487624935439,
+          "min": 0.0,
+          "max": 8.866
+        },
+        "value_first_diff_var": 1.772587533700605,
+        "n_samples": 1633
+      },
+      "genepi-meteo-10-WindDirection_deg": {
+        "value": {
+          "n": 1878,
+          "mean": 133.18301544195953,
+          "std": 123.50745519766346,
+          "min": 0.0,
+          "max": 359.484
+        },
+        "value_first_diff_var": 41893.62132908899,
+        "n_samples": 1878
+      }
+    }
+  },
+  "genepi-meteo-11": {
+    "totals": {
+      "n_raw": 231121,
+      "n_filtered": 6676,
+      "n_compressed": 224451,
+      "n_dropped": 0,
+      "n_reconstructable": 231121,
+      "overall_compression_rate": 0.9711146974961168,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 224451
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-11-AmbientTemp_C": 37702,
+      "genepi-meteo-11-SurfaceTemp_C": 37717,
+      "genepi-meteo-11-RelativeHumidity_pct": 37658,
+      "genepi-meteo-11-Rain_mm": 37708,
+      "genepi-meteo-11-WindSpeed_ms": 36946,
+      "genepi-meteo-11-WindDirection_deg": 36720
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-11-AmbientTemp_C": 37702,
+      "genepi-meteo-11-SurfaceTemp_C": 37717,
+      "genepi-meteo-11-RelativeHumidity_pct": 37658,
+      "genepi-meteo-11-Rain_mm": 37708,
+      "genepi-meteo-11-WindSpeed_ms": 36946,
+      "genepi-meteo-11-WindDirection_deg": 36720
+    },
+    "per_sensor": {
+      "genepi-meteo-11-AmbientTemp_C": {
+        "n_raw": 38558,
+        "n_filtered": 857,
+        "n_compressed": 37702,
+        "n_dropped": 0,
+        "rmse": 1.465813453283783,
+        "nrmse": 0.31680308945569396,
+        "mean_latency_hr": 5.725317278155275,
+        "n_reconstructable": 38558,
+        "compression_rate": 0.9777737434514239,
+        "drop_rate": 0.0,
+        "value_mean_delta": -2.7429651679329203,
+        "value_std_delta": -1.959506201094594
+      },
+      "genepi-meteo-11-SurfaceTemp_C": {
+        "n_raw": 38559,
+        "n_filtered": 843,
+        "n_compressed": 37717,
+        "n_dropped": 0,
+        "rmse": 2.0104548899875687,
+        "nrmse": 0.3865316874052317,
+        "mean_latency_hr": 5.890945823283799,
+        "n_reconstructable": 38559,
+        "compression_rate": 0.9781373998288337,
+        "drop_rate": 0.0,
+        "value_mean_delta": 1.3130533518952656,
+        "value_std_delta": -2.3895157241334797
+      },
+      "genepi-meteo-11-RelativeHumidity_pct": {
+        "n_raw": 38558,
+        "n_filtered": 901,
+        "n_compressed": 37658,
+        "n_dropped": 0,
+        "rmse": 10.961166945697515,
+        "nrmse": 0.5802899668905883,
+        "mean_latency_hr": 5.653891972266888,
+        "n_reconstructable": 38558,
+        "compression_rate": 0.9766326054255926,
+        "drop_rate": 0.0,
+        "value_mean_delta": 17.281859340346017,
+        "value_std_delta": -5.790210118728444
+      },
+      "genepi-meteo-11-Rain_mm": {
+        "n_raw": 38560,
+        "n_filtered": 853,
+        "n_compressed": 37708,
+        "n_dropped": 0,
+        "rmse": 4.509583846989582,
+        "nrmse": 0.35796114233688126,
+        "mean_latency_hr": 6.056515329644998,
+        "n_reconstructable": 38560,
+        "compression_rate": 0.9778786307053942,
+        "drop_rate": 0.0,
+        "value_mean_delta": -4.047221352025801,
+        "value_std_delta": -5.833462443718375
+      },
+      "genepi-meteo-11-WindSpeed_ms": {
+        "n_raw": 38560,
+        "n_filtered": 1615,
+        "n_compressed": 36946,
+        "n_dropped": 0,
+        "rmse": 0.8179701052615616,
+        "nrmse": 1.0902941760874116,
+        "mean_latency_hr": 3.9267468951705853,
+        "n_reconstructable": 38560,
+        "compression_rate": 0.9581172199170125,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.2922394010219289,
+        "value_std_delta": 0.3608990416448954
+      },
+      "genepi-meteo-11-WindDirection_deg": {
+        "n_raw": 38326,
+        "n_filtered": 1607,
+        "n_compressed": 36720,
+        "n_dropped": 0,
+        "rmse": 83.13874461538093,
+        "nrmse": 1.1271064199606855,
+        "mean_latency_hr": 3.8739580687899715,
+        "n_reconstructable": 38326,
+        "compression_rate": 0.9580702395240829,
+        "drop_rate": 0.0,
+        "value_mean_delta": -4.547699357875047,
+        "value_std_delta": 47.071786052477535
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-11-AmbientTemp_C": {
+        "value": {
+          "n": 38558,
+          "mean": 2.9245287618652425,
+          "std": 4.6268912838010126,
+          "min": -11.66,
+          "max": 12.94
+        },
+        "value_first_diff_var": 0.08321176865127557,
+        "n_samples": 38558
+      },
+      "genepi-meteo-11-SurfaceTemp_C": {
+        "value": {
+          "n": 38559,
+          "mean": 1.5689229233123265,
+          "std": 5.201267982668262,
+          "min": -11.775,
+          "max": 19.475
+        },
+        "value_first_diff_var": 0.0529755574874432,
+        "n_samples": 38559
+      },
+      "genepi-meteo-11-RelativeHumidity_pct": {
+        "value": {
+          "n": 38558,
+          "mean": 64.11908960526998,
+          "std": 18.88912021765871,
+          "min": 7.584,
+          "max": 91.282
+        },
+        "value_first_diff_var": 6.080650521579997,
+        "n_samples": 38558
+      },
+      "genepi-meteo-11-Rain_mm": {
+        "value": {
+          "n": 38560,
+          "mean": 5.2891908713692946,
+          "std": 12.597970320324773,
+          "min": 0.0,
+          "max": 50.8
+        },
+        "value_first_diff_var": 0.16532171477476074,
+        "n_samples": 38560
+      },
+      "genepi-meteo-11-WindSpeed_ms": {
+        "value": {
+          "n": 38560,
+          "mean": 0.7347890819502074,
+          "std": 0.7502288127383181,
+          "min": 0.0,
+          "max": 10.257
+        },
+        "value_first_diff_var": 0.3534108910826511,
+        "n_samples": 38560
+      },
+      "genepi-meteo-11-WindDirection_deg": {
+        "value": {
+          "n": 38326,
+          "mean": 133.8430571674581,
+          "std": 73.76299446354044,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "value_first_diff_var": 2787.8649779432394,
+        "n_samples": 38326
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-11-AmbientTemp_C": {
+        "value": {
+          "n": 857,
+          "mean": 0.18156359393232216,
+          "std": 2.6673850827064185,
+          "min": -11.16,
+          "max": 12.84
+        },
+        "value_first_diff_var": 1.112004454537514,
+        "n_samples": 857
+      },
+      "genepi-meteo-11-SurfaceTemp_C": {
+        "value": {
+          "n": 843,
+          "mean": 2.881976275207592,
+          "std": 2.8117522585347823,
+          "min": -11.588,
+          "max": 12.287
+        },
+        "value_first_diff_var": 2.188935285836798,
+        "n_samples": 843
+      },
+      "genepi-meteo-11-RelativeHumidity_pct": {
+        "value": {
+          "n": 901,
+          "mean": 81.400948945616,
+          "std": 13.098910098930267,
+          "min": 11.117,
+          "max": 91.029
+        },
+        "value_first_diff_var": 70.9992408224395,
+        "n_samples": 901
+      },
+      "genepi-meteo-11-Rain_mm": {
+        "value": {
+          "n": 853,
+          "mean": 1.2419695193434936,
+          "std": 6.764507876606398,
+          "min": 0.0,
+          "max": 50.8
+        },
+        "value_first_diff_var": 9.958028169014085,
+        "n_samples": 853
+      },
+      "genepi-meteo-11-WindSpeed_ms": {
+        "value": {
+          "n": 1615,
+          "mean": 1.0270284829721363,
+          "std": 1.1111278543832135,
+          "min": 0.0,
+          "max": 10.257
+        },
+        "value_first_diff_var": 2.556938267979299,
+        "n_samples": 1615
+      },
+      "genepi-meteo-11-WindDirection_deg": {
+        "value": {
+          "n": 1607,
+          "mean": 129.29535780958307,
+          "std": 120.83478051601797,
+          "min": 0.0,
+          "max": 359.774
+        },
+        "value_first_diff_var": 35794.78909682261,
+        "n_samples": 1607
+      }
+    }
+  },
+  "genepi-meteo-12": {
+    "totals": {
+      "n_raw": 250368,
+      "n_filtered": 7107,
+      "n_compressed": 243267,
+      "n_dropped": 0,
+      "n_reconstructable": 250368,
+      "overall_compression_rate": 0.9716137845092024,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 243267
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-12-AmbientTemp_C": 40856,
+      "genepi-meteo-12-SurfaceTemp_C": 40870,
+      "genepi-meteo-12-RelativeHumidity_pct": 40811,
+      "genepi-meteo-12-Rain_mm": 40826,
+      "genepi-meteo-12-WindSpeed_ms": 40202,
+      "genepi-meteo-12-WindDirection_deg": 39702
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-12-AmbientTemp_C": 40856,
+      "genepi-meteo-12-SurfaceTemp_C": 40870,
+      "genepi-meteo-12-RelativeHumidity_pct": 40811,
+      "genepi-meteo-12-Rain_mm": 40826,
+      "genepi-meteo-12-WindSpeed_ms": 40202,
+      "genepi-meteo-12-WindDirection_deg": 39702
+    },
+    "per_sensor": {
+      "genepi-meteo-12-AmbientTemp_C": {
+        "n_raw": 41728,
+        "n_filtered": 873,
+        "n_compressed": 40856,
+        "n_dropped": 0,
+        "rmse": 1.658107102147849,
+        "nrmse": 0.37091884174681006,
+        "mean_latency_hr": 5.524801046193336,
+        "n_reconstructable": 41728,
+        "compression_rate": 0.97907879601227,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.897730668016817,
+        "value_std_delta": -1.5303115439913286
+      },
+      "genepi-meteo-12-SurfaceTemp_C": {
+        "n_raw": 41728,
+        "n_filtered": 859,
+        "n_compressed": 40870,
+        "n_dropped": 0,
+        "rmse": 3.3139985761920405,
+        "nrmse": 0.5266106099646944,
+        "mean_latency_hr": 5.578640807398176,
+        "n_reconstructable": 41728,
+        "compression_rate": 0.9794143021472392,
+        "drop_rate": 0.0,
+        "value_mean_delta": 9.069133839523728,
+        "value_std_delta": 0.01488350174321873
+      },
+      "genepi-meteo-12-RelativeHumidity_pct": {
+        "n_raw": 41728,
+        "n_filtered": 918,
+        "n_compressed": 40811,
+        "n_dropped": 0,
+        "rmse": 11.581940908122524,
+        "nrmse": 0.5798698960404925,
+        "mean_latency_hr": 5.19796124105317,
+        "n_reconstructable": 41728,
+        "compression_rate": 0.9780003834355828,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.19973386479676947,
+        "value_std_delta": -7.605164613907274
+      },
+      "genepi-meteo-12-Rain_mm": {
+        "n_raw": 41728,
+        "n_filtered": 903,
+        "n_compressed": 40826,
+        "n_dropped": 0,
+        "rmse": 2.593593341044702,
+        "nrmse": 0.16995883184595503,
+        "mean_latency_hr": 5.736852892542179,
+        "n_reconstructable": 41728,
+        "compression_rate": 0.9783598542944786,
+        "drop_rate": 0.0,
+        "value_mean_delta": -10.732166779404373,
+        "value_std_delta": -6.452447621213084
+      },
+      "genepi-meteo-12-WindSpeed_ms": {
+        "n_raw": 41728,
+        "n_filtered": 1527,
+        "n_compressed": 40202,
+        "n_dropped": 0,
+        "rmse": 0.9496263433358466,
+        "nrmse": 0.9979188419648167,
+        "mean_latency_hr": 4.125765899262952,
+        "n_reconstructable": 41728,
+        "compression_rate": 0.9634058665644172,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.0132298406607948,
+        "value_std_delta": 0.13030373943885787
+      },
+      "genepi-meteo-12-WindDirection_deg": {
+        "n_raw": 41728,
+        "n_filtered": 2027,
+        "n_compressed": 39702,
+        "n_dropped": 0,
+        "rmse": 81.80840000571831,
+        "nrmse": 1.0279960775408021,
+        "mean_latency_hr": 3.6665733440375767,
+        "n_reconstructable": 41728,
+        "compression_rate": 0.951423504601227,
+        "drop_rate": 0.0,
+        "value_mean_delta": 9.275732915764706,
+        "value_std_delta": 54.39312148225879
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-12-AmbientTemp_C": {
+        "value": {
+          "n": 41728,
+          "mean": 2.3413300421779137,
+          "std": 4.47026927599347,
+          "min": -12.18,
+          "max": 12.32
+        },
+        "value_first_diff_var": 0.12229311071040985,
+        "n_samples": 41728
+      },
+      "genepi-meteo-12-SurfaceTemp_C": {
+        "value": {
+          "n": 41728,
+          "mean": 1.2656158694401844,
+          "std": 6.293072174171009,
+          "min": -12.775,
+          "max": 23.35
+        },
+        "value_first_diff_var": 0.07053274034133135,
+        "n_samples": 41728
+      },
+      "genepi-meteo-12-RelativeHumidity_pct": {
+        "value": {
+          "n": 41728,
+          "mean": 67.71649271472393,
+          "std": 19.973343998726488,
+          "min": 8.807,
+          "max": 95.264
+        },
+        "value_first_diff_var": 5.695981475896254,
+        "n_samples": 41728
+      },
+      "genepi-meteo-12-Rain_mm": {
+        "value": {
+          "n": 41728,
+          "mean": 13.258191142638038,
+          "std": 15.260126895879397,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.14835669949912525,
+        "n_samples": 41728
+      },
+      "genepi-meteo-12-WindSpeed_ms": {
+        "value": {
+          "n": 41728,
+          "mean": 0.9717577166411043,
+          "std": 0.9516067874478787,
+          "min": 0.0,
+          "max": 12.109
+        },
+        "value_first_diff_var": 0.457025040317032,
+        "n_samples": 41728
+      },
+      "genepi-meteo-12-WindDirection_deg": {
+        "value": {
+          "n": 41728,
+          "mean": 129.8279582534509,
+          "std": 79.58045929652029,
+          "min": 0.0,
+          "max": 359.096
+        },
+        "value_first_diff_var": 3761.190774892926,
+        "n_samples": 41728
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-12-AmbientTemp_C": {
+        "value": {
+          "n": 873,
+          "mean": 6.239060710194731,
+          "std": 2.9399577320021413,
+          "min": -11.78,
+          "max": 11.65
+        },
+        "value_first_diff_var": 1.4771331679782844,
+        "n_samples": 873
+      },
+      "genepi-meteo-12-SurfaceTemp_C": {
+        "value": {
+          "n": 859,
+          "mean": 10.334749708963912,
+          "std": 6.3079556759142275,
+          "min": -12.713,
+          "max": 20.975
+        },
+        "value_first_diff_var": 2.9002376302304915,
+        "n_samples": 859
+      },
+      "genepi-meteo-12-RelativeHumidity_pct": {
+        "value": {
+          "n": 918,
+          "mean": 67.9162265795207,
+          "std": 12.368179384819214,
+          "min": 10.236,
+          "max": 94.59
+        },
+        "value_first_diff_var": 98.58280607954914,
+        "n_samples": 918
+      },
+      "genepi-meteo-12-Rain_mm": {
+        "value": {
+          "n": 903,
+          "mean": 2.526024363233665,
+          "std": 8.807679274666313,
+          "min": 0.0,
+          "max": 50.0
+        },
+        "value_first_diff_var": 8.627849223946784,
+        "n_samples": 903
+      },
+      "genepi-meteo-12-WindSpeed_ms": {
+        "value": {
+          "n": 1527,
+          "mean": 0.9849875573018991,
+          "std": 1.0819105268867366,
+          "min": 0.0,
+          "max": 9.227
+        },
+        "value_first_diff_var": 2.4896439430388773,
+        "n_samples": 1527
+      },
+      "genepi-meteo-12-WindDirection_deg": {
+        "value": {
+          "n": 2027,
+          "mean": 139.1036911692156,
+          "std": 133.97358077877908,
+          "min": 0.0,
+          "max": 359.096
+        },
+        "value_first_diff_var": 47822.01980160754,
+        "n_samples": 2027
+      }
+    }
+  },
+  "genepi-meteo-13": {
+    "totals": {
+      "n_raw": 258121,
+      "n_filtered": 6915,
+      "n_compressed": 251211,
+      "n_dropped": 0,
+      "n_reconstructable": 258121,
+      "overall_compression_rate": 0.9732102386090244,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 251211
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-13-AmbientTemp_C": 42161,
+      "genepi-meteo-13-SurfaceTemp_C": 42187,
+      "genepi-meteo-13-RelativeHumidity_pct": 42111,
+      "genepi-meteo-13-Rain_mm": 42144,
+      "genepi-meteo-13-WindSpeed_ms": 41214,
+      "genepi-meteo-13-WindDirection_deg": 41394
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-13-AmbientTemp_C": 42161,
+      "genepi-meteo-13-SurfaceTemp_C": 42187,
+      "genepi-meteo-13-RelativeHumidity_pct": 42111,
+      "genepi-meteo-13-Rain_mm": 42144,
+      "genepi-meteo-13-WindSpeed_ms": 41214,
+      "genepi-meteo-13-WindDirection_deg": 41394
+    },
+    "per_sensor": {
+      "genepi-meteo-13-AmbientTemp_C": {
+        "n_raw": 43042,
+        "n_filtered": 882,
+        "n_compressed": 42161,
+        "n_dropped": 0,
+        "rmse": 1.7290109230126713,
+        "nrmse": 0.3750992166607752,
+        "mean_latency_hr": 5.552351056332575,
+        "n_reconstructable": 43042,
+        "compression_rate": 0.9795083871567306,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.174471474942841,
+        "value_std_delta": -0.9734363303378215
+      },
+      "genepi-meteo-13-SurfaceTemp_C": {
+        "n_raw": 43049,
+        "n_filtered": 863,
+        "n_compressed": 42187,
+        "n_dropped": 0,
+        "rmse": 3.2839343618636145,
+        "nrmse": 0.497271682326458,
+        "mean_latency_hr": 5.63664139185063,
+        "n_reconstructable": 43049,
+        "compression_rate": 0.979953076726521,
+        "drop_rate": 0.0,
+        "value_mean_delta": 8.228686181746543,
+        "value_std_delta": -1.0064287710054272
+      },
+      "genepi-meteo-13-RelativeHumidity_pct": {
+        "n_raw": 43040,
+        "n_filtered": 930,
+        "n_compressed": 42111,
+        "n_dropped": 0,
+        "rmse": 12.957805971876072,
+        "nrmse": 0.6577713906809155,
+        "mean_latency_hr": 5.282977733890954,
+        "n_reconstructable": 43040,
+        "compression_rate": 0.9783921933085502,
+        "drop_rate": 0.0,
+        "value_mean_delta": 8.563119962425546,
+        "value_std_delta": -6.088640310881571
+      },
+      "genepi-meteo-13-Rain_mm": {
+        "n_raw": 43058,
+        "n_filtered": 915,
+        "n_compressed": 42144,
+        "n_dropped": 0,
+        "rmse": 2.290799747209528,
+        "nrmse": 0.1558210111877629,
+        "mean_latency_hr": 5.770693457403709,
+        "n_reconstructable": 43058,
+        "compression_rate": 0.9787495935714617,
+        "drop_rate": 0.0,
+        "value_mean_delta": -10.247633556669149,
+        "value_std_delta": -5.471577418345417
+      },
+      "genepi-meteo-13-WindSpeed_ms": {
+        "n_raw": 43045,
+        "n_filtered": 1831,
+        "n_compressed": 41214,
+        "n_dropped": 0,
+        "rmse": 0.7434364445299864,
+        "nrmse": 1.0440032921369726,
+        "mean_latency_hr": 3.7262089867193247,
+        "n_reconstructable": 43045,
+        "compression_rate": 0.9574631199907074,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.5186540324260254,
+        "value_std_delta": 0.9885768617340974
+      },
+      "genepi-meteo-13-WindDirection_deg": {
+        "n_raw": 42887,
+        "n_filtered": 1494,
+        "n_compressed": 41394,
+        "n_dropped": 0,
+        "rmse": 69.44101189339874,
+        "nrmse": 0.9864027703833081,
+        "mean_latency_hr": 4.266576105683411,
+        "n_reconstructable": 42887,
+        "compression_rate": 0.9651642688926715,
+        "drop_rate": 0.0,
+        "value_mean_delta": 58.55853023037187,
+        "value_std_delta": 48.30350854411887
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-13-AmbientTemp_C": {
+        "value": {
+          "n": 43042,
+          "mean": 2.9335897495469543,
+          "std": 4.609476229795275,
+          "min": -11.76,
+          "max": 42.34
+        },
+        "value_first_diff_var": 0.1412317925203516,
+        "n_samples": 43042
+      },
+      "genepi-meteo-13-SurfaceTemp_C": {
+        "value": {
+          "n": 43049,
+          "mean": 1.0981411647192738,
+          "std": 6.603903818733272,
+          "min": -13.088,
+          "max": 23.038
+        },
+        "value_first_diff_var": 0.07487526672264705,
+        "n_samples": 43049
+      },
+      "genepi-meteo-13-RelativeHumidity_pct": {
+        "value": {
+          "n": 43040,
+          "mean": 64.00332304832715,
+          "std": 19.69955847192189,
+          "min": 9.016,
+          "max": 93.112
+        },
+        "value_first_diff_var": 6.088876097952649,
+        "n_samples": 43040
+      },
+      "genepi-meteo-13-Rain_mm": {
+        "value": {
+          "n": 43058,
+          "mean": 13.311677272516143,
+          "std": 14.701481717694252,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.6287646607121722,
+        "n_samples": 43058
+      },
+      "genepi-meteo-13-WindSpeed_ms": {
+        "value": {
+          "n": 43045,
+          "mean": 0.4446687420141712,
+          "std": 0.7121016285382057,
+          "min": 0.0,
+          "max": 60.078
+        },
+        "value_first_diff_var": 0.3959395561381652,
+        "n_samples": 43045
+      },
+      "genepi-meteo-13-WindDirection_deg": {
+        "value": {
+          "n": 42887,
+          "mean": 96.14558824352369,
+          "std": 70.3982328297948,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "value_first_diff_var": 2211.069444456007,
+        "n_samples": 42887
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-13-AmbientTemp_C": {
+        "value": {
+          "n": 882,
+          "mean": 7.108061224489795,
+          "std": 3.6360398994574537,
+          "min": -10.44,
+          "max": 42.34
+        },
+        "value_first_diff_var": 4.742453739365931,
+        "n_samples": 882
+      },
+      "genepi-meteo-13-SurfaceTemp_C": {
+        "value": {
+          "n": 863,
+          "mean": 9.326827346465816,
+          "std": 5.597475047727845,
+          "min": -12.025,
+          "max": 20.725
+        },
+        "value_first_diff_var": 7.1327623181144055,
+        "n_samples": 863
+      },
+      "genepi-meteo-13-RelativeHumidity_pct": {
+        "value": {
+          "n": 930,
+          "mean": 72.56644301075269,
+          "std": 13.610918161040319,
+          "min": 9.016,
+          "max": 91.652
+        },
+        "value_first_diff_var": 101.70148343226103,
+        "n_samples": 930
+      },
+      "genepi-meteo-13-Rain_mm": {
+        "value": {
+          "n": 915,
+          "mean": 3.0640437158469944,
+          "std": 9.229904299348835,
+          "min": 0.0,
+          "max": 50.8
+        },
+        "value_first_diff_var": 26.390284272369033,
+        "n_samples": 915
+      },
+      "genepi-meteo-13-WindSpeed_ms": {
+        "value": {
+          "n": 1831,
+          "mean": 0.9633227744401966,
+          "std": 1.7006784902723031,
+          "min": 0.0,
+          "max": 60.078
+        },
+        "value_first_diff_var": 5.658073155597659,
+        "n_samples": 1831
+      },
+      "genepi-meteo-13-WindDirection_deg": {
+        "value": {
+          "n": 1494,
+          "mean": 154.70411847389556,
+          "std": 118.70174137391366,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "value_first_diff_var": 32565.110684985477,
+        "n_samples": 1494
+      }
+    }
+  },
+  "genepi-meteo-15": {
+    "totals": {
+      "n_raw": 253246,
+      "n_filtered": 6537,
+      "n_compressed": 246715,
+      "n_dropped": 0,
+      "n_reconstructable": 253246,
+      "overall_compression_rate": 0.9741871539925606,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 246715
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-15-AmbientTemp_C": 41463,
+      "genepi-meteo-15-SurfaceTemp_C": 41438,
+      "genepi-meteo-15-RelativeHumidity_pct": 40814,
+      "genepi-meteo-15-Rain_mm": 41426,
+      "genepi-meteo-15-WindSpeed_ms": 40906,
+      "genepi-meteo-15-WindDirection_deg": 40668
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-15-AmbientTemp_C": 41463,
+      "genepi-meteo-15-SurfaceTemp_C": 41438,
+      "genepi-meteo-15-RelativeHumidity_pct": 40814,
+      "genepi-meteo-15-Rain_mm": 41426,
+      "genepi-meteo-15-WindSpeed_ms": 40906,
+      "genepi-meteo-15-WindDirection_deg": 40668
+    },
+    "per_sensor": {
+      "genepi-meteo-15-AmbientTemp_C": {
+        "n_raw": 42331,
+        "n_filtered": 869,
+        "n_compressed": 41463,
+        "n_dropped": 0,
+        "rmse": 1.9580694693673713,
+        "nrmse": 0.4272924746782283,
+        "mean_latency_hr": 5.515719376921037,
+        "n_reconstructable": 42331,
+        "compression_rate": 0.9794713094422527,
+        "drop_rate": 0.0,
+        "value_mean_delta": -2.3389701992127963,
+        "value_std_delta": -1.1753833827662414
+      },
+      "genepi-meteo-15-SurfaceTemp_C": {
+        "n_raw": 42329,
+        "n_filtered": 892,
+        "n_compressed": 41438,
+        "n_dropped": 0,
+        "rmse": 4.589425919427102,
+        "nrmse": 0.6313078810870753,
+        "mean_latency_hr": 5.472722096225073,
+        "n_reconstructable": 42329,
+        "compression_rate": 0.9789269767771505,
+        "drop_rate": 0.0,
+        "value_mean_delta": 9.838993087009966,
+        "value_std_delta": 0.12162197728528756
+      },
+      "genepi-meteo-15-RelativeHumidity_pct": {
+        "n_raw": 41746,
+        "n_filtered": 933,
+        "n_compressed": 40814,
+        "n_dropped": 0,
+        "rmse": 13.551106736042604,
+        "nrmse": 0.5983433577901824,
+        "mean_latency_hr": 5.404860638677292,
+        "n_reconstructable": 41746,
+        "compression_rate": 0.9776505533464284,
+        "drop_rate": 0.0,
+        "value_mean_delta": -7.33051379523868,
+        "value_std_delta": 3.975344780076494
+      },
+      "genepi-meteo-15-Rain_mm": {
+        "n_raw": 42332,
+        "n_filtered": 907,
+        "n_compressed": 41426,
+        "n_dropped": 0,
+        "rmse": 2.6774794757741276,
+        "nrmse": 0.2146951960465366,
+        "mean_latency_hr": 5.697605364210946,
+        "n_reconstructable": 42332,
+        "compression_rate": 0.9785741283190021,
+        "drop_rate": 0.0,
+        "value_mean_delta": -7.413110268897687,
+        "value_std_delta": -5.530535059096559
+      },
+      "genepi-meteo-15-WindSpeed_ms": {
+        "n_raw": 42332,
+        "n_filtered": 1427,
+        "n_compressed": 40906,
+        "n_dropped": 0,
+        "rmse": 0.8621128723231866,
+        "nrmse": 0.8801029730821971,
+        "mean_latency_hr": 4.133570598024084,
+        "n_reconstructable": 42332,
+        "compression_rate": 0.9662902768591137,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.3192152768309714,
+        "value_std_delta": 0.1799095892456931
+      },
+      "genepi-meteo-15-WindDirection_deg": {
+        "n_raw": 42176,
+        "n_filtered": 1509,
+        "n_compressed": 40668,
+        "n_dropped": 0,
+        "rmse": 84.05175441010844,
+        "nrmse": 0.917597792401761,
+        "mean_latency_hr": 3.9394764729282583,
+        "n_reconstructable": 42176,
+        "compression_rate": 0.9642213581183612,
+        "drop_rate": 0.0,
+        "value_mean_delta": -35.80691541890542,
+        "value_std_delta": 27.42933451927736
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-15-AmbientTemp_C": {
+        "value": {
+          "n": 42331,
+          "mean": 2.836680210720276,
+          "std": 4.582503988262118,
+          "min": -11.77,
+          "max": 14.68
+        },
+        "value_first_diff_var": 0.10210457144451683,
+        "n_samples": 42331
+      },
+      "genepi-meteo-15-SurfaceTemp_C": {
+        "value": {
+          "n": 42329,
+          "mean": 3.343570814335326,
+          "std": 7.269711113893239,
+          "min": -16.525,
+          "max": 38.975
+        },
+        "value_first_diff_var": 1.060346849297881,
+        "n_samples": 42329
+      },
+      "genepi-meteo-15-RelativeHumidity_pct": {
+        "value": {
+          "n": 41746,
+          "mean": 66.11440875772529,
+          "std": 22.647709813458796,
+          "min": 5.355,
+          "max": 99.424
+        },
+        "value_first_diff_var": 7.458772374838918,
+        "n_samples": 41746
+      },
+      "genepi-meteo-15-Rain_mm": {
+        "value": {
+          "n": 42332,
+          "mean": 9.403628460738922,
+          "std": 12.471073061149287,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.20223854715277753,
+        "n_samples": 42332
+      },
+      "genepi-meteo-15-WindSpeed_ms": {
+        "value": {
+          "n": 42332,
+          "mean": 0.6753138051592177,
+          "std": 0.9795590955726378,
+          "min": 0.0,
+          "max": 12.637
+        },
+        "value_first_diff_var": 0.31964381097254946,
+        "n_samples": 42332
+      },
+      "genepi-meteo-15-WindDirection_deg": {
+        "value": {
+          "n": 42176,
+          "mean": 161.59129315250382,
+          "std": 91.59977836270473,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "value_first_diff_var": 2727.7855524087236,
+        "n_samples": 42176
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-15-AmbientTemp_C": {
+        "value": {
+          "n": 869,
+          "mean": 0.49771001150747984,
+          "std": 3.407120605495877,
+          "min": -11.38,
+          "max": 11.27
+        },
+        "value_first_diff_var": 1.9132807024995226,
+        "n_samples": 869
+      },
+      "genepi-meteo-15-SurfaceTemp_C": {
+        "value": {
+          "n": 892,
+          "mean": 13.182563901345292,
+          "std": 7.391333091178526,
+          "min": -16.525,
+          "max": 38.975
+        },
+        "value_first_diff_var": 30.362281741137537,
+        "n_samples": 892
+      },
+      "genepi-meteo-15-RelativeHumidity_pct": {
+        "value": {
+          "n": 933,
+          "mean": 58.783894962486606,
+          "std": 26.62305459353529,
+          "min": 5.355,
+          "max": 98.353
+        },
+        "value_first_diff_var": 96.38083119113796,
+        "n_samples": 933
+      },
+      "genepi-meteo-15-Rain_mm": {
+        "value": {
+          "n": 907,
+          "mean": 1.990518191841235,
+          "std": 6.940538002052728,
+          "min": 0.0,
+          "max": 50.0
+        },
+        "value_first_diff_var": 5.149092534927806,
+        "n_samples": 907
+      },
+      "genepi-meteo-15-WindSpeed_ms": {
+        "value": {
+          "n": 1427,
+          "mean": 0.9945290819901891,
+          "std": 1.1594686848183309,
+          "min": 0.0,
+          "max": 12.068
+        },
+        "value_first_diff_var": 2.4217219690461063,
+        "n_samples": 1427
+      },
+      "genepi-meteo-15-WindDirection_deg": {
+        "value": {
+          "n": 1509,
+          "mean": 125.7843777335984,
+          "std": 119.02911288198209,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "value_first_diff_var": 37210.21557454248,
+        "n_samples": 1509
+      }
+    }
+  },
+  "genepi-meteo-16": {
+    "totals": {
+      "n_raw": 256722,
+      "n_filtered": 7642,
+      "n_compressed": 249086,
+      "n_dropped": 0,
+      "n_reconstructable": 256722,
+      "overall_compression_rate": 0.9702323914584648,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 249086
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-16-AmbientTemp_C": 42040,
+      "genepi-meteo-16-SurfaceTemp_C": 42059,
+      "genepi-meteo-16-RelativeHumidity_pct": 41255,
+      "genepi-meteo-16-Rain_mm": 42011,
+      "genepi-meteo-16-WindSpeed_ms": 40893,
+      "genepi-meteo-16-WindDirection_deg": 40828
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-16-AmbientTemp_C": 42040,
+      "genepi-meteo-16-SurfaceTemp_C": 42059,
+      "genepi-meteo-16-RelativeHumidity_pct": 41255,
+      "genepi-meteo-16-Rain_mm": 42011,
+      "genepi-meteo-16-WindSpeed_ms": 40893,
+      "genepi-meteo-16-WindDirection_deg": 40828
+    },
+    "per_sensor": {
+      "genepi-meteo-16-AmbientTemp_C": {
+        "n_raw": 42912,
+        "n_filtered": 873,
+        "n_compressed": 42040,
+        "n_dropped": 0,
+        "rmse": 1.6985530947207248,
+        "nrmse": 0.37808473721013097,
+        "mean_latency_hr": 5.598152517555307,
+        "n_reconstructable": 42912,
+        "compression_rate": 0.9796560402684564,
+        "drop_rate": 0.0,
+        "value_mean_delta": 5.97204309514749,
+        "value_std_delta": -0.29412637317958357
+      },
+      "genepi-meteo-16-SurfaceTemp_C": {
+        "n_raw": 42911,
+        "n_filtered": 853,
+        "n_compressed": 42059,
+        "n_dropped": 0,
+        "rmse": 2.7268819343091284,
+        "nrmse": 0.46143444960406427,
+        "mean_latency_hr": 5.849821063752107,
+        "n_reconstructable": 42911,
+        "compression_rate": 0.9801216471301065,
+        "drop_rate": 0.0,
+        "value_mean_delta": 7.44611996757213,
+        "value_std_delta": -0.68115349503839
+      },
+      "genepi-meteo-16-RelativeHumidity_pct": {
+        "n_raw": 42164,
+        "n_filtered": 910,
+        "n_compressed": 41255,
+        "n_dropped": 0,
+        "rmse": 12.275437817573195,
+        "nrmse": 0.6241596243467312,
+        "mean_latency_hr": 5.404984004258504,
+        "n_reconstructable": 42164,
+        "compression_rate": 0.9784176074376245,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.4663874272724655,
+        "value_std_delta": -6.877180053803819
+      },
+      "genepi-meteo-16-Rain_mm": {
+        "n_raw": 42920,
+        "n_filtered": 910,
+        "n_compressed": 42011,
+        "n_dropped": 0,
+        "rmse": 2.58249898841465,
+        "nrmse": 0.17379425150554284,
+        "mean_latency_hr": 5.832773538624832,
+        "n_reconstructable": 42920,
+        "compression_rate": 0.9787977632805219,
+        "drop_rate": 0.0,
+        "value_mean_delta": -10.356712462746945,
+        "value_std_delta": -6.271640303655511
+      },
+      "genepi-meteo-16-WindSpeed_ms": {
+        "n_raw": 42904,
+        "n_filtered": 2012,
+        "n_compressed": 40893,
+        "n_dropped": 0,
+        "rmse": 0.8320945071521055,
+        "nrmse": 0.926176728238711,
+        "mean_latency_hr": 3.705432231131,
+        "n_reconstructable": 42904,
+        "compression_rate": 0.9531046056311766,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.08306916416844823,
+        "value_std_delta": 0.18760595458767404
+      },
+      "genepi-meteo-16-WindDirection_deg": {
+        "n_raw": 42911,
+        "n_filtered": 2084,
+        "n_compressed": 40828,
+        "n_dropped": 0,
+        "rmse": 76.69525883821593,
+        "nrmse": 0.9933190115230167,
+        "mean_latency_hr": 3.510019445933314,
+        "n_reconstructable": 42911,
+        "compression_rate": 0.9514343641490527,
+        "drop_rate": 0.0,
+        "value_mean_delta": -0.8893547415305818,
+        "value_std_delta": 45.9508927382294
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-16-AmbientTemp_C": {
+        "value": {
+          "n": 42912,
+          "mean": 2.3193887490678593,
+          "std": 4.492519606197981,
+          "min": -11.24,
+          "max": 42.36
+        },
+        "value_first_diff_var": 0.20072216849451616,
+        "n_samples": 42912
+      },
+      "genepi-meteo-16-SurfaceTemp_C": {
+        "value": {
+          "n": 42911,
+          "mean": 3.158297382955419,
+          "std": 5.90957596826362,
+          "min": -10.9,
+          "max": 20.788
+        },
+        "value_first_diff_var": 0.04127300184196153,
+        "n_samples": 42911
+      },
+      "genepi-meteo-16-RelativeHumidity_pct": {
+        "value": {
+          "n": 42164,
+          "mean": 71.00333784745281,
+          "std": 19.667144971802887,
+          "min": 8.303,
+          "max": 98.851
+        },
+        "value_first_diff_var": 6.712459040344708,
+        "n_samples": 42164
+      },
+      "genepi-meteo-16-Rain_mm": {
+        "value": {
+          "n": 42920,
+          "mean": 12.896053122087604,
+          "std": 14.859519034968116,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.14461101065841295,
+        "n_samples": 42920
+      },
+      "genepi-meteo-16-WindSpeed_ms": {
+        "value": {
+          "n": 42904,
+          "mean": 0.8916047920939771,
+          "std": 0.8984187161930537,
+          "min": 0.0,
+          "max": 11.229
+        },
+        "value_first_diff_var": 0.3835538795536397,
+        "n_samples": 42904
+      },
+      "genepi-meteo-16-WindDirection_deg": {
+        "value": {
+          "n": 42911,
+          "mean": 130.6558451446016,
+          "std": 77.21110534330973,
+          "min": 0.0,
+          "max": 356.384
+        },
+        "value_first_diff_var": 2956.1166631375763,
+        "n_samples": 42911
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-16-AmbientTemp_C": {
+        "value": {
+          "n": 873,
+          "mean": 8.29143184421535,
+          "std": 4.198393233018398,
+          "min": -10.74,
+          "max": 42.36
+        },
+        "value_first_diff_var": 5.98522948076235,
+        "n_samples": 873
+      },
+      "genepi-meteo-16-SurfaceTemp_C": {
+        "value": {
+          "n": 853,
+          "mean": 10.60441735052755,
+          "std": 5.22842247322523,
+          "min": -8.025,
+          "max": 20.788
+        },
+        "value_first_diff_var": 4.282951789592013,
+        "n_samples": 853
+      },
+      "genepi-meteo-16-RelativeHumidity_pct": {
+        "value": {
+          "n": 910,
+          "mean": 71.46972527472528,
+          "std": 12.789964917999068,
+          "min": 10.354,
+          "max": 98.244
+        },
+        "value_first_diff_var": 77.41453802949601,
+        "n_samples": 910
+      },
+      "genepi-meteo-16-Rain_mm": {
+        "value": {
+          "n": 910,
+          "mean": 2.539340659340659,
+          "std": 8.587878731312605,
+          "min": 0.0,
+          "max": 49.2
+        },
+        "value_first_diff_var": 8.246379427821768,
+        "n_samples": 910
+      },
+      "genepi-meteo-16-WindSpeed_ms": {
+        "value": {
+          "n": 2012,
+          "mean": 0.9746739562624254,
+          "std": 1.0860246707807277,
+          "min": 0.0,
+          "max": 11.229
+        },
+        "value_first_diff_var": 2.8303776284428683,
+        "n_samples": 2012
+      },
+      "genepi-meteo-16-WindDirection_deg": {
+        "value": {
+          "n": 2084,
+          "mean": 129.76649040307103,
+          "std": 123.16199808153912,
+          "min": 0.0,
+          "max": 356.384
+        },
+        "value_first_diff_var": 39793.88591642365,
+        "n_samples": 2084
+      }
+    }
+  },
+  "genepi-meteo-17": {
+    "totals": {
+      "n_raw": 278545,
+      "n_filtered": 7658,
+      "n_compressed": 270894,
+      "n_dropped": 0,
+      "n_reconstructable": 278545,
+      "overall_compression_rate": 0.9725071352923226,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 270894
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-17-AmbientTemp_C": 39246,
+      "genepi-meteo-17-SurfaceTemp_C": 39269,
+      "genepi-meteo-17-SolarRadiation_Wm2": 36976,
+      "genepi-meteo-17-RelativeHumidity_pct": 39206,
+      "genepi-meteo-17-Rain_mm": 39222,
+      "genepi-meteo-17-WindSpeed_ms": 38740,
+      "genepi-meteo-17-WindDirection_deg": 38235
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-17-AmbientTemp_C": 39246,
+      "genepi-meteo-17-SurfaceTemp_C": 39269,
+      "genepi-meteo-17-SolarRadiation_Wm2": 36976,
+      "genepi-meteo-17-RelativeHumidity_pct": 39206,
+      "genepi-meteo-17-Rain_mm": 39222,
+      "genepi-meteo-17-WindSpeed_ms": 38740,
+      "genepi-meteo-17-WindDirection_deg": 38235
+    },
+    "per_sensor": {
+      "genepi-meteo-17-AmbientTemp_C": {
+        "n_raw": 40110,
+        "n_filtered": 865,
+        "n_compressed": 39246,
+        "n_dropped": 0,
+        "rmse": 1.7401962058068476,
+        "nrmse": 0.3876987874611021,
+        "mean_latency_hr": 5.852753372669603,
+        "n_reconstructable": 40110,
+        "compression_rate": 0.9784343056594366,
+        "drop_rate": 0.0,
+        "value_mean_delta": 5.130328469541132,
+        "value_std_delta": -0.5205538664643474
+      },
+      "genepi-meteo-17-SurfaceTemp_C": {
+        "n_raw": 40118,
+        "n_filtered": 850,
+        "n_compressed": 39269,
+        "n_dropped": 0,
+        "rmse": 3.9243202006259286,
+        "nrmse": 0.5755353829592789,
+        "mean_latency_hr": 5.9802831646642405,
+        "n_reconstructable": 40118,
+        "compression_rate": 0.9788125031158084,
+        "drop_rate": 0.0,
+        "value_mean_delta": 11.13603318926813,
+        "value_std_delta": 0.6109532046429047
+      },
+      "genepi-meteo-17-SolarRadiation_Wm2": {
+        "n_raw": 37862,
+        "n_filtered": 887,
+        "n_compressed": 36976,
+        "n_dropped": 0,
+        "rmse": 200.84408225433742,
+        "nrmse": 0.9767820567690156,
+        "mean_latency_hr": 5.834521713356693,
+        "n_reconstructable": 37862,
+        "compression_rate": 0.9765728170725265,
+        "drop_rate": 0.0,
+        "value_mean_delta": 124.72745561127257,
+        "value_std_delta": 83.25140037528709
+      },
+      "genepi-meteo-17-RelativeHumidity_pct": {
+        "n_raw": 40110,
+        "n_filtered": 905,
+        "n_compressed": 39206,
+        "n_dropped": 0,
+        "rmse": 12.58861040030022,
+        "nrmse": 0.6514825745874538,
+        "mean_latency_hr": 5.639521884262722,
+        "n_reconstructable": 40110,
+        "compression_rate": 0.9774370481176764,
+        "drop_rate": 0.0,
+        "value_mean_delta": 7.5855901469852824,
+        "value_std_delta": -4.837905008198888
+      },
+      "genepi-meteo-17-Rain_mm": {
+        "n_raw": 40118,
+        "n_filtered": 897,
+        "n_compressed": 39222,
+        "n_dropped": 0,
+        "rmse": 3.0088910573638348,
+        "nrmse": 0.1770505348357243,
+        "mean_latency_hr": 6.163566326558874,
+        "n_reconstructable": 40118,
+        "compression_rate": 0.9776409591704471,
+        "drop_rate": 0.0,
+        "value_mean_delta": -11.021181283330117,
+        "value_std_delta": -7.9787615313342215
+      },
+      "genepi-meteo-17-WindSpeed_ms": {
+        "n_raw": 40110,
+        "n_filtered": 1371,
+        "n_compressed": 38740,
+        "n_dropped": 0,
+        "rmse": 0.809805644752943,
+        "nrmse": 1.0367094896105842,
+        "mean_latency_hr": 4.919233933072938,
+        "n_reconstructable": 40110,
+        "compression_rate": 0.9658189977561705,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.11313813238975745,
+        "value_std_delta": 0.29039199895902323
+      },
+      "genepi-meteo-17-WindDirection_deg": {
+        "n_raw": 40117,
+        "n_filtered": 1883,
+        "n_compressed": 38235,
+        "n_dropped": 0,
+        "rmse": 95.20239822055733,
+        "nrmse": 1.165038481637435,
+        "mean_latency_hr": 4.239163682340266,
+        "n_reconstructable": 40117,
+        "compression_rate": 0.9530622927935788,
+        "drop_rate": 0.0,
+        "value_mean_delta": 15.40598200477362,
+        "value_std_delta": 47.65078609167473
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-17-AmbientTemp_C": {
+        "value": {
+          "n": 40110,
+          "mean": 3.4774056345051108,
+          "std": 4.4885263046674915,
+          "min": -11.5,
+          "max": 15.78
+        },
+        "value_first_diff_var": 0.10927334621299767,
+        "n_samples": 40110
+      },
+      "genepi-meteo-17-SurfaceTemp_C": {
+        "value": {
+          "n": 40118,
+          "mean": 3.5880232813201056,
+          "std": 6.818555933864431,
+          "min": -12.838,
+          "max": 28.038
+        },
+        "value_first_diff_var": 0.07497717082769209,
+        "n_samples": 40118
+      },
+      "genepi-meteo-17-SolarRadiation_Wm2": {
+        "value": {
+          "n": 37862,
+          "mean": 113.09124562886271,
+          "std": 205.61811190378162,
+          "min": 0.0,
+          "max": 904.988
+        },
+        "value_first_diff_var": 1810.513175554262,
+        "n_samples": 37862
+      },
+      "genepi-meteo-17-RelativeHumidity_pct": {
+        "value": {
+          "n": 40110,
+          "mean": 66.79259880329096,
+          "std": 19.323019358225903,
+          "min": 6.124,
+          "max": 95.631
+        },
+        "value_first_diff_var": 7.075482250071065,
+        "n_samples": 40110
+      },
+      "genepi-meteo-17-Rain_mm": {
+        "value": {
+          "n": 40118,
+          "mean": 13.469564783887531,
+          "std": 16.994532437620837,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.1691153351519717,
+        "n_samples": 40118
+      },
+      "genepi-meteo-17-WindSpeed_ms": {
+        "value": {
+          "n": 40110,
+          "mean": 0.7762849164796808,
+          "std": 0.7811307341819816,
+          "min": 0.0,
+          "max": 10.123
+        },
+        "value_first_diff_var": 0.32664828248993466,
+        "n_samples": 40110
+      },
+      "genepi-meteo-17-WindDirection_deg": {
+        "value": {
+          "n": 40117,
+          "mean": 145.8691592591669,
+          "std": 81.71609755477992,
+          "min": 0.0,
+          "max": 359.484
+        },
+        "value_first_diff_var": 5327.9388278564975,
+        "n_samples": 40117
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-17-AmbientTemp_C": {
+        "value": {
+          "n": 865,
+          "mean": 8.607734104046243,
+          "std": 3.967972438203144,
+          "min": -11.36,
+          "max": 15.78
+        },
+        "value_first_diff_var": 1.676899459340706,
+        "n_samples": 865
+      },
+      "genepi-meteo-17-SurfaceTemp_C": {
+        "value": {
+          "n": 850,
+          "mean": 14.724056470588236,
+          "std": 7.429509138507336,
+          "min": -9.588,
+          "max": 28.038
+        },
+        "value_first_diff_var": 8.362810336536715,
+        "n_samples": 850
+      },
+      "genepi-meteo-17-SolarRadiation_Wm2": {
+        "value": {
+          "n": 887,
+          "mean": 237.81870124013528,
+          "std": 288.8695122790687,
+          "min": 0.0,
+          "max": 893.822
+        },
+        "value_first_diff_var": 34869.11096792827,
+        "n_samples": 887
+      },
+      "genepi-meteo-17-RelativeHumidity_pct": {
+        "value": {
+          "n": 905,
+          "mean": 74.37818895027624,
+          "std": 14.485114350027015,
+          "min": 11.722,
+          "max": 95.631
+        },
+        "value_first_diff_var": 86.57756155589708,
+        "n_samples": 905
+      },
+      "genepi-meteo-17-Rain_mm": {
+        "value": {
+          "n": 897,
+          "mean": 2.448383500557414,
+          "std": 9.015770906286615,
+          "min": 0.0,
+          "max": 50.2
+        },
+        "value_first_diff_var": 9.118121811224494,
+        "n_samples": 897
+      },
+      "genepi-meteo-17-WindSpeed_ms": {
+        "value": {
+          "n": 1371,
+          "mean": 0.8894230488694382,
+          "std": 1.0715227331410049,
+          "min": 0.0,
+          "max": 10.123
+        },
+        "value_first_diff_var": 2.0750996691139645,
+        "n_samples": 1371
+      },
+      "genepi-meteo-17-WindDirection_deg": {
+        "value": {
+          "n": 1883,
+          "mean": 161.27514126394053,
+          "std": 129.36688364645465,
+          "min": 0.0,
+          "max": 359.096
+        },
+        "value_first_diff_var": 44481.2096768364,
+        "n_samples": 1883
+      }
+    }
+  },
+  "genepi-meteo-18": {
+    "totals": {
+      "n_raw": 216230,
+      "n_filtered": 6770,
+      "n_compressed": 209466,
+      "n_dropped": 0,
+      "n_reconstructable": 216230,
+      "overall_compression_rate": 0.9686907459649448,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 209466
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-18-AmbientTemp_C": 35187,
+      "genepi-meteo-18-SurfaceTemp_C": 35204,
+      "genepi-meteo-18-RelativeHumidity_pct": 35153,
+      "genepi-meteo-18-Rain_mm": 35191,
+      "genepi-meteo-18-WindSpeed_ms": 34620,
+      "genepi-meteo-18-WindDirection_deg": 34111
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-18-AmbientTemp_C": 35187,
+      "genepi-meteo-18-SurfaceTemp_C": 35204,
+      "genepi-meteo-18-RelativeHumidity_pct": 35153,
+      "genepi-meteo-18-Rain_mm": 35191,
+      "genepi-meteo-18-WindSpeed_ms": 34620,
+      "genepi-meteo-18-WindDirection_deg": 34111
+    },
+    "per_sensor": {
+      "genepi-meteo-18-AmbientTemp_C": {
+        "n_raw": 36037,
+        "n_filtered": 851,
+        "n_compressed": 35187,
+        "n_dropped": 0,
+        "rmse": 1.5129241520871375,
+        "nrmse": 0.34115812133267687,
+        "mean_latency_hr": 5.408900636074652,
+        "n_reconstructable": 36037,
+        "compression_rate": 0.9763853816910397,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.0598644694950066,
+        "value_std_delta": -1.1211289718764585
+      },
+      "genepi-meteo-18-SurfaceTemp_C": {
+        "n_raw": 36039,
+        "n_filtered": 836,
+        "n_compressed": 35204,
+        "n_dropped": 0,
+        "rmse": 4.186641774738122,
+        "nrmse": 0.6335730597905621,
+        "mean_latency_hr": 5.567358255408493,
+        "n_reconstructable": 36039,
+        "compression_rate": 0.9768029079608203,
+        "drop_rate": 0.0,
+        "value_mean_delta": 6.292351982952811,
+        "value_std_delta": 0.8639878928319176
+      },
+      "genepi-meteo-18-RelativeHumidity_pct": {
+        "n_raw": 36037,
+        "n_filtered": 885,
+        "n_compressed": 35153,
+        "n_dropped": 0,
+        "rmse": 10.317852010112832,
+        "nrmse": 0.6363586106324441,
+        "mean_latency_hr": 5.299946783090219,
+        "n_reconstructable": 36037,
+        "compression_rate": 0.9754419069289897,
+        "drop_rate": 0.0,
+        "value_mean_delta": -4.592990350783538,
+        "value_std_delta": 7.522988305364667
+      },
+      "genepi-meteo-18-Rain_mm": {
+        "n_raw": 36039,
+        "n_filtered": 849,
+        "n_compressed": 35191,
+        "n_dropped": 0,
+        "rmse": 3.0664308019953186,
+        "nrmse": 0.18042755286846252,
+        "mean_latency_hr": 5.780136934987098,
+        "n_reconstructable": 36039,
+        "compression_rate": 0.9764421876300674,
+        "drop_rate": 0.0,
+        "value_mean_delta": -15.148216797330964,
+        "value_std_delta": -7.186714071575382
+      },
+      "genepi-meteo-18-WindSpeed_ms": {
+        "n_raw": 36039,
+        "n_filtered": 1420,
+        "n_compressed": 34620,
+        "n_dropped": 0,
+        "rmse": 0.5425376242233668,
+        "nrmse": 0.9350421715888214,
+        "mean_latency_hr": 4.10534484247004,
+        "n_reconstructable": 36039,
+        "compression_rate": 0.9605982407946947,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.0786432883546736,
+        "value_std_delta": 0.19540623308410665
+      },
+      "genepi-meteo-18-WindDirection_deg": {
+        "n_raw": 36039,
+        "n_filtered": 1929,
+        "n_compressed": 34111,
+        "n_dropped": 0,
+        "rmse": 71.78422756395761,
+        "nrmse": 1.155556898966757,
+        "mean_latency_hr": 3.4861192273185533,
+        "n_reconstructable": 36039,
+        "compression_rate": 0.9464746524598352,
+        "drop_rate": 0.0,
+        "value_mean_delta": 9.619671384771223,
+        "value_std_delta": 53.08535634356876
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-18-AmbientTemp_C": {
+        "value": {
+          "n": 36037,
+          "mean": 2.6485961650525844,
+          "std": 4.434671366395012,
+          "min": -10.94,
+          "max": 13.87
+        },
+        "value_first_diff_var": 0.06340320375564298,
+        "n_samples": 36037
+      },
+      "genepi-meteo-18-SurfaceTemp_C": {
+        "value": {
+          "n": 36039,
+          "mean": 1.2683525625017347,
+          "std": 6.607985787972243,
+          "min": -13.025,
+          "max": 26.1
+        },
+        "value_first_diff_var": 0.06576761871393692,
+        "n_samples": 36039
+      },
+      "genepi-meteo-18-RelativeHumidity_pct": {
+        "value": {
+          "n": 36037,
+          "mean": 66.77134628298693,
+          "std": 16.213895494960692,
+          "min": 8.893,
+          "max": 90.126
+        },
+        "value_first_diff_var": 4.389662409261447,
+        "n_samples": 36037
+      },
+      "genepi-meteo-18-Rain_mm": {
+        "value": {
+          "n": 36039,
+          "mean": 18.200749188379255,
+          "std": 16.995357711418084,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.2963016815275559,
+        "n_samples": 36039
+      },
+      "genepi-meteo-18-WindSpeed_ms": {
+        "value": {
+          "n": 36039,
+          "mean": 0.6687750215044813,
+          "std": 0.5802279733559912,
+          "min": 0.0,
+          "max": 6.738
+        },
+        "value_first_diff_var": 0.14787112510576694,
+        "n_samples": 36039
+      },
+      "genepi-meteo-18-WindDirection_deg": {
+        "value": {
+          "n": 36039,
+          "mean": 125.90796417769637,
+          "std": 62.120893941391884,
+          "min": 0.0,
+          "max": 357.837
+        },
+        "value_first_diff_var": 2678.43481720693,
+        "n_samples": 36039
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-18-AmbientTemp_C": {
+        "value": {
+          "n": 851,
+          "mean": 4.708460634547591,
+          "std": 3.3135423945185534,
+          "min": -10.82,
+          "max": 11.56
+        },
+        "value_first_diff_var": 1.3076558617301037,
+        "n_samples": 851
+      },
+      "genepi-meteo-18-SurfaceTemp_C": {
+        "value": {
+          "n": 836,
+          "mean": 7.560704545454545,
+          "std": 7.471973680804161,
+          "min": -12.338,
+          "max": 23.725
+        },
+        "value_first_diff_var": 7.22635463448098,
+        "n_samples": 836
+      },
+      "genepi-meteo-18-RelativeHumidity_pct": {
+        "value": {
+          "n": 885,
+          "mean": 62.17835593220339,
+          "std": 23.73688380032536,
+          "min": 14.848,
+          "max": 90.126
+        },
+        "value_first_diff_var": 72.14481428315861,
+        "n_samples": 885
+      },
+      "genepi-meteo-18-Rain_mm": {
+        "value": {
+          "n": 849,
+          "mean": 3.0525323910482913,
+          "std": 9.808643639842701,
+          "min": 0.0,
+          "max": 50.8
+        },
+        "value_first_diff_var": 11.388254661356351,
+        "n_samples": 849
+      },
+      "genepi-meteo-18-WindSpeed_ms": {
+        "value": {
+          "n": 1420,
+          "mean": 0.7474183098591549,
+          "std": 0.7756342064400978,
+          "min": 0.0,
+          "max": 6.31
+        },
+        "value_first_diff_var": 1.1626377327391622,
+        "n_samples": 1420
+      },
+      "genepi-meteo-18-WindDirection_deg": {
+        "value": {
+          "n": 1929,
+          "mean": 135.5276355624676,
+          "std": 115.20625028496065,
+          "min": 0.0,
+          "max": 357.837
+        },
+        "value_first_diff_var": 33576.58531236521,
+        "n_samples": 1929
+      }
+    }
+  },
+  "genepi-meteo-19": {
+    "totals": {
+      "n_raw": 257722,
+      "n_filtered": 6945,
+      "n_compressed": 250783,
+      "n_dropped": 0,
+      "n_reconstructable": 257722,
+      "overall_compression_rate": 0.9730523587431419,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 250783
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-19-AmbientTemp_C": 42083,
+      "genepi-meteo-19-SurfaceTemp_C": 42106,
+      "genepi-meteo-19-RelativeHumidity_pct": 41978,
+      "genepi-meteo-19-Rain_mm": 42047,
+      "genepi-meteo-19-WindSpeed_ms": 41349,
+      "genepi-meteo-19-WindDirection_deg": 41220
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-19-AmbientTemp_C": 42083,
+      "genepi-meteo-19-SurfaceTemp_C": 42106,
+      "genepi-meteo-19-RelativeHumidity_pct": 41978,
+      "genepi-meteo-19-Rain_mm": 42047,
+      "genepi-meteo-19-WindSpeed_ms": 41349,
+      "genepi-meteo-19-WindDirection_deg": 41220
+    },
+    "per_sensor": {
+      "genepi-meteo-19-AmbientTemp_C": {
+        "n_raw": 42957,
+        "n_filtered": 875,
+        "n_compressed": 42083,
+        "n_dropped": 0,
+        "rmse": 1.6067126231408901,
+        "nrmse": 0.35500163063403245,
+        "mean_latency_hr": 5.6587831694743835,
+        "n_reconstructable": 42957,
+        "compression_rate": 0.979630793584282,
+        "drop_rate": 0.0,
+        "value_mean_delta": 5.1335642010116445,
+        "value_std_delta": -0.9689975376635145
+      },
+      "genepi-meteo-19-SurfaceTemp_C": {
+        "n_raw": 42957,
+        "n_filtered": 852,
+        "n_compressed": 42106,
+        "n_dropped": 0,
+        "rmse": 3.5245947270228033,
+        "nrmse": 0.5253602984514761,
+        "mean_latency_hr": 5.814850011510218,
+        "n_reconstructable": 42957,
+        "compression_rate": 0.9801662127243522,
+        "drop_rate": 0.0,
+        "value_mean_delta": 7.5814364994703185,
+        "value_std_delta": -1.1454304568368112
+      },
+      "genepi-meteo-19-RelativeHumidity_pct": {
+        "n_raw": 42941,
+        "n_filtered": 964,
+        "n_compressed": 41978,
+        "n_dropped": 0,
+        "rmse": 13.147725503678437,
+        "nrmse": 0.6691365187909663,
+        "mean_latency_hr": 5.276268795168565,
+        "n_reconstructable": 42941,
+        "compression_rate": 0.9775505926736685,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.637824368082562,
+        "value_std_delta": -7.019948172237926
+      },
+      "genepi-meteo-19-Rain_mm": {
+        "n_raw": 42960,
+        "n_filtered": 914,
+        "n_compressed": 42047,
+        "n_dropped": 0,
+        "rmse": 2.379952153565077,
+        "nrmse": 0.13911103923679907,
+        "mean_latency_hr": 5.781989111318022,
+        "n_reconstructable": 42960,
+        "compression_rate": 0.9787243947858473,
+        "drop_rate": 0.0,
+        "value_mean_delta": -12.654639092290829,
+        "value_std_delta": -7.207433529614642
+      },
+      "genepi-meteo-19-WindSpeed_ms": {
+        "n_raw": 42950,
+        "n_filtered": 1602,
+        "n_compressed": 41349,
+        "n_dropped": 0,
+        "rmse": 0.850102250194495,
+        "nrmse": 0.9786991011968379,
+        "mean_latency_hr": 4.285418910878282,
+        "n_reconstructable": 42950,
+        "compression_rate": 0.9627008149010478,
+        "drop_rate": 0.0,
+        "value_mean_delta": -0.271761784643468,
+        "value_std_delta": 0.25222977826420134
+      },
+      "genepi-meteo-19-WindDirection_deg": {
+        "n_raw": 42957,
+        "n_filtered": 1738,
+        "n_compressed": 41220,
+        "n_dropped": 0,
+        "rmse": 68.72324218245389,
+        "nrmse": 0.9352325215353351,
+        "mean_latency_hr": 4.16286499031331,
+        "n_reconstructable": 42957,
+        "compression_rate": 0.9595409362851224,
+        "drop_rate": 0.0,
+        "value_mean_delta": 24.244708722263624,
+        "value_std_delta": 41.749442902888674
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-19-AmbientTemp_C": {
+        "value": {
+          "n": 42957,
+          "mean": 1.6301843704169285,
+          "std": 4.525930261985849,
+          "min": -12.13,
+          "max": 13.04
+        },
+        "value_first_diff_var": 0.1449377031190423,
+        "n_samples": 42957
+      },
+      "genepi-meteo-19-SurfaceTemp_C": {
+        "value": {
+          "n": 42957,
+          "mean": 1.6037923737691182,
+          "std": 6.708909556758876,
+          "min": -12.713,
+          "max": 24.1
+        },
+        "value_first_diff_var": 0.08866354298009112,
+        "n_samples": 42957
+      },
+      "genepi-meteo-19-RelativeHumidity_pct": {
+        "value": {
+          "n": 42941,
+          "mean": 71.49561027922033,
+          "std": 19.648793832736093,
+          "min": 2.387,
+          "max": 98.613
+        },
+        "value_first_diff_var": 7.392211469036138,
+        "n_samples": 42941
+      },
+      "genepi-meteo-19-Rain_mm": {
+        "value": {
+          "n": 42960,
+          "mean": 15.70693668528864,
+          "std": 17.10829109337505,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.1771130612693238,
+        "n_samples": 42960
+      },
+      "genepi-meteo-19-WindSpeed_ms": {
+        "value": {
+          "n": 42950,
+          "mean": 0.8837343189755529,
+          "std": 0.8686043025429537,
+          "min": 0.0,
+          "max": 23.607
+        },
+        "value_first_diff_var": 0.3437337605702357,
+        "n_samples": 42950
+      },
+      "genepi-meteo-19-WindDirection_deg": {
+        "value": {
+          "n": 42957,
+          "mean": 134.20173431571106,
+          "std": 73.48251969428266,
+          "min": 0.0,
+          "max": 356.384
+        },
+        "value_first_diff_var": 2016.287884925162,
+        "n_samples": 42957
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-19-AmbientTemp_C": {
+        "value": {
+          "n": 875,
+          "mean": 6.7637485714285726,
+          "std": 3.5569327243223343,
+          "min": -10.53,
+          "max": 13.04
+        },
+        "value_first_diff_var": 2.247647959223748,
+        "n_samples": 875
+      },
+      "genepi-meteo-19-SurfaceTemp_C": {
+        "value": {
+          "n": 852,
+          "mean": 9.185228873239437,
+          "std": 5.5634790999220645,
+          "min": -10.65,
+          "max": 20.975
+        },
+        "value_first_diff_var": 7.92591602450977,
+        "n_samples": 852
+      },
+      "genepi-meteo-19-RelativeHumidity_pct": {
+        "value": {
+          "n": 964,
+          "mean": 76.13343464730289,
+          "std": 12.628845660498166,
+          "min": 12.267,
+          "max": 97.436
+        },
+        "value_first_diff_var": 106.70098519783384,
+        "n_samples": 964
+      },
+      "genepi-meteo-19-Rain_mm": {
+        "value": {
+          "n": 914,
+          "mean": 3.052297592997812,
+          "std": 9.90085756376041,
+          "min": 0.0,
+          "max": 50.8
+        },
+        "value_first_diff_var": 9.747951759242484,
+        "n_samples": 914
+      },
+      "genepi-meteo-19-WindSpeed_ms": {
+        "value": {
+          "n": 1602,
+          "mean": 0.6119725343320849,
+          "std": 1.120834080807155,
+          "min": 0.0,
+          "max": 23.607
+        },
+        "value_first_diff_var": 2.4682531252437867,
+        "n_samples": 1602
+      },
+      "genepi-meteo-19-WindDirection_deg": {
+        "value": {
+          "n": 1738,
+          "mean": 158.4464430379747,
+          "std": 115.23196259717133,
+          "min": 0.0,
+          "max": 356.287
+        },
+        "value_first_diff_var": 32103.820763804913,
+        "n_samples": 1738
+      }
+    }
+  },
+  "genepi-meteo-2": {
+    "totals": {
+      "n_raw": 301570,
+      "n_filtered": 8008,
+      "n_compressed": 293569,
+      "n_dropped": 0,
+      "n_reconstructable": 301570,
+      "overall_compression_rate": 0.9734456345127168,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 293569
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-2-AmbientTemp_C": 42197,
+      "genepi-meteo-2-SurfaceTemp_C": 42244,
+      "genepi-meteo-2-SolarRadiation_Wm2": 42187,
+      "genepi-meteo-2-RelativeHumidity_pct": 42133,
+      "genepi-meteo-2-Rain_mm": 42175,
+      "genepi-meteo-2-WindSpeed_ms": 41350,
+      "genepi-meteo-2-WindDirection_deg": 41283
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-2-AmbientTemp_C": 42197,
+      "genepi-meteo-2-SurfaceTemp_C": 42244,
+      "genepi-meteo-2-SolarRadiation_Wm2": 42187,
+      "genepi-meteo-2-RelativeHumidity_pct": 42133,
+      "genepi-meteo-2-Rain_mm": 42175,
+      "genepi-meteo-2-WindSpeed_ms": 41350,
+      "genepi-meteo-2-WindDirection_deg": 41283
+    },
+    "per_sensor": {
+      "genepi-meteo-2-AmbientTemp_C": {
+        "n_raw": 43084,
+        "n_filtered": 888,
+        "n_compressed": 42197,
+        "n_dropped": 0,
+        "rmse": 1.59000169845095,
+        "nrmse": 0.3427519777112825,
+        "mean_latency_hr": 5.644430079740868,
+        "n_reconstructable": 43084,
+        "compression_rate": 0.9793891003620834,
+        "drop_rate": 0.0,
+        "value_mean_delta": 6.086483918697268,
+        "value_std_delta": -0.3083518070519071
+      },
+      "genepi-meteo-2-SurfaceTemp_C": {
+        "n_raw": 43090,
+        "n_filtered": 847,
+        "n_compressed": 42244,
+        "n_dropped": 0,
+        "rmse": 2.7418240464039147,
+        "nrmse": 0.44501600832560595,
+        "mean_latency_hr": 5.91565504370697,
+        "n_reconstructable": 43090,
+        "compression_rate": 0.9803434671617545,
+        "drop_rate": 0.0,
+        "value_mean_delta": 8.40111586306687,
+        "value_std_delta": -0.42033849919824107
+      },
+      "genepi-meteo-2-SolarRadiation_Wm2": {
+        "n_raw": 43086,
+        "n_filtered": 900,
+        "n_compressed": 42187,
+        "n_dropped": 0,
+        "rmse": 217.47470497549688,
+        "nrmse": 1.0434011889200463,
+        "mean_latency_hr": 5.728723186701532,
+        "n_reconstructable": 43086,
+        "compression_rate": 0.9791115443531542,
+        "drop_rate": 0.0,
+        "value_mean_delta": 84.12133797211779,
+        "value_std_delta": 42.65431580351168
+      },
+      "genepi-meteo-2-RelativeHumidity_pct": {
+        "n_raw": 43047,
+        "n_filtered": 915,
+        "n_compressed": 42133,
+        "n_dropped": 0,
+        "rmse": 14.044436820028526,
+        "nrmse": 0.6999410804787951,
+        "mean_latency_hr": 5.382662935602688,
+        "n_reconstructable": 43047,
+        "compression_rate": 0.9787441633563314,
+        "drop_rate": 0.0,
+        "value_mean_delta": 5.770433632396461,
+        "value_std_delta": -5.794187621243305
+      },
+      "genepi-meteo-2-Rain_mm": {
+        "n_raw": 43090,
+        "n_filtered": 916,
+        "n_compressed": 42175,
+        "n_dropped": 0,
+        "rmse": 2.274158052553197,
+        "nrmse": 0.14231681731638857,
+        "mean_latency_hr": 5.8530886000876725,
+        "n_reconstructable": 43090,
+        "compression_rate": 0.9787421675562775,
+        "drop_rate": 0.0,
+        "value_mean_delta": -11.671550223407698,
+        "value_std_delta": -6.253631038535399
+      },
+      "genepi-meteo-2-WindSpeed_ms": {
+        "n_raw": 43083,
+        "n_filtered": 1734,
+        "n_compressed": 41350,
+        "n_dropped": 0,
+        "rmse": 0.7688022199947592,
+        "nrmse": 0.9410585085990281,
+        "mean_latency_hr": 3.7873754600293488,
+        "n_reconstructable": 43083,
+        "compression_rate": 0.9597521063992758,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.2387538330896981,
+        "value_std_delta": 0.3672882028683335
+      },
+      "genepi-meteo-2-WindDirection_deg": {
+        "n_raw": 43090,
+        "n_filtered": 1808,
+        "n_compressed": 41283,
+        "n_dropped": 0,
+        "rmse": 73.55830467492291,
+        "nrmse": 0.970212483015875,
+        "mean_latency_hr": 4.076464338206853,
+        "n_reconstructable": 43090,
+        "compression_rate": 0.9580413088883731,
+        "drop_rate": 0.0,
+        "value_mean_delta": 6.746097429413027,
+        "value_std_delta": 50.239315443697095
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-2-AmbientTemp_C": {
+        "value": {
+          "n": 43084,
+          "mean": 3.335588153374803,
+          "std": 4.638927859929927,
+          "min": -11.4,
+          "max": 15.98
+        },
+        "value_first_diff_var": 0.12673686028504857,
+        "n_samples": 43084
+      },
+      "genepi-meteo-2-SurfaceTemp_C": {
+        "value": {
+          "n": 43090,
+          "mean": 3.0666267579484803,
+          "std": 6.16118071059996,
+          "min": -12.088,
+          "max": 22.913
+        },
+        "value_first_diff_var": 0.056522897907723066,
+        "n_samples": 43090
+      },
+      "genepi-meteo-2-SolarRadiation_Wm2": {
+        "value": {
+          "n": 43086,
+          "mean": 117.43141758343778,
+          "std": 208.4286536040755,
+          "min": 0.0,
+          "max": 1035.26
+        },
+        "value_first_diff_var": 2179.796730354052,
+        "n_samples": 43086
+      },
+      "genepi-meteo-2-RelativeHumidity_pct": {
+        "value": {
+          "n": 43047,
+          "mean": 60.723080028805725,
+          "std": 20.065170071774357,
+          "min": 0.017,
+          "max": 91.173
+        },
+        "value_first_diff_var": 7.039745703530321,
+        "n_samples": 43047
+      },
+      "genepi-meteo-2-Rain_mm": {
+        "value": {
+          "n": 43090,
+          "mean": 14.916310048735209,
+          "std": 15.979545463678066,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.621630564006165,
+        "n_samples": 43090
+      },
+      "genepi-meteo-2-WindSpeed_ms": {
+        "value": {
+          "n": 43083,
+          "mean": 0.7095518185827356,
+          "std": 0.8169547514524786,
+          "min": 0.0,
+          "max": 12.453
+        },
+        "value_first_diff_var": 0.3287206687201369,
+        "n_samples": 43083
+      },
+      "genepi-meteo-2-WindDirection_deg": {
+        "value": {
+          "n": 43090,
+          "mean": 134.9563024599675,
+          "std": 75.81669578840011,
+          "min": 0.0,
+          "max": 359.774
+        },
+        "value_first_diff_var": 2762.3167862057107,
+        "n_samples": 43090
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-2-AmbientTemp_C": {
+        "value": {
+          "n": 888,
+          "mean": 9.422072072072071,
+          "std": 4.33057605287802,
+          "min": -10.9,
+          "max": 15.98
+        },
+        "value_first_diff_var": 1.795006517796202,
+        "n_samples": 888
+      },
+      "genepi-meteo-2-SurfaceTemp_C": {
+        "value": {
+          "n": 847,
+          "mean": 11.46774262101535,
+          "std": 5.740842211401719,
+          "min": -11.838,
+          "max": 21.475
+        },
+        "value_first_diff_var": 4.431895608570998,
+        "n_samples": 847
+      },
+      "genepi-meteo-2-SolarRadiation_Wm2": {
+        "value": {
+          "n": 900,
+          "mean": 201.55275555555556,
+          "std": 251.08296940758717,
+          "min": 0.0,
+          "max": 860.855
+        },
+        "value_first_diff_var": 38549.74737230136,
+        "n_samples": 900
+      },
+      "genepi-meteo-2-RelativeHumidity_pct": {
+        "value": {
+          "n": 915,
+          "mean": 66.49351366120219,
+          "std": 14.270982450531053,
+          "min": 1.267,
+          "max": 89.56
+        },
+        "value_first_diff_var": 113.71449071894047,
+        "n_samples": 915
+      },
+      "genepi-meteo-2-Rain_mm": {
+        "value": {
+          "n": 916,
+          "mean": 3.244759825327512,
+          "std": 9.725914425142667,
+          "min": 0.0,
+          "max": 50.2
+        },
+        "value_first_diff_var": 21.78367487831826,
+        "n_samples": 916
+      },
+      "genepi-meteo-2-WindSpeed_ms": {
+        "value": {
+          "n": 1734,
+          "mean": 0.9483056516724337,
+          "std": 1.1842429543208122,
+          "min": 0.0,
+          "max": 12.453
+        },
+        "value_first_diff_var": 2.6796630713880685,
+        "n_samples": 1734
+      },
+      "genepi-meteo-2-WindDirection_deg": {
+        "value": {
+          "n": 1808,
+          "mean": 141.70239988938053,
+          "std": 126.0560112320972,
+          "min": 0.0,
+          "max": 359.387
+        },
+        "value_first_diff_var": 40442.47018111509,
+        "n_samples": 1808
+      }
+    }
+  },
+  "genepi-meteo-20": {
+    "totals": {
+      "n_raw": 258339,
+      "n_filtered": 7565,
+      "n_compressed": 250780,
+      "n_dropped": 0,
+      "n_reconstructable": 258339,
+      "overall_compression_rate": 0.9707167713740473,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 250780
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-20-AmbientTemp_C": 42184,
+      "genepi-meteo-20-SurfaceTemp_C": 42211,
+      "genepi-meteo-20-RelativeHumidity_pct": 42136,
+      "genepi-meteo-20-Rain_mm": 42154,
+      "genepi-meteo-20-WindSpeed_ms": 41007,
+      "genepi-meteo-20-WindDirection_deg": 41088
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-20-AmbientTemp_C": 42184,
+      "genepi-meteo-20-SurfaceTemp_C": 42211,
+      "genepi-meteo-20-RelativeHumidity_pct": 42136,
+      "genepi-meteo-20-Rain_mm": 42154,
+      "genepi-meteo-20-WindSpeed_ms": 41007,
+      "genepi-meteo-20-WindDirection_deg": 41088
+    },
+    "per_sensor": {
+      "genepi-meteo-20-AmbientTemp_C": {
+        "n_raw": 43055,
+        "n_filtered": 872,
+        "n_compressed": 42184,
+        "n_dropped": 0,
+        "rmse": 1.6048065649855476,
+        "nrmse": 0.37049907152885836,
+        "mean_latency_hr": 5.684296003819403,
+        "n_reconstructable": 43055,
+        "compression_rate": 0.979746835443038,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.1853687434676585,
+        "value_std_delta": -0.8456662095118261
+      },
+      "genepi-meteo-20-SurfaceTemp_C": {
+        "n_raw": 43059,
+        "n_filtered": 849,
+        "n_compressed": 42211,
+        "n_dropped": 0,
+        "rmse": 4.351750574296895,
+        "nrmse": 0.6530020195793349,
+        "mean_latency_hr": 5.861210328980134,
+        "n_reconstructable": 43059,
+        "compression_rate": 0.9802828676931652,
+        "drop_rate": 0.0,
+        "value_mean_delta": 6.447142954317671,
+        "value_std_delta": -1.4600669356750053
+      },
+      "genepi-meteo-20-RelativeHumidity_pct": {
+        "n_raw": 43055,
+        "n_filtered": 920,
+        "n_compressed": 42136,
+        "n_dropped": 0,
+        "rmse": 11.382216774617229,
+        "nrmse": 0.6001010827317833,
+        "mean_latency_hr": 5.482594807674938,
+        "n_reconstructable": 43055,
+        "compression_rate": 0.9786319823481593,
+        "drop_rate": 0.0,
+        "value_mean_delta": 7.554706766118173,
+        "value_std_delta": -5.627612045548563
+      },
+      "genepi-meteo-20-Rain_mm": {
+        "n_raw": 43059,
+        "n_filtered": 906,
+        "n_compressed": 42154,
+        "n_dropped": 0,
+        "rmse": 2.5903642142272463,
+        "nrmse": 0.14372310960691345,
+        "mean_latency_hr": 5.804602328587906,
+        "n_reconstructable": 43059,
+        "compression_rate": 0.9789591026266286,
+        "drop_rate": 0.0,
+        "value_mean_delta": -12.825301492223286,
+        "value_std_delta": -7.95433843635605
+      },
+      "genepi-meteo-20-WindSpeed_ms": {
+        "n_raw": 43052,
+        "n_filtered": 2046,
+        "n_compressed": 41007,
+        "n_dropped": 0,
+        "rmse": 0.9216339745317558,
+        "nrmse": 0.9625058634168002,
+        "mean_latency_hr": 3.270518397648322,
+        "n_reconstructable": 43052,
+        "compression_rate": 0.9524760754436495,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.13833093971971777,
+        "value_std_delta": 0.21483686165805782
+      },
+      "genepi-meteo-20-WindDirection_deg": {
+        "n_raw": 43059,
+        "n_filtered": 1972,
+        "n_compressed": 41088,
+        "n_dropped": 0,
+        "rmse": 87.14518882732467,
+        "nrmse": 1.0486343929622355,
+        "mean_latency_hr": 3.7948782549008984,
+        "n_reconstructable": 43059,
+        "compression_rate": 0.9542023734875403,
+        "drop_rate": 0.0,
+        "value_mean_delta": 26.933541467738024,
+        "value_std_delta": 34.16677277757681
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-20-AmbientTemp_C": {
+        "value": {
+          "n": 43055,
+          "mean": 2.925124375798397,
+          "std": 4.331472568509658,
+          "min": -10.68,
+          "max": 13.74
+        },
+        "value_first_diff_var": 0.12707119612891798,
+        "n_samples": 43055
+      },
+      "genepi-meteo-20-SurfaceTemp_C": {
+        "value": {
+          "n": 43059,
+          "mean": 3.730317587496226,
+          "std": 6.664222228746399,
+          "min": -11.463,
+          "max": 23.663
+        },
+        "value_first_diff_var": 0.0559292261983983,
+        "n_samples": 43059
+      },
+      "genepi-meteo-20-RelativeHumidity_pct": {
+        "value": {
+          "n": 43055,
+          "mean": 69.31287801649053,
+          "std": 18.967165869461596,
+          "min": 8.56,
+          "max": 95.014
+        },
+        "value_first_diff_var": 7.158922415118475,
+        "n_samples": 43055
+      },
+      "genepi-meteo-20-Rain_mm": {
+        "value": {
+          "n": 43059,
+          "mean": 16.131261757123948,
+          "std": 18.023296471332703,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.5082669865553916,
+        "n_samples": 43059
+      },
+      "genepi-meteo-20-WindSpeed_ms": {
+        "value": {
+          "n": 43052,
+          "mean": 0.9767692557837034,
+          "std": 0.957535958544758,
+          "min": 0.0,
+          "max": 13.618
+        },
+        "value_first_diff_var": 0.42038346730926834,
+        "n_samples": 43052
+      },
+      "genepi-meteo-20-WindDirection_deg": {
+        "value": {
+          "n": 43059,
+          "mean": 140.6433383497062,
+          "std": 83.1035005261963,
+          "min": 0.0,
+          "max": 358.709
+        },
+        "value_first_diff_var": 3689.100407898023,
+        "n_samples": 43059
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-20-AmbientTemp_C": {
+        "value": {
+          "n": 872,
+          "mean": 7.110493119266056,
+          "std": 3.4858063589978316,
+          "min": -10.49,
+          "max": 13.74
+        },
+        "value_first_diff_var": 1.7438260410391737,
+        "n_samples": 872
+      },
+      "genepi-meteo-20-SurfaceTemp_C": {
+        "value": {
+          "n": 849,
+          "mean": 10.177460541813897,
+          "std": 5.204155293071394,
+          "min": -8.713,
+          "max": 21.288
+        },
+        "value_first_diff_var": 11.068416045033821,
+        "n_samples": 849
+      },
+      "genepi-meteo-20-RelativeHumidity_pct": {
+        "value": {
+          "n": 920,
+          "mean": 76.8675847826087,
+          "std": 13.339553823913032,
+          "min": 14.968,
+          "max": 94.801
+        },
+        "value_first_diff_var": 78.96704234831823,
+        "n_samples": 920
+      },
+      "genepi-meteo-20-Rain_mm": {
+        "value": {
+          "n": 906,
+          "mean": 3.3059602649006625,
+          "std": 10.068958034976653,
+          "min": 0.0,
+          "max": 49.2
+        },
+        "value_first_diff_var": 22.920351198070872,
+        "n_samples": 906
+      },
+      "genepi-meteo-20-WindSpeed_ms": {
+        "value": {
+          "n": 2046,
+          "mean": 1.1151001955034212,
+          "std": 1.1723728202028159,
+          "min": 0.0,
+          "max": 12.637
+        },
+        "value_first_diff_var": 3.1969885506365934,
+        "n_samples": 2046
+      },
+      "genepi-meteo-20-WindDirection_deg": {
+        "value": {
+          "n": 1972,
+          "mean": 167.57687981744422,
+          "std": 117.27027330377311,
+          "min": 0.0,
+          "max": 358.709
+        },
+        "value_first_diff_var": 45267.94711972569,
+        "n_samples": 1972
+      }
+    }
+  },
+  "genepi-meteo-3": {
+    "totals": {
+      "n_raw": 294980,
+      "n_filtered": 7996,
+      "n_compressed": 286991,
+      "n_dropped": 0,
+      "n_reconstructable": 294980,
+      "overall_compression_rate": 0.9728930774967794,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 286991
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-3-AmbientTemp_C": 41270,
+      "genepi-meteo-3-SurfaceTemp_C": 41285,
+      "genepi-meteo-3-SolarRadiation_Wm2": 41247,
+      "genepi-meteo-3-RelativeHumidity_pct": 41232,
+      "genepi-meteo-3-Rain_mm": 41231,
+      "genepi-meteo-3-WindSpeed_ms": 40416,
+      "genepi-meteo-3-WindDirection_deg": 40310
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-3-AmbientTemp_C": 41270,
+      "genepi-meteo-3-SurfaceTemp_C": 41285,
+      "genepi-meteo-3-SolarRadiation_Wm2": 41247,
+      "genepi-meteo-3-RelativeHumidity_pct": 41232,
+      "genepi-meteo-3-Rain_mm": 41231,
+      "genepi-meteo-3-WindSpeed_ms": 40416,
+      "genepi-meteo-3-WindDirection_deg": 40310
+    },
+    "per_sensor": {
+      "genepi-meteo-3-AmbientTemp_C": {
+        "n_raw": 42141,
+        "n_filtered": 872,
+        "n_compressed": 41270,
+        "n_dropped": 0,
+        "rmse": 1.9702321667309244,
+        "nrmse": 0.4255688631332241,
+        "mean_latency_hr": 5.63120423103391,
+        "n_reconstructable": 42141,
+        "compression_rate": 0.9793075627061532,
+        "drop_rate": 0.0,
+        "value_mean_delta": 6.376546715765704,
+        "value_std_delta": -0.2232430130789096
+      },
+      "genepi-meteo-3-SurfaceTemp_C": {
+        "n_raw": 42141,
+        "n_filtered": 857,
+        "n_compressed": 41285,
+        "n_dropped": 0,
+        "rmse": 4.988190531743305,
+        "nrmse": 0.6661986516691125,
+        "mean_latency_hr": 5.818728896904308,
+        "n_reconstructable": 42141,
+        "compression_rate": 0.9796635105953821,
+        "drop_rate": 0.0,
+        "value_mean_delta": 7.935178180784814,
+        "value_std_delta": -0.5816351243932374
+      },
+      "genepi-meteo-3-SolarRadiation_Wm2": {
+        "n_raw": 42141,
+        "n_filtered": 895,
+        "n_compressed": 41247,
+        "n_dropped": 0,
+        "rmse": 257.53578305174136,
+        "nrmse": 1.1824646120143636,
+        "mean_latency_hr": 5.691141716037957,
+        "n_reconstructable": 42141,
+        "compression_rate": 0.9787617759426687,
+        "drop_rate": 0.0,
+        "value_mean_delta": 93.53027768477175,
+        "value_std_delta": 50.31618812203189
+      },
+      "genepi-meteo-3-RelativeHumidity_pct": {
+        "n_raw": 42141,
+        "n_filtered": 910,
+        "n_compressed": 41232,
+        "n_dropped": 0,
+        "rmse": 17.673144632938104,
+        "nrmse": 0.8116179787701592,
+        "mean_latency_hr": 5.252631067922767,
+        "n_reconstructable": 42141,
+        "compression_rate": 0.9784058280534397,
+        "drop_rate": 0.0,
+        "value_mean_delta": 11.338343733191898,
+        "value_std_delta": -5.149419084871205
+      },
+      "genepi-meteo-3-Rain_mm": {
+        "n_raw": 42141,
+        "n_filtered": 911,
+        "n_compressed": 41231,
+        "n_dropped": 0,
+        "rmse": 2.697649501090649,
+        "nrmse": 0.13961322394241524,
+        "mean_latency_hr": 5.863996741099326,
+        "n_reconstructable": 42141,
+        "compression_rate": 0.9783820981941577,
+        "drop_rate": 0.0,
+        "value_mean_delta": -14.007976217836045,
+        "value_std_delta": -9.590387781076767
+      },
+      "genepi-meteo-3-WindSpeed_ms": {
+        "n_raw": 42134,
+        "n_filtered": 1719,
+        "n_compressed": 40416,
+        "n_dropped": 0,
+        "rmse": 0.8527871415209621,
+        "nrmse": 0.9733020646836185,
+        "mean_latency_hr": 3.7477771712472907,
+        "n_reconstructable": 42134,
+        "compression_rate": 0.9592015949114729,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.15423861718449283,
+        "value_std_delta": 0.5278423296110435
+      },
+      "genepi-meteo-3-WindDirection_deg": {
+        "n_raw": 42141,
+        "n_filtered": 1832,
+        "n_compressed": 40310,
+        "n_dropped": 0,
+        "rmse": 73.2502066096805,
+        "nrmse": 1.0080390957973788,
+        "mean_latency_hr": 3.9076828385657674,
+        "n_reconstructable": 42141,
+        "compression_rate": 0.956526897795496,
+        "drop_rate": 0.0,
+        "value_mean_delta": 13.436694960340049,
+        "value_std_delta": 46.21693661411946
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-3-AmbientTemp_C": {
+        "value": {
+          "n": 42141,
+          "mean": 3.1990152108398,
+          "std": 4.62964360744161,
+          "min": -11.36,
+          "max": 16.55
+        },
+        "value_first_diff_var": 0.1724910284417616,
+        "n_samples": 42141
+      },
+      "genepi-meteo-3-SurfaceTemp_C": {
+        "value": {
+          "n": 42141,
+          "mean": 4.645218552003986,
+          "std": 7.487542220696116,
+          "min": -11.713,
+          "max": 28.225
+        },
+        "value_first_diff_var": 0.0790538404132157,
+        "n_samples": 42141
+      },
+      "genepi-meteo-3-SolarRadiation_Wm2": {
+        "value": {
+          "n": 42141,
+          "mean": 119.77160276215561,
+          "std": 217.79576355610467,
+          "min": 0.0,
+          "max": 1057.59
+        },
+        "value_first_diff_var": 2787.4945550886196,
+        "n_samples": 42141
+      },
+      "genepi-meteo-3-RelativeHumidity_pct": {
+        "value": {
+          "n": 42141,
+          "mean": 57.10930132175316,
+          "std": 21.77520101232619,
+          "min": 5.654,
+          "max": 93.285
+        },
+        "value_first_diff_var": 10.998771615109254,
+        "n_samples": 42141
+      },
+      "genepi-meteo-3-Rain_mm": {
+        "value": {
+          "n": 42141,
+          "mean": 16.70786644835196,
+          "std": 19.322306475805757,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.15110773035122152,
+        "n_samples": 42141
+      },
+      "genepi-meteo-3-WindSpeed_ms": {
+        "value": {
+          "n": 42134,
+          "mean": 0.8146747045141691,
+          "std": 0.8761793203409767,
+          "min": 0.0,
+          "max": 14.724
+        },
+        "value_first_diff_var": 0.428315357512005,
+        "n_samples": 42134
+      },
+      "genepi-meteo-3-WindDirection_deg": {
+        "value": {
+          "n": 42141,
+          "mean": 126.87856977765122,
+          "std": 72.66603737401489,
+          "min": 0.0,
+          "max": 357.934
+        },
+        "value_first_diff_var": 2435.6920063100406,
+        "n_samples": 42141
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-3-AmbientTemp_C": {
+        "value": {
+          "n": 872,
+          "mean": 9.575561926605504,
+          "std": 4.4064005943627,
+          "min": -9.94,
+          "max": 16.55
+        },
+        "value_first_diff_var": 1.9944234060642652,
+        "n_samples": 872
+      },
+      "genepi-meteo-3-SurfaceTemp_C": {
+        "value": {
+          "n": 857,
+          "mean": 12.5803967327888,
+          "std": 6.905907096302879,
+          "min": -9.838,
+          "max": 25.163
+        },
+        "value_first_diff_var": 14.549677685025712,
+        "n_samples": 857
+      },
+      "genepi-meteo-3-SolarRadiation_Wm2": {
+        "value": {
+          "n": 895,
+          "mean": 213.30188044692736,
+          "std": 268.11195167813656,
+          "min": 0.0,
+          "max": 970.922
+        },
+        "value_first_diff_var": 44985.1651200664,
+        "n_samples": 895
+      },
+      "genepi-meteo-3-RelativeHumidity_pct": {
+        "value": {
+          "n": 910,
+          "mean": 68.44764505494506,
+          "std": 16.625781927454984,
+          "min": 6.24,
+          "max": 93.285
+        },
+        "value_first_diff_var": 172.64807635210056,
+        "n_samples": 910
+      },
+      "genepi-meteo-3-Rain_mm": {
+        "value": {
+          "n": 911,
+          "mean": 2.6998902305159165,
+          "std": 9.73191869472899,
+          "min": 0.0,
+          "max": 49.4
+        },
+        "value_first_diff_var": 8.60689718633015,
+        "n_samples": 911
+      },
+      "genepi-meteo-3-WindSpeed_ms": {
+        "value": {
+          "n": 1719,
+          "mean": 0.968913321698662,
+          "std": 1.4040216499520202,
+          "min": 0.0,
+          "max": 14.724
+        },
+        "value_first_diff_var": 3.5501820937170074,
+        "n_samples": 1719
+      },
+      "genepi-meteo-3-WindDirection_deg": {
+        "value": {
+          "n": 1832,
+          "mean": 140.31526473799127,
+          "std": 118.88297398813435,
+          "min": 0.0,
+          "max": 357.934
+        },
+        "value_first_diff_var": 34630.35635002993,
+        "n_samples": 1832
+      }
+    }
+  },
+  "genepi-meteo-4": {
+    "totals": {
+      "n_raw": 273378,
+      "n_filtered": 7243,
+      "n_compressed": 266142,
+      "n_dropped": 0,
+      "n_reconstructable": 273378,
+      "overall_compression_rate": 0.973505549093197,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 266142
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-4-AmbientTemp_C": 38208,
+      "genepi-meteo-4-SurfaceTemp_C": 38214,
+      "genepi-meteo-4-SolarRadiation_Wm2": 38167,
+      "genepi-meteo-4-RelativeHumidity_pct": 38105,
+      "genepi-meteo-4-Rain_mm": 38219,
+      "genepi-meteo-4-WindSpeed_ms": 37581,
+      "genepi-meteo-4-WindDirection_deg": 37648
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-4-AmbientTemp_C": 38208,
+      "genepi-meteo-4-SurfaceTemp_C": 38214,
+      "genepi-meteo-4-SolarRadiation_Wm2": 38167,
+      "genepi-meteo-4-RelativeHumidity_pct": 38105,
+      "genepi-meteo-4-Rain_mm": 38219,
+      "genepi-meteo-4-WindSpeed_ms": 37581,
+      "genepi-meteo-4-WindDirection_deg": 37648
+    },
+    "per_sensor": {
+      "genepi-meteo-4-AmbientTemp_C": {
+        "n_raw": 39055,
+        "n_filtered": 848,
+        "n_compressed": 38208,
+        "n_dropped": 0,
+        "rmse": 1.8844966639274707,
+        "nrmse": 0.394261794876258,
+        "mean_latency_hr": 6.162707556295253,
+        "n_reconstructable": 39055,
+        "compression_rate": 0.9782870311099731,
+        "drop_rate": 0.0,
+        "value_mean_delta": 6.548256778056103,
+        "value_std_delta": -0.7932032000237208
+      },
+      "genepi-meteo-4-SurfaceTemp_C": {
+        "n_raw": 39055,
+        "n_filtered": 842,
+        "n_compressed": 38214,
+        "n_dropped": 0,
+        "rmse": 4.082933559709504,
+        "nrmse": 0.5584261270846409,
+        "mean_latency_hr": 6.298323333191084,
+        "n_reconstructable": 39055,
+        "compression_rate": 0.9784406606068365,
+        "drop_rate": 0.0,
+        "value_mean_delta": 8.740888753207837,
+        "value_std_delta": -0.8736018428947885
+      },
+      "genepi-meteo-4-SolarRadiation_Wm2": {
+        "n_raw": 39055,
+        "n_filtered": 889,
+        "n_compressed": 38167,
+        "n_dropped": 0,
+        "rmse": 251.85992747035212,
+        "nrmse": 1.2006834902539172,
+        "mean_latency_hr": 6.093050171410689,
+        "n_reconstructable": 39055,
+        "compression_rate": 0.9772372295480732,
+        "drop_rate": 0.0,
+        "value_mean_delta": 93.49042331812929,
+        "value_std_delta": 52.68536844720208
+      },
+      "genepi-meteo-4-RelativeHumidity_pct": {
+        "n_raw": 39055,
+        "n_filtered": 951,
+        "n_compressed": 38105,
+        "n_dropped": 0,
+        "rmse": 12.8804039359732,
+        "nrmse": 0.6119276645826974,
+        "mean_latency_hr": 6.006007012902033,
+        "n_reconstructable": 39055,
+        "compression_rate": 0.9756497247471515,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.19294799296901,
+        "value_std_delta": -4.961027895915638
+      },
+      "genepi-meteo-4-Rain_mm": {
+        "n_raw": 39055,
+        "n_filtered": 837,
+        "n_compressed": 38219,
+        "n_dropped": 0,
+        "rmse": 0.0,
+        "nrmse": 0.0,
+        "mean_latency_hr": 6.505059872828916,
+        "n_reconstructable": 39055,
+        "compression_rate": 0.978568685187556,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.1223923557241748,
+        "value_std_delta": 1.4705769478161348
+      },
+      "genepi-meteo-4-WindSpeed_ms": {
+        "n_raw": 39048,
+        "n_filtered": 1468,
+        "n_compressed": 37581,
+        "n_dropped": 0,
+        "rmse": 0.661811202873839,
+        "nrmse": 0.7749763044249425,
+        "mean_latency_hr": 4.618075175282843,
+        "n_reconstructable": 39048,
+        "compression_rate": 0.9624052448268797,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.3000679379030183,
+        "value_std_delta": 0.31231896224010947
+      },
+      "genepi-meteo-4-WindDirection_deg": {
+        "n_raw": 39055,
+        "n_filtered": 1408,
+        "n_compressed": 37648,
+        "n_dropped": 0,
+        "rmse": 96.69344505505883,
+        "nrmse": 0.9238349025141431,
+        "mean_latency_hr": 4.770965732087228,
+        "n_reconstructable": 39055,
+        "compression_rate": 0.9639482780693893,
+        "drop_rate": 0.0,
+        "value_mean_delta": -51.85269303102558,
+        "value_std_delta": 25.78185697152611
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-4-AmbientTemp_C": {
+        "value": {
+          "n": 39055,
+          "mean": 3.235540391755217,
+          "std": 4.779810492464617,
+          "min": -11.22,
+          "max": 15.77
+        },
+        "value_first_diff_var": 0.102329095365338,
+        "n_samples": 39055
+      },
+      "genepi-meteo-4-SurfaceTemp_C": {
+        "value": {
+          "n": 39055,
+          "mean": 2.449353527077199,
+          "std": 7.311501668134972,
+          "min": -13.963,
+          "max": 30.538
+        },
+        "value_first_diff_var": 0.08875193636562168,
+        "n_samples": 39055
+      },
+      "genepi-meteo-4-SolarRadiation_Wm2": {
+        "value": {
+          "n": 39055,
+          "mean": 114.52290964025092,
+          "std": 209.76379663310726,
+          "min": 0.0,
+          "max": 1017.71
+        },
+        "value_first_diff_var": 2291.4588080699154,
+        "n_samples": 39055
+      },
+      "genepi-meteo-4-RelativeHumidity_pct": {
+        "value": {
+          "n": 39055,
+          "mean": 67.22404990398157,
+          "std": 21.048899537426472,
+          "min": 7.34,
+          "max": 96.113
+        },
+        "value_first_diff_var": 6.896256476892824,
+        "n_samples": 39055
+      },
+      "genepi-meteo-4-Rain_mm": {
+        "value": {
+          "n": 39055,
+          "mean": 0.004250416079887338,
+          "std": 0.2860408060847859,
+          "min": 0.0,
+          "max": 47.0
+        },
+        "value_first_diff_var": 0.11748450862907768,
+        "n_samples": 39055
+      },
+      "genepi-meteo-4-WindSpeed_ms": {
+        "value": {
+          "n": 39048,
+          "mean": 0.4386330157754558,
+          "std": 0.8539760494547306,
+          "min": 0.0,
+          "max": 12.176
+        },
+        "value_first_diff_var": 0.21891610827085722,
+        "n_samples": 39048
+      },
+      "genepi-meteo-4-WindDirection_deg": {
+        "value": {
+          "n": 39055,
+          "mean": 160.5300651901165,
+          "std": 104.66528682983866,
+          "min": 0.0,
+          "max": 358.709
+        },
+        "value_first_diff_var": 2825.558845449955,
+        "n_samples": 39055
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-4-AmbientTemp_C": {
+        "value": {
+          "n": 848,
+          "mean": 9.78379716981132,
+          "std": 3.986607292440896,
+          "min": -8.42,
+          "max": 15.77
+        },
+        "value_first_diff_var": 1.5324402400861987,
+        "n_samples": 848
+      },
+      "genepi-meteo-4-SurfaceTemp_C": {
+        "value": {
+          "n": 842,
+          "mean": 11.190242280285037,
+          "std": 6.437899825240184,
+          "min": -13.838,
+          "max": 30.538
+        },
+        "value_first_diff_var": 8.28510615600306,
+        "n_samples": 842
+      },
+      "genepi-meteo-4-SolarRadiation_Wm2": {
+        "value": {
+          "n": 889,
+          "mean": 208.0133329583802,
+          "std": 262.44916508030934,
+          "min": 0.0,
+          "max": 903.393
+        },
+        "value_first_diff_var": 38104.97527445922,
+        "n_samples": 889
+      },
+      "genepi-meteo-4-RelativeHumidity_pct": {
+        "value": {
+          "n": 951,
+          "mean": 71.41699789695058,
+          "std": 16.087871641510834,
+          "min": 12.646,
+          "max": 96.113
+        },
+        "value_first_diff_var": 87.84330077353572,
+        "n_samples": 951
+      },
+      "genepi-meteo-4-Rain_mm": {
+        "value": {
+          "n": 837,
+          "mean": 0.12664277180406214,
+          "std": 1.7566177539009207,
+          "min": 0.0,
+          "max": 47.0
+        },
+        "value_first_diff_var": 5.488325358851674,
+        "n_samples": 837
+      },
+      "genepi-meteo-4-WindSpeed_ms": {
+        "value": {
+          "n": 1468,
+          "mean": 0.7387009536784741,
+          "std": 1.16629501169484,
+          "min": 0.0,
+          "max": 12.001
+        },
+        "value_first_diff_var": 2.222903460360608,
+        "n_samples": 1468
+      },
+      "genepi-meteo-4-WindDirection_deg": {
+        "value": {
+          "n": 1408,
+          "mean": 108.67737215909091,
+          "std": 130.44714380136477,
+          "min": 0.0,
+          "max": 358.612
+        },
+        "value_first_diff_var": 39934.41535776989,
+        "n_samples": 1408
+      }
+    }
+  },
+  "genepi-meteo-6": {
+    "totals": {
+      "n_raw": 261336,
+      "n_filtered": 8238,
+      "n_compressed": 253104,
+      "n_dropped": 0,
+      "n_reconstructable": 261336,
+      "overall_compression_rate": 0.9684773624758931,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 253104
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-6-AmbientTemp_C": 37195,
+      "genepi-meteo-6-SurfaceTemp_C": 37477,
+      "genepi-meteo-6-SolarRadiation_Wm2": 37519,
+      "genepi-meteo-6-RelativeHumidity_pct": 30249,
+      "genepi-meteo-6-Rain_mm": 37545,
+      "genepi-meteo-6-WindSpeed_ms": 36762,
+      "genepi-meteo-6-WindDirection_deg": 36357
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-6-AmbientTemp_C": 37195,
+      "genepi-meteo-6-SurfaceTemp_C": 37477,
+      "genepi-meteo-6-SolarRadiation_Wm2": 37519,
+      "genepi-meteo-6-RelativeHumidity_pct": 30249,
+      "genepi-meteo-6-Rain_mm": 37545,
+      "genepi-meteo-6-WindSpeed_ms": 36762,
+      "genepi-meteo-6-WindDirection_deg": 36357
+    },
+    "per_sensor": {
+      "genepi-meteo-6-AmbientTemp_C": {
+        "n_raw": 38141,
+        "n_filtered": 947,
+        "n_compressed": 37195,
+        "n_dropped": 0,
+        "rmse": 1.476913353118754,
+        "nrmse": 0.3399973984430395,
+        "mean_latency_hr": 5.381055913875124,
+        "n_reconstructable": 38141,
+        "compression_rate": 0.975171075745261,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.5869956035138557,
+        "value_std_delta": -1.2616504110728104
+      },
+      "genepi-meteo-6-SurfaceTemp_C": {
+        "n_raw": 38403,
+        "n_filtered": 927,
+        "n_compressed": 37477,
+        "n_dropped": 0,
+        "rmse": 3.31438740337819,
+        "nrmse": 0.5389246906144003,
+        "mean_latency_hr": 5.596732821799223,
+        "n_reconstructable": 38403,
+        "compression_rate": 0.9758612608389969,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.714461088572925,
+        "value_std_delta": 0.6753420101186682
+      },
+      "genepi-meteo-6-SolarRadiation_Wm2": {
+        "n_raw": 38403,
+        "n_filtered": 885,
+        "n_compressed": 37519,
+        "n_dropped": 0,
+        "rmse": 179.1984593645964,
+        "nrmse": 0.9465756415791641,
+        "mean_latency_hr": 5.41458050875655,
+        "n_reconstructable": 38403,
+        "compression_rate": 0.9769549253964535,
+        "drop_rate": 0.0,
+        "value_mean_delta": 94.43957046885015,
+        "value_std_delta": 83.30983234395367
+      },
+      "genepi-meteo-6-RelativeHumidity_pct": {
+        "n_raw": 31180,
+        "n_filtered": 932,
+        "n_compressed": 30249,
+        "n_dropped": 0,
+        "rmse": 11.800348293682339,
+        "nrmse": 0.6680871876955713,
+        "mean_latency_hr": 5.70065852398261,
+        "n_reconstructable": 31180,
+        "compression_rate": 0.9701090442591405,
+        "drop_rate": 0.0,
+        "value_mean_delta": -14.931095176147366,
+        "value_std_delta": 3.6551459485565445
+      },
+      "genepi-meteo-6-Rain_mm": {
+        "n_raw": 38403,
+        "n_filtered": 859,
+        "n_compressed": 37545,
+        "n_dropped": 0,
+        "rmse": 1.931780028924134,
+        "nrmse": 0.1672360130081454,
+        "mean_latency_hr": 5.712617887202099,
+        "n_reconstructable": 38403,
+        "compression_rate": 0.9776319558367836,
+        "drop_rate": 0.0,
+        "value_mean_delta": -6.11937969169985,
+        "value_std_delta": -5.099887504459803
+      },
+      "genepi-meteo-6-WindSpeed_ms": {
+        "n_raw": 38403,
+        "n_filtered": 1641,
+        "n_compressed": 36762,
+        "n_dropped": 0,
+        "rmse": 0.6931578374892894,
+        "nrmse": 1.016764082188461,
+        "mean_latency_hr": 3.8472880229264494,
+        "n_reconstructable": 38403,
+        "compression_rate": 0.9572689633622373,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.2779794847209006,
+        "value_std_delta": 0.3053141199841467
+      },
+      "genepi-meteo-6-WindDirection_deg": {
+        "n_raw": 38403,
+        "n_filtered": 2047,
+        "n_compressed": 36357,
+        "n_dropped": 0,
+        "rmse": 78.96621371442212,
+        "nrmse": 1.07701526240152,
+        "mean_latency_hr": 3.6188973662358555,
+        "n_reconstructable": 38403,
+        "compression_rate": 0.9466968726401583,
+        "drop_rate": 0.0,
+        "value_mean_delta": 15.860095406757722,
+        "value_std_delta": 46.25147938747041
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-6-AmbientTemp_C": {
+        "value": {
+          "n": 38141,
+          "mean": 2.3644193912063134,
+          "std": 4.3438960412109875,
+          "min": -11.18,
+          "max": 12.29
+        },
+        "value_first_diff_var": 0.18986037648801138,
+        "n_samples": 38141
+      },
+      "genepi-meteo-6-SurfaceTemp_C": {
+        "value": {
+          "n": 38403,
+          "mean": 2.654839882300862,
+          "std": 6.150001031868901,
+          "min": -11.275,
+          "max": 23.725
+        },
+        "value_first_diff_var": 0.21397482647025207,
+        "n_samples": 38403
+      },
+      "genepi-meteo-6-SolarRadiation_Wm2": {
+        "value": {
+          "n": 38403,
+          "mean": 97.64487698877693,
+          "std": 189.3123502160283,
+          "min": 0.0,
+          "max": 939.55
+        },
+        "value_first_diff_var": 1734.4642543092189,
+        "n_samples": 38403
+      },
+      "genepi-meteo-6-RelativeHumidity_pct": {
+        "value": {
+          "n": 31180,
+          "mean": 65.22496642078256,
+          "std": 17.662886687567234,
+          "min": 1.907,
+          "max": 96.849
+        },
+        "value_first_diff_var": 21.680602426363485,
+        "n_samples": 31180
+      },
+      "genepi-meteo-6-Rain_mm": {
+        "value": {
+          "n": 38403,
+          "mean": 7.70564278832383,
+          "std": 11.551220303428574,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.1417446998203727,
+        "n_samples": 38403
+      },
+      "genepi-meteo-6-WindSpeed_ms": {
+        "value": {
+          "n": 38403,
+          "mean": 0.6153404421529568,
+          "std": 0.6817292719441382,
+          "min": 0.0,
+          "max": 7.852
+        },
+        "value_first_diff_var": 0.23399359011613216,
+        "n_samples": 38403
+      },
+      "genepi-meteo-6-WindDirection_deg": {
+        "value": {
+          "n": 38403,
+          "mean": 131.72204968361845,
+          "std": 73.31949367026044,
+          "min": 0.0,
+          "max": 357.546
+        },
+        "value_first_diff_var": 3452.0425162283636,
+        "n_samples": 38403
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-6-AmbientTemp_C": {
+        "value": {
+          "n": 947,
+          "mean": 5.951414994720169,
+          "std": 3.082245630138177,
+          "min": -9.78,
+          "max": 11.46
+        },
+        "value_first_diff_var": 3.5635665023309446,
+        "n_samples": 947
+      },
+      "genepi-meteo-6-SurfaceTemp_C": {
+        "value": {
+          "n": 927,
+          "mean": 7.369300970873787,
+          "std": 6.825343041987569,
+          "min": -10.088,
+          "max": 21.538
+        },
+        "value_first_diff_var": 3.800830799463775,
+        "n_samples": 927
+      },
+      "genepi-meteo-6-SolarRadiation_Wm2": {
+        "value": {
+          "n": 885,
+          "mean": 192.08444745762708,
+          "std": 272.622182559982,
+          "min": 0.0,
+          "max": 939.55
+        },
+        "value_first_diff_var": 24240.92022209737,
+        "n_samples": 885
+      },
+      "genepi-meteo-6-RelativeHumidity_pct": {
+        "value": {
+          "n": 932,
+          "mean": 50.2938712446352,
+          "std": 21.318032636123778,
+          "min": 1.907,
+          "max": 96.849
+        },
+        "value_first_diff_var": 537.9817545670261,
+        "n_samples": 932
+      },
+      "genepi-meteo-6-Rain_mm": {
+        "value": {
+          "n": 859,
+          "mean": 1.5862630966239808,
+          "std": 6.451332798968771,
+          "min": 0.0,
+          "max": 48.4
+        },
+        "value_first_diff_var": 6.269276519905888,
+        "n_samples": 859
+      },
+      "genepi-meteo-6-WindSpeed_ms": {
+        "value": {
+          "n": 1641,
+          "mean": 0.8933199268738574,
+          "std": 0.9870433919282849,
+          "min": 0.0,
+          "max": 7.852
+        },
+        "value_first_diff_var": 1.9678980334681737,
+        "n_samples": 1641
+      },
+      "genepi-meteo-6-WindDirection_deg": {
+        "value": {
+          "n": 2047,
+          "mean": 147.58214509037617,
+          "std": 119.57097305773085,
+          "min": 0.0,
+          "max": 357.546
+        },
+        "value_first_diff_var": 44097.80575803201,
+        "n_samples": 2047
+      }
+    }
+  },
+  "genepi-meteo-7": {
+    "totals": {
+      "n_raw": 190976,
+      "n_filtered": 6261,
+      "n_compressed": 184721,
+      "n_dropped": 0,
+      "n_reconstructable": 190976,
+      "overall_compression_rate": 0.9672157758042895,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 184721
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-7-AmbientTemp_C": 30984,
+      "genepi-meteo-7-SurfaceTemp_C": 31005,
+      "genepi-meteo-7-RelativeHumidity_pct": 30924,
+      "genepi-meteo-7-Rain_mm": 30971,
+      "genepi-meteo-7-WindSpeed_ms": 30521,
+      "genepi-meteo-7-WindDirection_deg": 30316
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-7-AmbientTemp_C": 30984,
+      "genepi-meteo-7-SurfaceTemp_C": 31005,
+      "genepi-meteo-7-RelativeHumidity_pct": 30924,
+      "genepi-meteo-7-Rain_mm": 30971,
+      "genepi-meteo-7-WindSpeed_ms": 30521,
+      "genepi-meteo-7-WindDirection_deg": 30316
+    },
+    "per_sensor": {
+      "genepi-meteo-7-AmbientTemp_C": {
+        "n_raw": 31829,
+        "n_filtered": 846,
+        "n_compressed": 30984,
+        "n_dropped": 0,
+        "rmse": 1.7160536729994005,
+        "nrmse": 0.3675937021997718,
+        "mean_latency_hr": 6.425425642583109,
+        "n_reconstructable": 31829,
+        "compression_rate": 0.9734204656131201,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.8829341170574105,
+        "value_std_delta": -0.9953129467411554
+      },
+      "genepi-meteo-7-SurfaceTemp_C": {
+        "n_raw": 31829,
+        "n_filtered": 825,
+        "n_compressed": 31005,
+        "n_dropped": 0,
+        "rmse": 3.536551652701697,
+        "nrmse": 0.5093029830087064,
+        "mean_latency_hr": 6.705676444612006,
+        "n_reconstructable": 31829,
+        "compression_rate": 0.9740802412893902,
+        "drop_rate": 0.0,
+        "value_mean_delta": 8.883516882697977,
+        "value_std_delta": -1.2880812311865961
+      },
+      "genepi-meteo-7-RelativeHumidity_pct": {
+        "n_raw": 31827,
+        "n_filtered": 904,
+        "n_compressed": 30924,
+        "n_dropped": 0,
+        "rmse": 14.417397817175841,
+        "nrmse": 0.6870299766936998,
+        "mean_latency_hr": 6.270939741938186,
+        "n_reconstructable": 31827,
+        "compression_rate": 0.9715964432714362,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.920669669244759,
+        "value_std_delta": -8.800077309915896
+      },
+      "genepi-meteo-7-Rain_mm": {
+        "n_raw": 31833,
+        "n_filtered": 863,
+        "n_compressed": 30971,
+        "n_dropped": 0,
+        "rmse": 2.208374154780352,
+        "nrmse": 0.11892321502563882,
+        "mean_latency_hr": 6.317576388234432,
+        "n_reconstructable": 31833,
+        "compression_rate": 0.9728897684792511,
+        "drop_rate": 0.0,
+        "value_mean_delta": -12.211488198532031,
+        "value_std_delta": -10.771711935879178
+      },
+      "genepi-meteo-7-WindSpeed_ms": {
+        "n_raw": 31829,
+        "n_filtered": 1309,
+        "n_compressed": 30521,
+        "n_dropped": 0,
+        "rmse": 0.696002688007402,
+        "nrmse": 0.970836531676302,
+        "mean_latency_hr": 4.270361323181864,
+        "n_reconstructable": 31829,
+        "compression_rate": 0.9588739828458324,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.35039930373252925,
+        "value_std_delta": 0.3013264628595035
+      },
+      "genepi-meteo-7-WindDirection_deg": {
+        "n_raw": 31829,
+        "n_filtered": 1514,
+        "n_compressed": 30316,
+        "n_dropped": 0,
+        "rmse": 96.9397078707642,
+        "nrmse": 1.264809117283029,
+        "mean_latency_hr": 4.190895968386622,
+        "n_reconstructable": 31829,
+        "compression_rate": 0.9524333155298627,
+        "drop_rate": 0.0,
+        "value_mean_delta": 23.835124143909212,
+        "value_std_delta": 40.16366332168755
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-7-AmbientTemp_C": {
+        "value": {
+          "n": 31829,
+          "mean": 2.7263448427534636,
+          "std": 4.66834350732918,
+          "min": -11.92,
+          "max": 14.84
+        },
+        "value_first_diff_var": 0.12404350196747634,
+        "n_samples": 31829
+      },
+      "genepi-meteo-7-SurfaceTemp_C": {
+        "value": {
+          "n": 31829,
+          "mean": 2.39684190518081,
+          "std": 6.9439052404710555,
+          "min": -12.463,
+          "max": 28.663
+        },
+        "value_first_diff_var": 0.15114717131324124,
+        "n_samples": 31829
+      },
+      "genepi-meteo-7-RelativeHumidity_pct": {
+        "value": {
+          "n": 31827,
+          "mean": 60.67700179093222,
+          "std": 20.985107355226194,
+          "min": 5.086,
+          "max": 96.725
+        },
+        "value_first_diff_var": 7.345302635758125,
+        "n_samples": 31827
+      },
+      "genepi-meteo-7-Rain_mm": {
+        "value": {
+          "n": 31833,
+          "mean": 13.955404768636319,
+          "std": 18.56974817157647,
+          "min": 0.0,
+          "max": 41.8
+        },
+        "value_first_diff_var": 0.09276828313303048,
+        "n_samples": 31833
+      },
+      "genepi-meteo-7-WindSpeed_ms": {
+        "value": {
+          "n": 31829,
+          "mean": 0.5934104747243081,
+          "std": 0.7169102781965196,
+          "min": 0.0,
+          "max": 11.255
+        },
+        "value_first_diff_var": 0.24665975445809946,
+        "n_samples": 31829
+      },
+      "genepi-meteo-7-WindDirection_deg": {
+        "value": {
+          "n": 31829,
+          "mean": 133.2877437556945,
+          "std": 76.6437453257793,
+          "min": 0.0,
+          "max": 359.871
+        },
+        "value_first_diff_var": 4060.7613218850406,
+        "n_samples": 31829
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-7-AmbientTemp_C": {
+        "value": {
+          "n": 846,
+          "mean": 7.609278959810874,
+          "std": 3.6730305605880242,
+          "min": -11.66,
+          "max": 14.84
+        },
+        "value_first_diff_var": 2.41073563446658,
+        "n_samples": 846
+      },
+      "genepi-meteo-7-SurfaceTemp_C": {
+        "value": {
+          "n": 825,
+          "mean": 11.280358787878788,
+          "std": 5.655824009284459,
+          "min": -11.838,
+          "max": 21.6
+        },
+        "value_first_diff_var": 8.967637454588969,
+        "n_samples": 825
+      },
+      "genepi-meteo-7-RelativeHumidity_pct": {
+        "value": {
+          "n": 904,
+          "mean": 65.59767146017698,
+          "std": 12.185030045310299,
+          "min": 5.086,
+          "max": 91.23
+        },
+        "value_first_diff_var": 97.49477750230375,
+        "n_samples": 904
+      },
+      "genepi-meteo-7-Rain_mm": {
+        "value": {
+          "n": 863,
+          "mean": 1.7439165701042876,
+          "std": 7.798036235697293,
+          "min": 0.0,
+          "max": 41.8
+        },
+        "value_first_diff_var": 3.1928069401004526,
+        "n_samples": 863
+      },
+      "genepi-meteo-7-WindSpeed_ms": {
+        "value": {
+          "n": 1309,
+          "mean": 0.9438097784568373,
+          "std": 1.0182367410560231,
+          "min": 0.0,
+          "max": 10.718
+        },
+        "value_first_diff_var": 1.6361669149879825,
+        "n_samples": 1309
+      },
+      "genepi-meteo-7-WindDirection_deg": {
+        "value": {
+          "n": 1514,
+          "mean": 157.1228678996037,
+          "std": 116.80740864746686,
+          "min": 0.0,
+          "max": 359.484
+        },
+        "value_first_diff_var": 39553.2703225199,
+        "n_samples": 1514
+      }
+    }
+  },
+  "genepi-meteo-8": {
+    "totals": {
+      "n_raw": 289898,
+      "n_filtered": 7384,
+      "n_compressed": 282521,
+      "n_dropped": 0,
+      "n_reconstructable": 289898,
+      "overall_compression_rate": 0.9745289722592084,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 282521
+    },
+    "drops_by_sensor": {
+      "genepi-meteo-8-AmbientTemp_C": 40561,
+      "genepi-meteo-8-SurfaceTemp_C": 40571,
+      "genepi-meteo-8-SolarRadiation_Wm2": 40494,
+      "genepi-meteo-8-RelativeHumidity_pct": 40473,
+      "genepi-meteo-8-Rain_mm": 40543,
+      "genepi-meteo-8-WindSpeed_ms": 40061,
+      "genepi-meteo-8-WindDirection_deg": 39818
+    },
+    "compressed_by_sensor": {
+      "genepi-meteo-8-AmbientTemp_C": 40561,
+      "genepi-meteo-8-SurfaceTemp_C": 40571,
+      "genepi-meteo-8-SolarRadiation_Wm2": 40494,
+      "genepi-meteo-8-RelativeHumidity_pct": 40473,
+      "genepi-meteo-8-Rain_mm": 40543,
+      "genepi-meteo-8-WindSpeed_ms": 40061,
+      "genepi-meteo-8-WindDirection_deg": 39818
+    },
+    "per_sensor": {
+      "genepi-meteo-8-AmbientTemp_C": {
+        "n_raw": 41414,
+        "n_filtered": 854,
+        "n_compressed": 40561,
+        "n_dropped": 0,
+        "rmse": 1.751563075406654,
+        "nrmse": 0.3780219701042241,
+        "mean_latency_hr": 5.655515170661558,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.979378953976916,
+        "drop_rate": 0.0,
+        "value_mean_delta": -2.835445960133632,
+        "value_std_delta": -1.9124954747193819
+      },
+      "genepi-meteo-8-SurfaceTemp_C": {
+        "n_raw": 41414,
+        "n_filtered": 844,
+        "n_compressed": 40571,
+        "n_dropped": 0,
+        "rmse": 3.5773537201449535,
+        "nrmse": 0.553954401047249,
+        "mean_latency_hr": 5.687218419160456,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.9796204182160622,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.6116362115222147,
+        "value_std_delta": -3.3866830023067833
+      },
+      "genepi-meteo-8-SolarRadiation_Wm2": {
+        "n_raw": 41414,
+        "n_filtered": 921,
+        "n_compressed": 40494,
+        "n_dropped": 0,
+        "rmse": 223.4025965086371,
+        "nrmse": 1.0773132439622857,
+        "mean_latency_hr": 5.4853431810498865,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.9777611435746366,
+        "drop_rate": 0.0,
+        "value_mean_delta": 5.5164499432572285,
+        "value_std_delta": -16.76148086760074
+      },
+      "genepi-meteo-8-RelativeHumidity_pct": {
+        "n_raw": 41414,
+        "n_filtered": 942,
+        "n_compressed": 40473,
+        "n_dropped": 0,
+        "rmse": 12.943071361885774,
+        "nrmse": 0.5875849362524872,
+        "mean_latency_hr": 5.296925590111772,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.9772540686724296,
+        "drop_rate": 0.0,
+        "value_mean_delta": 8.494956910629625,
+        "value_std_delta": -6.470986465104106
+      },
+      "genepi-meteo-8-Rain_mm": {
+        "n_raw": 41414,
+        "n_filtered": 872,
+        "n_compressed": 40543,
+        "n_dropped": 0,
+        "rmse": 2.378759577295632,
+        "nrmse": 0.1429803125297201,
+        "mean_latency_hr": 5.743605530604251,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.9789443183464529,
+        "drop_rate": 0.0,
+        "value_mean_delta": -13.000965325292208,
+        "value_std_delta": -6.684550002963231
+      },
+      "genepi-meteo-8-WindSpeed_ms": {
+        "n_raw": 41414,
+        "n_filtered": 1354,
+        "n_compressed": 40061,
+        "n_dropped": 0,
+        "rmse": 0.6287245752433506,
+        "nrmse": 0.9065527892204606,
+        "mean_latency_hr": 4.516484535556951,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.967305742019607,
+        "drop_rate": 0.0,
+        "value_mean_delta": 0.355389335904862,
+        "value_std_delta": 0.3267213715207782
+      },
+      "genepi-meteo-8-WindDirection_deg": {
+        "n_raw": 41414,
+        "n_filtered": 1597,
+        "n_compressed": 39818,
+        "n_dropped": 0,
+        "rmse": 93.47063650349469,
+        "nrmse": 1.006745373032587,
+        "mean_latency_hr": 4.132277437044907,
+        "n_reconstructable": 41414,
+        "compression_rate": 0.9614381610083547,
+        "drop_rate": 0.0,
+        "value_mean_delta": -27.760029491900838,
+        "value_std_delta": 36.03239769068462
+      }
+    },
+    "raw_stats": {
+      "genepi-meteo-8-AmbientTemp_C": {
+        "value": {
+          "n": 41414,
+          "mean": 2.8232445549814074,
+          "std": 4.633495441875328,
+          "min": -11.56,
+          "max": 13.76
+        },
+        "value_first_diff_var": 0.07341064822111092,
+        "n_samples": 41414
+      },
+      "genepi-meteo-8-SurfaceTemp_C": {
+        "value": {
+          "n": 41414,
+          "mean": 3.998054546771624,
+          "std": 6.457848720728597,
+          "min": -10.65,
+          "max": 23.913
+        },
+        "value_first_diff_var": 0.062190507681559544,
+        "n_samples": 41414
+      },
+      "genepi-meteo-8-SolarRadiation_Wm2": {
+        "value": {
+          "n": 41414,
+          "mean": 109.53893876466894,
+          "std": 207.37013840744902,
+          "min": 0.0,
+          "max": 986.341
+        },
+        "value_first_diff_var": 2066.3195294652205,
+        "n_samples": 41414
+      },
+      "genepi-meteo-8-RelativeHumidity_pct": {
+        "value": {
+          "n": 41414,
+          "mean": 66.87685200656783,
+          "std": 22.027575186720057,
+          "min": 6.391,
+          "max": 97.826
+        },
+        "value_first_diff_var": 6.909545209071979,
+        "n_samples": 41414
+      },
+      "genepi-meteo-8-Rain_mm": {
+        "value": {
+          "n": 41414,
+          "mean": 16.097295600521566,
+          "std": 16.63697284758123,
+          "min": 0.0,
+          "max": 51.0
+        },
+        "value_first_diff_var": 0.14644096135305204,
+        "n_samples": 41414
+      },
+      "genepi-meteo-8-WindSpeed_ms": {
+        "value": {
+          "n": 41414,
+          "mean": 0.5045803834452118,
+          "std": 0.6935333305675306,
+          "min": 0.0,
+          "max": 9.017
+        },
+        "value_first_diff_var": 0.1879516323422874,
+        "n_samples": 41414
+      },
+      "genepi-meteo-8-WindDirection_deg": {
+        "value": {
+          "n": 41414,
+          "mean": 137.6204496547061,
+          "std": 92.84436661669083,
+          "min": 0.0,
+          "max": 359.484
+        },
+        "value_first_diff_var": 2805.7228147194323,
+        "n_samples": 41414
+      }
+    },
+    "filtered_stats": {
+      "genepi-meteo-8-AmbientTemp_C": {
+        "value": {
+          "n": 854,
+          "mean": -0.01220140515222486,
+          "std": 2.7209999671559464,
+          "min": -10.9,
+          "max": 12.4
+        },
+        "value_first_diff_var": 1.4617831549637241,
+        "n_samples": 854
+      },
+      "genepi-meteo-8-SurfaceTemp_C": {
+        "value": {
+          "n": 844,
+          "mean": 4.609690758293839,
+          "std": 3.0711657184218137,
+          "min": -8.088,
+          "max": 20.35
+        },
+        "value_first_diff_var": 6.680476598768169,
+        "n_samples": 844
+      },
+      "genepi-meteo-8-SolarRadiation_Wm2": {
+        "value": {
+          "n": 921,
+          "mean": 115.05538870792617,
+          "std": 190.60865753984828,
+          "min": 0.0,
+          "max": 986.341
+        },
+        "value_first_diff_var": 41065.231601342246,
+        "n_samples": 921
+      },
+      "genepi-meteo-8-RelativeHumidity_pct": {
+        "value": {
+          "n": 942,
+          "mean": 75.37180891719746,
+          "std": 15.55658872161595,
+          "min": 12.938,
+          "max": 97.229
+        },
+        "value_first_diff_var": 81.47485192359409,
+        "n_samples": 942
+      },
+      "genepi-meteo-8-Rain_mm": {
+        "value": {
+          "n": 872,
+          "mean": 3.096330275229358,
+          "std": 9.952422844617999,
+          "min": 0.0,
+          "max": 50.2
+        },
+        "value_first_diff_var": 8.313192880426971,
+        "n_samples": 872
+      },
+      "genepi-meteo-8-WindSpeed_ms": {
+        "value": {
+          "n": 1354,
+          "mean": 0.8599697193500738,
+          "std": 1.0202547020883088,
+          "min": 0.0,
+          "max": 8.741
+        },
+        "value_first_diff_var": 1.6431418298511589,
+        "n_samples": 1354
+      },
+      "genepi-meteo-8-WindDirection_deg": {
+        "value": {
+          "n": 1597,
+          "mean": 109.86042016280527,
+          "std": 128.87676430737545,
+          "min": 0.0,
+          "max": 359.096
+        },
+        "value_first_diff_var": 43691.87363981732,
+        "n_samples": 1597
+      }
+    }
+  }
+}

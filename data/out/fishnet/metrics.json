@@ -1,0 +1,1020 @@
+{
+  "fishnet-meteo-101": {
+    "totals": {
+      "n_raw": 58882,
+      "n_filtered": 3224,
+      "n_compressed": 55662,
+      "n_dropped": 0,
+      "n_reconstructable": 58882,
+      "overall_compression_rate": 0.9452464250534969,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 55662
+    },
+    "drops_by_sensor": {
+      "fishnet-meteo-101-AmbientTemp_C": 13950,
+      "fishnet-meteo-101-SurfaceTemp_C": 13949,
+      "fishnet-meteo-101-SolarRadiation_Wm2": 13818,
+      "fishnet-meteo-101-RelativeHumidity_pct": 13945
+    },
+    "compressed_by_sensor": {
+      "fishnet-meteo-101-AmbientTemp_C": 13950,
+      "fishnet-meteo-101-SurfaceTemp_C": 13949,
+      "fishnet-meteo-101-SolarRadiation_Wm2": 13818,
+      "fishnet-meteo-101-RelativeHumidity_pct": 13945
+    },
+    "per_sensor": {
+      "fishnet-meteo-101-AmbientTemp_C": {
+        "n_raw": 14721,
+        "n_filtered": 772,
+        "n_compressed": 13950,
+        "n_dropped": 0,
+        "rmse": 2.4889849477728494,
+        "nrmse": 0.6610616550309614,
+        "mean_latency_hr": 6.232572439976148,
+        "n_reconstructable": 14721,
+        "compression_rate": 0.9475579104680388,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.5983662389881843,
+        "value_std_delta": -1.3228907404920847
+      },
+      "fishnet-meteo-101-SurfaceTemp_C": {
+        "n_raw": 14721,
+        "n_filtered": 773,
+        "n_compressed": 13949,
+        "n_dropped": 0,
+        "rmse": 1.602889674369131,
+        "nrmse": 0.6080206166844481,
+        "mean_latency_hr": 6.201382378914476,
+        "n_reconstructable": 14721,
+        "compression_rate": 0.9474899803002513,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.427183423053002,
+        "value_std_delta": -0.9854881556814492
+      },
+      "fishnet-meteo-101-SolarRadiation_Wm2": {
+        "n_raw": 14720,
+        "n_filtered": 903,
+        "n_compressed": 13818,
+        "n_dropped": 0,
+        "rmse": 17.769076337048727,
+        "nrmse": 1.2036440348180604,
+        "mean_latency_hr": 5.060488488828502,
+        "n_reconstructable": 14720,
+        "compression_rate": 0.9386548913043479,
+        "drop_rate": 0.0,
+        "value_mean_delta": -3.3645344260075065,
+        "value_std_delta": 10.99745659126883
+      },
+      "fishnet-meteo-101-RelativeHumidity_pct": {
+        "n_raw": 14720,
+        "n_filtered": 776,
+        "n_compressed": 13945,
+        "n_dropped": 0,
+        "rmse": 9.688289979420505,
+        "nrmse": 0.9833145712620439,
+        "mean_latency_hr": 6.084742678140097,
+        "n_reconstructable": 14720,
+        "compression_rate": 0.9472826086956522,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.6670050215710432,
+        "value_std_delta": -0.8053888625134018
+      }
+    },
+    "raw_stats": {
+      "fishnet-meteo-101-AmbientTemp_C": {
+        "value": {
+          "n": 14721,
+          "mean": 14.891245159975547,
+          "std": 3.7651328417411776,
+          "min": -1.0,
+          "max": 26.51
+        },
+        "value_first_diff_var": 0.06572325974301085,
+        "n_samples": 14721
+      },
+      "fishnet-meteo-101-SurfaceTemp_C": {
+        "value": {
+          "n": 14721,
+          "mean": 15.305586305278176,
+          "std": 2.636242308870593,
+          "min": -1.0,
+          "max": 23.288
+        },
+        "value_first_diff_var": 0.05901748144612016,
+        "n_samples": 14721
+      },
+      "fishnet-meteo-101-SolarRadiation_Wm2": {
+        "value": {
+          "n": 14720,
+          "mean": 9.437215489130432,
+          "std": 14.762733684576979,
+          "min": 0.0,
+          "max": 272.773
+        },
+        "value_first_diff_var": 54.4197418444108,
+        "n_samples": 14720
+      },
+      "fishnet-meteo-101-RelativeHumidity_pct": {
+        "value": {
+          "n": 14720,
+          "mean": 84.20854008152173,
+          "std": 9.852686274124853,
+          "min": 47.537,
+          "max": 95.093
+        },
+        "value_first_diff_var": 1.5615840374209873,
+        "n_samples": 14720
+      }
+    },
+    "filtered_stats": {
+      "fishnet-meteo-101-AmbientTemp_C": {
+        "value": {
+          "n": 772,
+          "mean": 17.48961139896373,
+          "std": 2.442242101249093,
+          "min": -1.0,
+          "max": 24.74
+        },
+        "value_first_diff_var": 1.6299373222910263,
+        "n_samples": 772
+      },
+      "fishnet-meteo-101-SurfaceTemp_C": {
+        "value": {
+          "n": 773,
+          "mean": 17.732769728331178,
+          "std": 1.6507541531891436,
+          "min": -1.0,
+          "max": 23.288
+        },
+        "value_first_diff_var": 1.1725003997959678,
+        "n_samples": 773
+      },
+      "fishnet-meteo-101-SolarRadiation_Wm2": {
+        "value": {
+          "n": 903,
+          "mean": 6.072681063122926,
+          "std": 25.760190275845808,
+          "min": 0.0,
+          "max": 272.773
+        },
+        "value_first_diff_var": 700.042561481582,
+        "n_samples": 903
+      },
+      "fishnet-meteo-101-RelativeHumidity_pct": {
+        "value": {
+          "n": 776,
+          "mean": 87.87554510309278,
+          "std": 9.047297411611451,
+          "min": 57.661,
+          "max": 94.985
+        },
+        "value_first_diff_var": 17.711758242580643,
+        "n_samples": 776
+      }
+    }
+  },
+  "fishnet-meteo-102": {
+    "totals": {
+      "n_raw": 58108,
+      "n_filtered": 3094,
+      "n_compressed": 55018,
+      "n_dropped": 0,
+      "n_reconstructable": 58108,
+      "overall_compression_rate": 0.9467543195429201,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 55018
+    },
+    "drops_by_sensor": {
+      "fishnet-meteo-102-AmbientTemp_C": 13758,
+      "fishnet-meteo-102-SurfaceTemp_C": 13759,
+      "fishnet-meteo-102-SolarRadiation_Wm2": 13746,
+      "fishnet-meteo-102-RelativeHumidity_pct": 13755
+    },
+    "compressed_by_sensor": {
+      "fishnet-meteo-102-AmbientTemp_C": 13758,
+      "fishnet-meteo-102-SurfaceTemp_C": 13759,
+      "fishnet-meteo-102-SolarRadiation_Wm2": 13746,
+      "fishnet-meteo-102-RelativeHumidity_pct": 13755
+    },
+    "per_sensor": {
+      "fishnet-meteo-102-AmbientTemp_C": {
+        "n_raw": 14527,
+        "n_filtered": 770,
+        "n_compressed": 13758,
+        "n_dropped": 0,
+        "rmse": 3.849279071480576,
+        "nrmse": 0.8276526868486137,
+        "mean_latency_hr": 6.336168265222613,
+        "n_reconstructable": 14527,
+        "compression_rate": 0.9469952502237213,
+        "drop_rate": 0.0,
+        "value_mean_delta": -0.8971964009694453,
+        "value_std_delta": -1.4183474620850078
+      },
+      "fishnet-meteo-102-SurfaceTemp_C": {
+        "n_raw": 14527,
+        "n_filtered": 769,
+        "n_compressed": 13759,
+        "n_dropped": 0,
+        "rmse": 5.699352993842989,
+        "nrmse": 0.9912774931582446,
+        "mean_latency_hr": 6.4139154486282255,
+        "n_reconstructable": 14527,
+        "compression_rate": 0.9470640875610932,
+        "drop_rate": 0.0,
+        "value_mean_delta": -0.032607369104102446,
+        "value_std_delta": -1.4432726600167713
+      },
+      "fishnet-meteo-102-SolarRadiation_Wm2": {
+        "n_raw": 14527,
+        "n_filtered": 782,
+        "n_compressed": 13746,
+        "n_dropped": 0,
+        "rmse": 253.9280286880684,
+        "nrmse": 0.9870060261625392,
+        "mean_latency_hr": 6.0162255723059745,
+        "n_reconstructable": 14527,
+        "compression_rate": 0.9461692021752599,
+        "drop_rate": 0.0,
+        "value_mean_delta": -147.81830371957537,
+        "value_std_delta": -154.38391136194764
+      },
+      "fishnet-meteo-102-RelativeHumidity_pct": {
+        "n_raw": 14527,
+        "n_filtered": 773,
+        "n_compressed": 13755,
+        "n_dropped": 0,
+        "rmse": 11.368733318632577,
+        "nrmse": 1.0118242862377147,
+        "mean_latency_hr": 6.287188855235079,
+        "n_reconstructable": 14527,
+        "compression_rate": 0.946788738211606,
+        "drop_rate": 0.0,
+        "value_mean_delta": 4.3712261599514335,
+        "value_std_delta": -4.980061593329328
+      }
+    },
+    "raw_stats": {
+      "fishnet-meteo-102-AmbientTemp_C": {
+        "value": {
+          "n": 14527,
+          "mean": 15.199547050320094,
+          "std": 4.6508386097762395,
+          "min": 5.2,
+          "max": 29.31
+        },
+        "value_first_diff_var": 0.06834010677943458,
+        "n_samples": 14527
+      },
+      "fishnet-meteo-102-SurfaceTemp_C": {
+        "value": {
+          "n": 14527,
+          "mean": 16.451741309286156,
+          "std": 5.749503073740383,
+          "min": 5.662,
+          "max": 34.788
+        },
+        "value_first_diff_var": 0.5387009310227229,
+        "n_samples": 14527
+      },
+      "fishnet-meteo-102-SolarRadiation_Wm2": {
+        "value": {
+          "n": 14527,
+          "mean": 169.6909264817237,
+          "std": 257.27100134873115,
+          "min": 0.0,
+          "max": 1122.99
+        },
+        "value_first_diff_var": 4986.449814012573,
+        "n_samples": 14527
+      },
+      "fishnet-meteo-102-RelativeHumidity_pct": {
+        "value": {
+          "n": 14527,
+          "mean": 81.794102429958,
+          "std": 11.235877091767733,
+          "min": 45.298,
+          "max": 92.895
+        },
+        "value_first_diff_var": 3.158001281143362,
+        "n_samples": 14527
+      }
+    },
+    "filtered_stats": {
+      "fishnet-meteo-102-AmbientTemp_C": {
+        "value": {
+          "n": 770,
+          "mean": 14.302350649350648,
+          "std": 3.2324911476912317,
+          "min": 7.4,
+          "max": 26.6
+        },
+        "value_first_diff_var": 3.0997145564215423,
+        "n_samples": 770
+      },
+      "fishnet-meteo-102-SurfaceTemp_C": {
+        "value": {
+          "n": 769,
+          "mean": 16.419133940182054,
+          "std": 4.306230413723612,
+          "min": 7.037,
+          "max": 30.975
+        },
+        "value_first_diff_var": 5.4259224023166235,
+        "n_samples": 769
+      },
+      "fishnet-meteo-102-SolarRadiation_Wm2": {
+        "value": {
+          "n": 782,
+          "mean": 21.872622762148335,
+          "std": 102.8870899867835,
+          "min": 0.0,
+          "max": 1038.98
+        },
+        "value_first_diff_var": 15857.391572414344,
+        "n_samples": 782
+      },
+      "fishnet-meteo-102-RelativeHumidity_pct": {
+        "value": {
+          "n": 773,
+          "mean": 86.16532858990944,
+          "std": 6.255815498438405,
+          "min": 58.819,
+          "max": 92.509
+        },
+        "value_first_diff_var": 21.366218615405785,
+        "n_samples": 773
+      }
+    }
+  },
+  "fishnet-meteo-103": {
+    "totals": {
+      "n_raw": 56984,
+      "n_filtered": 3121,
+      "n_compressed": 53867,
+      "n_dropped": 0,
+      "n_reconstructable": 56984,
+      "overall_compression_rate": 0.9452302400673873,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 53867
+    },
+    "drops_by_sensor": {
+      "fishnet-meteo-103-AmbientTemp_C": 13476,
+      "fishnet-meteo-103-SurfaceTemp_C": 13475,
+      "fishnet-meteo-103-SolarRadiation_Wm2": 13444,
+      "fishnet-meteo-103-RelativeHumidity_pct": 13472
+    },
+    "compressed_by_sensor": {
+      "fishnet-meteo-103-AmbientTemp_C": 13476,
+      "fishnet-meteo-103-SurfaceTemp_C": 13475,
+      "fishnet-meteo-103-SolarRadiation_Wm2": 13444,
+      "fishnet-meteo-103-RelativeHumidity_pct": 13472
+    },
+    "per_sensor": {
+      "fishnet-meteo-103-AmbientTemp_C": {
+        "n_raw": 14246,
+        "n_filtered": 771,
+        "n_compressed": 13476,
+        "n_dropped": 0,
+        "rmse": 3.1817390230384692,
+        "nrmse": 0.6978636106872423,
+        "mean_latency_hr": 6.327496080771211,
+        "n_reconstructable": 14246,
+        "compression_rate": 0.9458795451354767,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.50750863873683,
+        "value_std_delta": -1.8871380931484145
+      },
+      "fishnet-meteo-103-SurfaceTemp_C": {
+        "n_raw": 14246,
+        "n_filtered": 772,
+        "n_compressed": 13475,
+        "n_dropped": 0,
+        "rmse": 4.309582543529536,
+        "nrmse": 0.8301860984800972,
+        "mean_latency_hr": 6.339484026705351,
+        "n_reconstructable": 14246,
+        "compression_rate": 0.9458093499929805,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.7884251428816675,
+        "value_std_delta": -1.9438406900615695
+      },
+      "fishnet-meteo-103-SolarRadiation_Wm2": {
+        "n_raw": 14246,
+        "n_filtered": 803,
+        "n_compressed": 13444,
+        "n_dropped": 0,
+        "rmse": 236.36551002853915,
+        "nrmse": 0.9344206671288803,
+        "mean_latency_hr": 5.8246823669802055,
+        "n_reconstructable": 14246,
+        "compression_rate": 0.9436333005756001,
+        "drop_rate": 0.0,
+        "value_mean_delta": -146.12490025278996,
+        "value_std_delta": -134.8901144011346
+      },
+      "fishnet-meteo-103-RelativeHumidity_pct": {
+        "n_raw": 14246,
+        "n_filtered": 775,
+        "n_compressed": 13472,
+        "n_dropped": 0,
+        "rmse": 10.87434765086865,
+        "nrmse": 0.9516958099379866,
+        "mean_latency_hr": 6.178523133199183,
+        "n_reconstructable": 14246,
+        "compression_rate": 0.9455987645654921,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.693667045418536,
+        "value_std_delta": -2.6109632645983876
+      }
+    },
+    "raw_stats": {
+      "fishnet-meteo-103-AmbientTemp_C": {
+        "value": {
+          "n": 14246,
+          "mean": 15.63745893584164,
+          "std": 4.559256241925489,
+          "min": 5.8,
+          "max": 28.86
+        },
+        "value_first_diff_var": 0.06688648956356082,
+        "n_samples": 14246
+      },
+      "fishnet-meteo-103-SurfaceTemp_C": {
+        "value": {
+          "n": 14246,
+          "mean": 17.212030815667557,
+          "std": 5.191104201117689,
+          "min": 5.6,
+          "max": 31.413
+        },
+        "value_first_diff_var": 0.3880060474628859,
+        "n_samples": 14246
+      },
+      "fishnet-meteo-103-SolarRadiation_Wm2": {
+        "value": {
+          "n": 14246,
+          "mean": 171.0766935280079,
+          "std": 252.95406912905787,
+          "min": 0.0,
+          "max": 1121.93
+        },
+        "value_first_diff_var": 5621.772468064569,
+        "n_samples": 14246
+      },
+      "fishnet-meteo-103-RelativeHumidity_pct": {
+        "value": {
+          "n": 14246,
+          "mean": 81.09935230942018,
+          "std": 11.426285097942412,
+          "min": 43.45,
+          "max": 91.838
+        },
+        "value_first_diff_var": 3.446879279655568,
+        "n_samples": 14246
+      }
+    },
+    "filtered_stats": {
+      "fishnet-meteo-103-AmbientTemp_C": {
+        "value": {
+          "n": 771,
+          "mean": 18.14496757457847,
+          "std": 2.6721181487770744,
+          "min": 7.98,
+          "max": 26.28
+        },
+        "value_first_diff_var": 1.3084418593354699,
+        "n_samples": 771
+      },
+      "fishnet-meteo-103-SurfaceTemp_C": {
+        "value": {
+          "n": 772,
+          "mean": 20.000455958549225,
+          "std": 3.2472635110561194,
+          "min": 7.162,
+          "max": 29.788
+        },
+        "value_first_diff_var": 3.79886703080373,
+        "n_samples": 772
+      },
+      "fishnet-meteo-103-SolarRadiation_Wm2": {
+        "value": {
+          "n": 803,
+          "mean": 24.951793275217934,
+          "std": 118.06395472792327,
+          "min": 0.0,
+          "max": 953.906
+        },
+        "value_first_diff_var": 21178.39003418347,
+        "n_samples": 803
+      },
+      "fishnet-meteo-103-RelativeHumidity_pct": {
+        "value": {
+          "n": 775,
+          "mean": 84.79301935483872,
+          "std": 8.815321833344024,
+          "min": 57.943,
+          "max": 91.633
+        },
+        "value_first_diff_var": 19.668268075371074,
+        "n_samples": 775
+      }
+    }
+  },
+  "fishnet-meteo-104": {
+    "totals": {
+      "n_raw": 45876,
+      "n_filtered": 2314,
+      "n_compressed": 43565,
+      "n_dropped": 0,
+      "n_reconstructable": 45876,
+      "overall_compression_rate": 0.9495596826227222,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 43565
+    },
+    "drops_by_sensor": {
+      "fishnet-meteo-104-AmbientTemp_C": 14523,
+      "fishnet-meteo-104-SurfaceTemp_C": 14522,
+      "fishnet-meteo-104-RelativeHumidity_pct": 14520
+    },
+    "compressed_by_sensor": {
+      "fishnet-meteo-104-AmbientTemp_C": 14523,
+      "fishnet-meteo-104-SurfaceTemp_C": 14522,
+      "fishnet-meteo-104-RelativeHumidity_pct": 14520
+    },
+    "per_sensor": {
+      "fishnet-meteo-104-AmbientTemp_C": {
+        "n_raw": 15292,
+        "n_filtered": 770,
+        "n_compressed": 14523,
+        "n_dropped": 0,
+        "rmse": 2.3488638275574902,
+        "nrmse": 0.5883040121725056,
+        "mean_latency_hr": 6.380956545906356,
+        "n_reconstructable": 15292,
+        "compression_rate": 0.9496468741825791,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.9959657642906397,
+        "value_std_delta": -0.967199869212521
+      },
+      "fishnet-meteo-104-SurfaceTemp_C": {
+        "n_raw": 15292,
+        "n_filtered": 771,
+        "n_compressed": 14522,
+        "n_dropped": 0,
+        "rmse": 2.141303478729691,
+        "nrmse": 0.6060048369072427,
+        "mean_latency_hr": 6.505479081291597,
+        "n_reconstructable": 15292,
+        "compression_rate": 0.9495814805126864,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.914852514119433,
+        "value_std_delta": -1.382661734534317
+      },
+      "fishnet-meteo-104-RelativeHumidity_pct": {
+        "n_raw": 15292,
+        "n_filtered": 773,
+        "n_compressed": 14520,
+        "n_dropped": 0,
+        "rmse": 5.550477652809676,
+        "nrmse": 0.7891817791752382,
+        "mean_latency_hr": 6.18264112317261,
+        "n_reconstructable": 15292,
+        "compression_rate": 0.9494506931729009,
+        "drop_rate": 0.0,
+        "value_mean_delta": 5.091058116868723,
+        "value_std_delta": 1.9651492681196583
+      }
+    },
+    "raw_stats": {
+      "fishnet-meteo-104-AmbientTemp_C": {
+        "value": {
+          "n": 15292,
+          "mean": 15.7996965733717,
+          "std": 3.992602088303868,
+          "min": 7.02,
+          "max": 27.4
+        },
+        "value_first_diff_var": 0.03317859079858206,
+        "n_samples": 15292
+      },
+      "fishnet-meteo-104-SurfaceTemp_C": {
+        "value": {
+          "n": 15292,
+          "mean": 15.507439314674341,
+          "std": 3.533475887185776,
+          "min": 7.412,
+          "max": 25.913
+        },
+        "value_first_diff_var": 0.10186010290496686,
+        "n_samples": 15292
+      },
+      "fishnet-meteo-104-RelativeHumidity_pct": {
+        "value": {
+          "n": 15292,
+          "mean": 74.80657448339001,
+          "std": 7.0332055291626165,
+          "min": 48.303,
+          "max": 87.541
+        },
+        "value_first_diff_var": 1.2121386607978648,
+        "n_samples": 15292
+      }
+    },
+    "filtered_stats": {
+      "fishnet-meteo-104-AmbientTemp_C": {
+        "value": {
+          "n": 770,
+          "mean": 18.79566233766234,
+          "std": 3.025402219091347,
+          "min": 8.46,
+          "max": 26.17
+        },
+        "value_first_diff_var": 0.8742091602253105,
+        "n_samples": 770
+      },
+      "fishnet-meteo-104-SurfaceTemp_C": {
+        "value": {
+          "n": 771,
+          "mean": 18.422291828793774,
+          "std": 2.150814152651459,
+          "min": 9.412,
+          "max": 23.725
+        },
+        "value_first_diff_var": 1.124499826144375,
+        "n_samples": 771
+      },
+      "fishnet-meteo-104-RelativeHumidity_pct": {
+        "value": {
+          "n": 773,
+          "mean": 79.89763260025873,
+          "std": 8.998354797282275,
+          "min": 55.291,
+          "max": 87.437
+        },
+        "value_first_diff_var": 4.948206300590283,
+        "n_samples": 773
+      }
+    }
+  },
+  "fishnet-meteo-105": {
+    "totals": {
+      "n_raw": 55542,
+      "n_filtered": 3807,
+      "n_compressed": 51740,
+      "n_dropped": 0,
+      "n_reconstructable": 55542,
+      "overall_compression_rate": 0.9314572755752404,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 51740
+    },
+    "drops_by_sensor": {
+      "fishnet-meteo-105-AmbientTemp_C": 14591,
+      "fishnet-meteo-105-SurfaceTemp_C": 14590,
+      "fishnet-meteo-105-RelativeHumidity_pct": 14591,
+      "fishnet-meteo-105-WindSpeed_ms": 3973,
+      "fishnet-meteo-105-WindDirection_deg": 3995
+    },
+    "compressed_by_sensor": {
+      "fishnet-meteo-105-AmbientTemp_C": 14591,
+      "fishnet-meteo-105-SurfaceTemp_C": 14590,
+      "fishnet-meteo-105-RelativeHumidity_pct": 14591,
+      "fishnet-meteo-105-WindSpeed_ms": 3973,
+      "fishnet-meteo-105-WindDirection_deg": 3995
+    },
+    "per_sensor": {
+      "fishnet-meteo-105-AmbientTemp_C": {
+        "n_raw": 15362,
+        "n_filtered": 772,
+        "n_compressed": 14591,
+        "n_dropped": 0,
+        "rmse": 3.2061874783104414,
+        "nrmse": 0.7185485842935633,
+        "mean_latency_hr": 6.168498567894805,
+        "n_reconstructable": 15362,
+        "compression_rate": 0.9497461268064055,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.2210858163572986,
+        "value_std_delta": -0.9037658960134172
+      },
+      "fishnet-meteo-105-SurfaceTemp_C": {
+        "n_raw": 15362,
+        "n_filtered": 773,
+        "n_compressed": 14590,
+        "n_dropped": 0,
+        "rmse": 4.499618667861145,
+        "nrmse": 0.8396764374745581,
+        "mean_latency_hr": 6.2286673465549915,
+        "n_reconstructable": 15362,
+        "compression_rate": 0.9496810311157401,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.175481104481026,
+        "value_std_delta": -1.5440893138602556
+      },
+      "fishnet-meteo-105-RelativeHumidity_pct": {
+        "n_raw": 15362,
+        "n_filtered": 772,
+        "n_compressed": 14591,
+        "n_dropped": 0,
+        "rmse": 11.44010368978714,
+        "nrmse": 0.9123843855890379,
+        "mean_latency_hr": 6.224128386784128,
+        "n_reconstructable": 15362,
+        "compression_rate": 0.9497461268064055,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.4174389975803336,
+        "value_std_delta": 0.6772944435522206
+      },
+      "fishnet-meteo-105-WindSpeed_ms": {
+        "n_raw": 4728,
+        "n_filtered": 756,
+        "n_compressed": 3973,
+        "n_dropped": 0,
+        "rmse": 0.2726995508811143,
+        "nrmse": 0.804503433737879,
+        "mean_latency_hr": 5.189925679169017,
+        "n_reconstructable": 4728,
+        "compression_rate": 0.8401015228426396,
+        "drop_rate": 0.0,
+        "value_mean_delta": -0.06003513348373755,
+        "value_std_delta": -0.09895380329205122
+      },
+      "fishnet-meteo-105-WindDirection_deg": {
+        "n_raw": 4728,
+        "n_filtered": 734,
+        "n_compressed": 3995,
+        "n_dropped": 0,
+        "rmse": 8.211428448997884,
+        "nrmse": 0.13833854472029353,
+        "mean_latency_hr": 5.340386585824403,
+        "n_reconstructable": 4728,
+        "compression_rate": 0.8447546531302876,
+        "drop_rate": 0.0,
+        "value_mean_delta": -22.964994959012802,
+        "value_std_delta": -47.20919177997662
+      }
+    },
+    "raw_stats": {
+      "fishnet-meteo-105-AmbientTemp_C": {
+        "value": {
+          "n": 15362,
+          "mean": 15.49852558260643,
+          "std": 4.462032976465447,
+          "min": 6.12,
+          "max": 29.0
+        },
+        "value_first_diff_var": 0.05484798175706838,
+        "n_samples": 15362
+      },
+      "fishnet-meteo-105-SurfaceTemp_C": {
+        "value": {
+          "n": 15362,
+          "mean": 16.35689923187085,
+          "std": 5.358753047059847,
+          "min": 5.412,
+          "max": 31.038
+        },
+        "value_first_diff_var": 0.3933135183184379,
+        "n_samples": 15362
+      },
+      "fishnet-meteo-105-RelativeHumidity_pct": {
+        "value": {
+          "n": 15362,
+          "mean": 82.85245996615024,
+          "std": 12.538688594940583,
+          "min": 44.279,
+          "max": 95.523
+        },
+        "value_first_diff_var": 2.16190677942597,
+        "n_samples": 15362
+      },
+      "fishnet-meteo-105-WindSpeed_ms": {
+        "value": {
+          "n": 4728,
+          "mean": 0.09566476311336718,
+          "std": 0.33896629827184116,
+          "min": 0.0,
+          "max": 2.137
+        },
+        "value_first_diff_var": 0.04255468902629364,
+        "n_samples": 4728
+      },
+      "fishnet-meteo-105-WindDirection_deg": {
+        "value": {
+          "n": 4728,
+          "mean": 23.86321975465313,
+          "std": 59.357487572249354,
+          "min": 0.0,
+          "max": 312.599
+        },
+        "value_first_diff_var": 64.22815139611586,
+        "n_samples": 4728
+      }
+    },
+    "filtered_stats": {
+      "fishnet-meteo-105-AmbientTemp_C": {
+        "value": {
+          "n": 772,
+          "mean": 18.71961139896373,
+          "std": 3.5582670804520298,
+          "min": 8.14,
+          "max": 27.61
+        },
+        "value_first_diff_var": 1.4226364651832561,
+        "n_samples": 772
+      },
+      "fishnet-meteo-105-SurfaceTemp_C": {
+        "value": {
+          "n": 773,
+          "mean": 19.532380336351878,
+          "std": 3.814663733199591,
+          "min": 7.1,
+          "max": 30.038
+        },
+        "value_first_diff_var": 4.519438075921501,
+        "n_samples": 773
+      },
+      "fishnet-meteo-105-RelativeHumidity_pct": {
+        "value": {
+          "n": 772,
+          "mean": 85.26989896373057,
+          "std": 13.215983038492803,
+          "min": 52.904,
+          "max": 95.106
+        },
+        "value_first_diff_var": 20.44629258613386,
+        "n_samples": 772
+      },
+      "fishnet-meteo-105-WindSpeed_ms": {
+        "value": {
+          "n": 756,
+          "mean": 0.03562962962962963,
+          "std": 0.24001249497978994,
+          "min": 0.0,
+          "max": 2.137
+        },
+        "value_first_diff_var": 0.0716015039585983,
+        "n_samples": 756
+      },
+      "fishnet-meteo-105-WindDirection_deg": {
+        "value": {
+          "n": 734,
+          "mean": 0.898224795640327,
+          "std": 12.148295792272734,
+          "min": 0.0,
+          "max": 173.494
+        },
+        "value_first_diff_var": 41.94703192463646,
+        "n_samples": 734
+      }
+    }
+  },
+  "fishnet-meteo-106": {
+    "totals": {
+      "n_raw": 46014,
+      "n_filtered": 2312,
+      "n_compressed": 43705,
+      "n_dropped": 0,
+      "n_reconstructable": 46014,
+      "overall_compression_rate": 0.9497544225670448,
+      "overall_drop_rate": 0.0
+    },
+    "drops_by_reason": {
+      "in_run": 43705
+    },
+    "drops_by_sensor": {
+      "fishnet-meteo-106-AmbientTemp_C": 14570,
+      "fishnet-meteo-106-SurfaceTemp_C": 14568,
+      "fishnet-meteo-106-RelativeHumidity_pct": 14567
+    },
+    "compressed_by_sensor": {
+      "fishnet-meteo-106-AmbientTemp_C": 14570,
+      "fishnet-meteo-106-SurfaceTemp_C": 14568,
+      "fishnet-meteo-106-RelativeHumidity_pct": 14567
+    },
+    "per_sensor": {
+      "fishnet-meteo-106-AmbientTemp_C": {
+        "n_raw": 15338,
+        "n_filtered": 769,
+        "n_compressed": 14570,
+        "n_dropped": 0,
+        "rmse": 3.3536449771759944,
+        "nrmse": 0.7334409695372615,
+        "mean_latency_hr": 6.429857778791962,
+        "n_reconstructable": 15338,
+        "compression_rate": 0.9498630851479984,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.2065514557874994,
+        "value_std_delta": -0.9602799044104828
+      },
+      "fishnet-meteo-106-SurfaceTemp_C": {
+        "n_raw": 15338,
+        "n_filtered": 771,
+        "n_compressed": 14568,
+        "n_dropped": 0,
+        "rmse": 4.411668592130248,
+        "nrmse": 0.7869872673834558,
+        "mean_latency_hr": 6.278055120905231,
+        "n_reconstructable": 15338,
+        "compression_rate": 0.949732690050854,
+        "drop_rate": 0.0,
+        "value_mean_delta": 3.0433979791973336,
+        "value_std_delta": -1.230670091519853
+      },
+      "fishnet-meteo-106-RelativeHumidity_pct": {
+        "n_raw": 15338,
+        "n_filtered": 772,
+        "n_compressed": 14567,
+        "n_dropped": 0,
+        "rmse": 11.580452077029813,
+        "nrmse": 0.9454788692176481,
+        "mean_latency_hr": 6.194468857304298,
+        "n_reconstructable": 15338,
+        "compression_rate": 0.9496674925022819,
+        "drop_rate": 0.0,
+        "value_mean_delta": 2.375838095738388,
+        "value_std_delta": 0.7852285964496311
+      }
+    },
+    "raw_stats": {
+      "fishnet-meteo-106-AmbientTemp_C": {
+        "value": {
+          "n": 15338,
+          "mean": 15.725919285434868,
+          "std": 4.572481108182241,
+          "min": 6.18,
+          "max": 29.5
+        },
+        "value_first_diff_var": 0.05278529051567958,
+        "n_samples": 15338
+      },
+      "fishnet-meteo-106-SurfaceTemp_C": {
+        "value": {
+          "n": 15338,
+          "mean": 17.057233668014085,
+          "std": 5.605768701694488,
+          "min": 5.975,
+          "max": 34.163
+        },
+        "value_first_diff_var": 0.10397596710371315,
+        "n_samples": 15338
+      },
+      "fishnet-meteo-106-RelativeHumidity_pct": {
+        "value": {
+          "n": 15338,
+          "mean": 81.32578237058286,
+          "std": 12.24823997030441,
+          "min": 41.948,
+          "max": 93.818
+        },
+        "value_first_diff_var": 2.0396029434885325,
+        "n_samples": 15338
+      }
+    },
+    "filtered_stats": {
+      "fishnet-meteo-106-AmbientTemp_C": {
+        "value": {
+          "n": 769,
+          "mean": 18.932470741222367,
+          "std": 3.612201203771758,
+          "min": 8.06,
+          "max": 28.19
+        },
+        "value_first_diff_var": 1.2013923405965172,
+        "n_samples": 769
+      },
+      "fishnet-meteo-106-SurfaceTemp_C": {
+        "value": {
+          "n": 771,
+          "mean": 20.10063164721142,
+          "std": 4.375098610174635,
+          "min": 7.787,
+          "max": 31.413
+        },
+        "value_first_diff_var": 3.1355366618468548,
+        "n_samples": 771
+      },
+      "fishnet-meteo-106-RelativeHumidity_pct": {
+        "value": {
+          "n": 772,
+          "mean": 83.70162046632124,
+          "std": 13.03346856675404,
+          "min": 52.323,
+          "max": 93.802
+        },
+        "value_first_diff_var": 19.86892662633634,
+        "n_samples": 772
+      }
+    }
+  }
+}
