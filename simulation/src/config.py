@@ -33,7 +33,35 @@ def resolution_for(channel: str) -> float:
     return sensorResolution.get(channel, defaultSensorResolution)
 
 
-eventDeltaThreshold = 3  # tuned: sensor delta that counts as an event
+# Sigma multiplier (alpha) in the event threshold: delta = max(alpha*sigma, resolution).
+# Lower alpha => tighter deadband => better reconstruction fidelity, but less
+# compression. The multiplier is PER CHANNEL because a single global value can't
+# serve both signal types: calm soil channels can afford a wide (alpha=3)
+# deadband with near-perfect reconstruction, but dynamic meteo channels
+# (temperature, solar, humidity) have a large 24h sigma, so alpha*sigma becomes
+# several units wide and the zero-order-hold holds a stale value straight
+# through the diurnal ramp. Tightening alpha on those channels trades some
+# compression for a large fidelity gain. Channels not listed here fall back to
+# eventDeltaThreshold. Values tuned from the per-channel alpha sweep.
+eventDeltaThreshold = 3  # global default / fallback multiplier
+eventDeltaThresholdByChannel = {
+    "AmbientTemp_C": 1.0,
+    "SurfaceTemp_C": 1.0,
+    "RelativeHumidity_pct": 1.0,
+    "SolarRadiation_Wm2": 1.5,
+    "WindSpeed_ms": 1.5,
+    "Rain_mm": 1.0,
+    # WindDirection is circular (0..360 wraps) — sigma/threshold are not
+    # meaningful for it yet, so it keeps the default until circular handling
+    # lands; see the wind-direction note in the metrics discussion.
+}
+
+
+def event_multiplier_for(channel: str) -> float:
+    """Sigma multiplier (alpha) for a channel, or the global default."""
+    return eventDeltaThresholdByChannel.get(channel, eventDeltaThreshold)
+
+
 stdDevWindowHours = 24  # hours, window for stddev calculation
 # reporting tier
 normalHeartbeatHours = 3  # hours

@@ -175,22 +175,28 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
 
         for index_row, row in df.iterrows():
             for index_sensor, index_swc in enumerate(indices_vwc):
-                # Filter out entries with "nan".
-                if isinstance(row.iloc[index_swc], float):
-                    ts = timestamps.iloc[index_row]
-                    data = data_sensors[index_sensor]
-                    # One Datum per channel present, each tagged with its name.
-                    data.append(
-                        Datum(timestamp=ts, value=row.iloc[index_swc], name="VWC")
-                    )
-                    idx_st = indices_st[index_sensor]
-                    st_val = row.iloc[idx_st] if idx_st is not None else None
-                    if isinstance(st_val, float):
-                        data.append(Datum(timestamp=ts, value=st_val, name="ST"))
-                    idx_sc = indices_sc[index_sensor]
-                    sc_val = row.iloc[idx_sc] if idx_sc is not None else None
-                    if isinstance(sc_val, float):
-                        data.append(Datum(timestamp=ts, value=sc_val, name="SC"))
+                vwc = row.iloc[index_swc]
+                # A blank logging interval is stored as an all-zero row
+                # (VWC=ST=SC=0.0), NOT as NaN — which is why the old
+                # `isinstance(..., float)` "nan filter" never caught it (0.0 is a
+                # float). A buried probe's VWC is physically never exactly 0, so
+                # an exact 0.0 (or a NaN) in the VWC column marks a missing
+                # reading; skip the whole row so the sentinel doesn't spike the
+                # histograms, inflate sigma, or fire phantom events in the filter.
+                if not isinstance(vwc, float) or np.isnan(vwc) or vwc == 0.0:
+                    continue
+                ts = timestamps.iloc[index_row]
+                data = data_sensors[index_sensor]
+                # One Datum per channel present, each tagged with its name.
+                data.append(Datum(timestamp=ts, value=vwc, name="VWC"))
+                idx_st = indices_st[index_sensor]
+                st_val = row.iloc[idx_st] if idx_st is not None else None
+                if isinstance(st_val, float) and not np.isnan(st_val):
+                    data.append(Datum(timestamp=ts, value=st_val, name="ST"))
+                idx_sc = indices_sc[index_sensor]
+                sc_val = row.iloc[idx_sc] if idx_sc is not None else None
+                if isinstance(sc_val, float) and not np.isnan(sc_val):
+                    data.append(Datum(timestamp=ts, value=sc_val, name="SC"))
 
         # Form the Sensor data type.
         for index, data in enumerate(data_sensors):

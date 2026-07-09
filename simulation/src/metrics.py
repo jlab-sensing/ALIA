@@ -10,7 +10,7 @@ import math
 
 import numpy as np
 
-from simulation.src import filter_algo
+from simulation.src import config, filter_algo
 from simulation.src.models import Sensor
 
 
@@ -67,24 +67,34 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     """Reconstruction error of the channel value, raw vs received signal, under
     two reconstruction strategies.
 
+    Reported in the channel's own physical units — RMSE, MAE, and the worst-case
+    `max_err` — because that is what a domain reader interprets directly (±0.004
+    m³/m³, ±0.1 °C) and what the algorithm actually bounds: the zero-order-hold
+    error is guaranteed below `delta = max(3*sigma_window, resolution)`. For a
+    dimensionless, cross-channel number we normalize by the sensor's resolution
+    (`config.resolution_for`), not by the signal's mean or std: resolution is a
+    fixed positive datasheet constant, so `rmse_over_res` never blows up on a
+    zero-mean channel (temperature at freezing, wind direction, rain) or a
+    dead-calm one, and it answers the useful question — how large is the
+    reconstruction error relative to the sensor's own measurement floor.
+
     The receiver only ever sees the transmitted packets in `filtered`. We score
     the reconstruction two ways:
 
-    - Zero-order hold (`sse`/`rmse`/`mae`): the live, causal reconstruction —
+    - Zero-order hold (`rmse`/`mae`/`max_err`): the live, causal reconstruction —
       hold the most recently transmitted value until the next packet arrives.
       The held samples were, by construction, within `delta` of it, so ZOH is
       the error the algorithm actually bounds.
-    - Linear interpolation (`sse_interp`/`rmse_interp`/`mae_interp`): the offline
-      reconstruction — a straight line between the bracketing transmitted
-      packets. This is non-causal (it needs the *next* packet, so it's only
-      available in post-hoc analysis of the archived series), but it is a
-      strictly better reconstruction on the trends between packets. Samples
-      before the first / after the last packet have no bracket on one side and
-      fall back to the held endpoint value.
+    - Linear interpolation (`*_interp`): the offline reconstruction — a straight
+      line between the bracketing transmitted packets. Non-causal (it needs the
+      *next* packet, so it's only available in post-hoc analysis of the archived
+      series), but a strictly better reconstruction on the trends between
+      packets. Samples before the first / after the last packet have no bracket
+      on one side and fall back to the held endpoint value.
 
-    Both are aligned onto the raw timestamps and compared against the true
-    value. Returns `sse`/`abs_sum`/`n` (and the interp counterparts) so callers
-    can pool across sensors, plus the derived per-sensor `rmse`/`mae`.
+    Returns `sse`/`abs_sum`/`n`/`max_abs` (and the interp counterparts) so
+    callers can pool across sensors, plus the derived per-sensor
+    `rmse`/`mae`/`max_err` and their resolution-normalized ratios.
     """
     tx = sorted(
         (d for d in filtered.data if d.value is not None),
@@ -93,27 +103,38 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     raw_data = sorted(raw.data, key=lambda d: d.timestamp)
     raw_vals = _series(raw, "value")
     sigma = float(np.std(raw_vals)) if raw_vals else 0.0
+    mean = float(np.mean(raw_vals)) if raw_vals else 0.0
+    channel = next((d.name for d in raw.data if d.name), "")
+    resolution = config.resolution_for(channel)
     empty = {
         "sigma": sigma,
+        "mean": mean,
+        "resolution": resolution,
         "sse": 0.0,
         "abs_sum": 0.0,
+        "max_abs": 0.0,
         "n": 0,
         "rmse": None,
-        "nrmse": None,
         "mae": None,
+        "max_err": None,
+        "rmse_over_res": None,
         "sse_interp": 0.0,
         "abs_sum_interp": 0.0,
+        "max_abs_interp": 0.0,
         "rmse_interp": None,
-        "nrmse_interp": None,
         "mae_interp": None,
+        "max_err_interp": None,
+        "rmse_interp_over_res": None,
     }
     if not tx or not raw_data:
         return empty
 
     sse = 0.0
     abs_sum = 0.0
+    max_abs = 0.0
     sse_interp = 0.0
     abs_sum_interp = 0.0
+    max_abs_interp = 0.0
     n = 0
     # `k` indexes the latest packet transmitted at or before the current sample,
     # so tx[k] is the held value and tx[k + 1] (if any) is the next packet used
@@ -140,34 +161,43 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
         else:
             interp = held
 
-        err = d.value - held
+        err = abs(d.value - held)
         sse += err * err
-        abs_sum += abs(err)
+        abs_sum += err
+        max_abs = max(max_abs, err)
 
-        err_i = d.value - interp
+        err_i = abs(d.value - interp)
         sse_interp += err_i * err_i
-        abs_sum_interp += abs(err_i)
+        abs_sum_interp += err_i
+        max_abs_interp = max(max_abs_interp, err_i)
 
         n += 1
 
     rmse = math.sqrt(sse / n) if n else None
     rmse_interp = math.sqrt(sse_interp / n) if n else None
+    over_res = resolution if resolution > 0 else None
 
     return {
         "sigma": sigma,
+        "mean": mean,
+        "resolution": resolution,
         "sse": sse,
         "abs_sum": abs_sum,
+        "max_abs": max_abs,
         "n": n,
         "rmse": rmse,
-        "nrmse": (rmse / sigma) if (rmse is not None and sigma > 0) else None,
         "mae": abs_sum / n if n else None,
+        "max_err": max_abs,
+        "rmse_over_res": (rmse / over_res) if (rmse is not None and over_res) else None,
         "sse_interp": sse_interp,
         "abs_sum_interp": abs_sum_interp,
+        "max_abs_interp": max_abs_interp,
         "rmse_interp": rmse_interp,
-        "nrmse_interp": (
-            (rmse_interp / sigma) if (rmse_interp is not None and sigma > 0) else None
-        ),
         "mae_interp": abs_sum_interp / n if n else None,
+        "max_err_interp": max_abs_interp,
+        "rmse_interp_over_res": (
+            (rmse_interp / over_res) if (rmse_interp is not None and over_res) else None
+        ),
     }
 
 
@@ -245,13 +275,24 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
         n_reconstructable = n_filt + sum(d.run_length for d in fs.data)
         err = reconstruction_error(rs, fs)
         lat = transmission_latency(rs, fs)
+        rval = raw_stats.get(fs.name, {}).get("value", {})
+        _vmin, _vmax = rval.get("min"), rval.get("max")
         per_sensor[fs.name] = {
             "n_raw": n_raw,
             "n_filtered": n_filt,
             "n_compressed": n_compressed,
             "n_dropped": n_dropped,
+            # Raw-signal scale, so RMSE/max_err can be read against the signal
+            # they're measuring (a 0.72 error means little without the mean/range).
+            "value_mean": rval.get("mean"),
+            "value_range": (
+                (_vmax - _vmin) if (_vmin is not None and _vmax is not None) else None
+            ),
+            "resolution": err["resolution"],
             "rmse": err["rmse"],
-            "nrmse": err["nrmse"],
+            "mae": err["mae"],
+            "max_err": err["max_err"],
+            "rmse_over_res": err["rmse_over_res"],
             "mean_latency_hr": (lat["mean_sec"] / 3600) if lat["mean_sec"] else None,
             "n_reconstructable": n_reconstructable,
             "compression_rate": (n_raw - n_filt) / n_raw if n_raw else 0.0,

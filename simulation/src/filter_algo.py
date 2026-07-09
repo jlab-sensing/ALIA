@@ -18,7 +18,6 @@ from simulation.src import config
 from simulation.src.models import Datum, Sensor
 from simulation.src.config import (
     burstHeartbeatHours,
-    eventDeltaThreshold,
     normalHeartbeatHours,
     quietEntryRunLength,
     quietHeartbeatHours,
@@ -163,7 +162,12 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
         heartbeat = HeartbeatState()
         runState = RunState()
         for datum in sensor.data:
-            delta = update_delta(datum, stats, config.resolution_for(datum.name))
+            delta = update_delta(
+                datum,
+                stats,
+                config.resolution_for(datum.name),
+                config.event_multiplier_for(datum.name),
+            )
             keep, reason = _should_log(datum, prev, delta, heartbeat, runState)
             if keep:
                 kept.append(datum)
@@ -190,25 +194,34 @@ def update_delta(
     datum: Datum,
     stats: RollingStats,
     sensor_resolution: float,
+    alpha: float,
 ) -> float:
     """Maintain rolling mean/variance over `stats.window` (length W) and
-    return the event threshold = max(eventDeltaThreshold * sigma, sensor_resolution).
+    return the event threshold = max(alpha * sigma, sensor_resolution), where
+    `alpha` is the channel's sigma multiplier (config.event_multiplier_for).
 
-    During warm-up (fewer than W samples seen) returns 0.0 so every sample
-    passes _should_log. Once the window fills, seeds mean/variance directly
-    from it; thereafter uses an O(1) incremental update.
+    During warm-up (fewer than W samples seen) sigma is estimated over the
+    partial window so the threshold adapts from the start, floored at
+    sensor_resolution, rather than force-transmitting every early sample. This
+    matters most for fast-cadence streams (SensorScope ~120 s -> W=720): a
+    24 h all-transmit warm-up would otherwise dominate short records. The first
+    sample still transmits (prev is None -> "first" in _should_log). Once the
+    window fills, mean/variance are seeded from it; thereafter an O(1)
+    incremental update takes over, consistent with the warm-up seed.
     """
     x = datum.value
 
     if not stats.warmed_up:
         stats.window.append(x)
-        if stats.warmed_up:
-            stats.mean = sum(stats.window) / stats.W
-            stats.variance = sum((v - stats.mean) ** 2 for v in stats.window) / (
-                stats.W - 1
-            )
-            stats.sdev = sqrt(stats.variance)
-        return 0.0
+        n = len(stats.window)
+        stats.mean = sum(stats.window) / n
+        stats.variance = (
+            sum((v - stats.mean) ** 2 for v in stats.window) / (n - 1)
+            if n >= 2
+            else 0.0
+        )
+        stats.sdev = sqrt(max(0.0, stats.variance))
+        return max(alpha * stats.sdev, sensor_resolution)
 
     goingaway = stats.window[0]
     oldmean = stats.mean
@@ -220,4 +233,4 @@ def update_delta(
     stats.mean = newmean
     stats.sdev = sqrt(max(0.0, stats.variance))
 
-    return max(eventDeltaThreshold * stats.sdev, sensor_resolution)
+    return max(alpha * stats.sdev, sensor_resolution)

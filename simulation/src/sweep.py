@@ -42,7 +42,6 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 from simulation.src import config, filter_algo, metrics, pipeline, plots
 from simulation.src.compare import _ingest, _plot_overlay_generic
@@ -53,13 +52,30 @@ DEFAULT_HEARTBEAT_HRS = [0.5, 1.0, 2.0, 3.0, 6.0, 12.0, 24.0, 48.0]
 # Heartbeat settings that each get their own delta-curve in `both` mode.
 MULTI_HEARTBEAT_HRS = [3.0, 6.0, 12.0]
 
-# Globals on filter_algo that any mode may rebind; snapshotted and restored.
+# Heartbeat globals on filter_algo that any mode may rebind; snapshotted and
+# restored. The event multiplier is swept through config (per-channel) instead,
+# so it is snapshotted separately in _snapshot/_restore.
 SWEPT_PARAMS = [
-    "eventDeltaThreshold",
     "normalHeartbeatHours",
     "quietHeartbeatHours",
     "burstHeartbeatHours",
 ]
+
+
+def _snapshot() -> dict:
+    """Capture every knob a sweep may rebind so it can be restored afterward."""
+    return {
+        "hb": {k: getattr(filter_algo, k) for k in SWEPT_PARAMS},
+        "delta": config.eventDeltaThreshold,
+        "by_channel": dict(config.eventDeltaThresholdByChannel),
+    }
+
+
+def _restore(snap: dict) -> None:
+    for k, v in snap["hb"].items():
+        setattr(filter_algo, k, v)
+    config.eventDeltaThreshold = snap["delta"]
+    config.eventDeltaThresholdByChannel = snap["by_channel"]
 
 # Tier proportions from config defaults, preserved as the heartbeat is scaled.
 _QUIET_OVER_NORMAL = config.quietHeartbeatHours / config.normalHeartbeatHours
@@ -78,7 +94,14 @@ def _heartbeat_overrides(normal_hr: float) -> dict:
 def _operating_point(sensors_by_logger: dict, overrides: dict) -> dict:
     """Apply `overrides` to filter_algo, run every logger, pool the metrics."""
     for key, val in overrides.items():
-        setattr(filter_algo, key, val)
+        if key == "eventDeltaThreshold":
+            # The event multiplier now lives in config and is per-channel; to
+            # sweep it as one global knob, set the default and clear the
+            # per-channel overrides so every channel uses the swept value.
+            config.eventDeltaThreshold = val
+            config.eventDeltaThresholdByChannel = {}
+        else:
+            setattr(filter_algo, key, val)
 
     n_raw = 0
     n_tx = 0
@@ -100,8 +123,6 @@ def _operating_point(sensors_by_logger: dict, overrides: dict) -> dict:
                 continue
             n_raw += len(rs.data)
             n_tx += len(fs.data)
-            raw_vals = metrics._series(rs, "value")
-            sigma = float(np.std(raw_vals)) if raw_vals else 0.0
 
             err = metrics.reconstruction_error(rs, fs)
             sse += err["sse"]
@@ -109,16 +130,13 @@ def _operating_point(sensors_by_logger: dict, overrides: dict) -> dict:
             sse_interp += err["sse_interp"]
             abs_sum_interp += err["abs_sum_interp"]
             err_n += err["n"]
-            ch_rmse = math.sqrt(err["sse"] / err["n"]) if err["n"] else None
-            if ch_rmse is not None and sigma > 0:
-                nrmse_list.append(ch_rmse / sigma)
 
             lat = metrics.transmission_latency(rs, fs)
             lat_sum += lat["sum_sec"]
             lat_n += lat["n"]
 
     return {
-        "delta": filter_algo.eventDeltaThreshold,
+        "delta": config.eventDeltaThreshold,
         "heartbeat_hr": filter_algo.normalHeartbeatHours,
         "n_raw": n_raw,
         "n_tx": n_tx,
@@ -182,10 +200,11 @@ def _collect(
 def _render_overlays(sensors_by_logger: dict, deltas: list, plots_dir: str) -> None:
     """Write the compare.py overlay graphs once per eventDeltaThreshold value.
 
-    For each delta we rebind `filter_algo.eventDeltaThreshold`, run both branches
-    for every logger, and drop the raw-vs-filtered overlays into a per-delta
-    subfolder (`plots/overlay_sweep/delta_<d>/overlay/<logger>.png`) so runs at
-    different thresholds sit side by side instead of clobbering each other.
+    For each delta we set the global event multiplier (config.eventDeltaThreshold
+    with per-channel overrides cleared), run both branches for every logger, and
+    drop the raw-vs-filtered overlays into a per-delta subfolder
+    (`plots/overlay_sweep/delta_<d>/overlay/<logger>.png`) so runs at different
+    thresholds sit side by side instead of clobbering each other.
 
     Sensors are channel-split first, matching compare.py, so every overlay axis
     is a single channel scored on its own dynamics.
@@ -195,7 +214,8 @@ def _render_overlays(sensors_by_logger: dict, deltas: list, plots_dir: str) -> N
         for name, sensors in sensors_by_logger.items()
     }
     for d in deltas:
-        setattr(filter_algo, "eventDeltaThreshold", d)
+        config.eventDeltaThreshold = d
+        config.eventDeltaThresholdByChannel = {}
         # A filesystem-safe stamp for the delta (e.g. 1.5 -> "1p5").
         stamp = f"delta_{d:g}".replace(".", "p")
         delta_dir = os.path.join(plots_dir, "overlay_sweep", stamp)
@@ -383,23 +403,21 @@ def main():
     # Overlay mode is not a tradeoff curve: it renders the raw-vs-filtered
     # graphs once per delta and returns, leaving the config globals restored.
     if args.mode == "overlay":
-        saved = {k: getattr(filter_algo, k) for k in SWEPT_PARAMS}
+        saved = _snapshot()
         try:
             _render_overlays(sensors_by_logger, deltas, plots_dir)
         finally:
-            for k, v in saved.items():
-                setattr(filter_algo, k, v)
+            _restore(saved)
         print(f"\nWrote overlay graphs to {os.path.join(plots_dir, 'overlay_sweep')}")
         if args.show:
             plt.show()
         return
 
-    saved = {k: getattr(filter_algo, k) for k in SWEPT_PARAMS}
+    saved = _snapshot()
     try:
         series = _collect(sensors_by_logger, args.mode, deltas, heartbeats)
     finally:
-        for k, v in saved.items():
-            setattr(filter_algo, k, v)
+        _restore(saved)
 
     # Mode-specific filenames so charts from different modes don't clobber.
     suffix = {"delta": "", "heartbeat": "_heartbeat", "both": "_multi"}[args.mode]

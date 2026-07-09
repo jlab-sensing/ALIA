@@ -20,9 +20,16 @@ ALIA/
 │   ├── pipeline.py             # runs raw and filtered branches
 │   ├── metrics.py              # per-sensor stats and raw-vs-filtered diff
 │   └── compare.py              # CLI entry point
-└── data/UCSC_Haybarn_Field/
-    ├── data_transformer.py     # site-specific XLSX → Sensor ingestion
-    └── data/                   # XLSX logger files
+├── data/
+│   ├── UCSC_Haybarn_Field/     # Haybarn site
+│   │   ├── data_transformer.py       # XLSX → Sensor ingestion
+│   │   ├── sensorscope_transformer.py # SensorScope .txt → Sensor ingestion
+│   │   └── logger_*.xlsx             # XLSX logger files (directly here)
+│   ├── fishnet-meteo/          # SensorScope .txt station logs
+│   ├── genepi-meteo/           #   "
+│   ├── luce_stations_1x/       #   "
+│   ├── plaine_morte-meteo/     #   "
+│   └── out/<dataset>/          # generated metrics.csv, metrics.json, plots/
 ```
 
 ## Running the comparison harness
@@ -31,8 +38,8 @@ From the repo root:
 
 ```sh
 python -m simulation.src.compare \
-    --dir data/UCSC_Haybarn_Field/data \
-    --output data/UCSC_Haybarn_Field/out
+    --dir data/UCSC_Haybarn_Field \
+    --output data/out/UCSC_Haybarn_Field
 ```
 
 Flags:
@@ -59,8 +66,8 @@ analyze a station:
 
 ```sh
 python -m simulation.src.compare \
-    --dir data/UCSC_Haybarn_Field/data/fishnet-meteo \
-    --output data/UCSC_Haybarn_Field/out/fishnet-meteo
+    --dir data/fishnet-meteo \
+    --output data/out/fishnet-meteo
 ```
 
 `metrics.csv` then carries one row per `(station, channel)`, and each station
@@ -83,8 +90,15 @@ names intact.
 
 Outputs land in `<output>/`:
 - `plots/<logger>.png` — one panel per single-channel stream, raw (faded) and filtered (solid) overlaid.
-- `metrics.csv` — one row per `(logger, stream)`: sample counts, drop rate, mean/std deltas for that stream.
-- `metrics.json` — full diff including drops by reason and per-stream descriptive stats.
+- `metrics.csv` — one row per `(logger, stream)`: `n_raw`, `compression_ratio`, and
+  reconstruction fidelity in the channel's own units (`rmse`, `mae`, `max_err`),
+  plus `rmse_over_res` (RMSE as a multiple of the sensor's resolution, a
+  dimensionless cross-channel number that doesn't blow up on zero-mean or
+  dead-calm channels the way a mean-/σ-normalized nrmse would) and
+  `mean_latency_hr`.
+- `metrics.json` — full diff including sample counts, drops by reason, per-stream
+  descriptive stats, mean/std deltas, and both zero-order-hold and linear-interp
+  error breakdowns.
 
 ## Editing the algorithm
 
@@ -96,7 +110,7 @@ The decision logic lives in `simulation/src/filter_algo.py` in `_should_log(datu
 The original ingest-and-plot path still works:
 
 ```sh
-python data/UCSC_Haybarn_Field/data_transformer.py --dir data/UCSC_Haybarn_Field/data
+python data/UCSC_Haybarn_Field/data_transformer.py --dir data/UCSC_Haybarn_Field
 ```
 
 # Algorithm Specifications

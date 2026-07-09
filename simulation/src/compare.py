@@ -153,17 +153,64 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
             linewidth=1.2,
         )
         ax.set_ylabel(label, fontsize="small")
+
+        # Guide-rail annotation: put the fidelity/compression numbers on the
+        # panel so the picture and the metric sit together. RMSE and max_err are
+        # in the channel's own units (same axis as the y-scale); "×N" is the
+        # compression ratio; "Nx res" is RMSE as a multiple of sensor resolution.
+        err = metrics.reconstruction_error(rs, fs)
+        comp = len(rs.data) / len(fs.data) if fs.data else float("inf")
+
+        def _g(v, prec=3):
+            return f"{v:.{prec}g}" if v is not None else "n/a"
+
+        over_res = (
+            f"{err['rmse_over_res']:.0f}× res"
+            if err["rmse_over_res"] is not None
+            else "n/a"
+        )
+        note = (
+            f"RMSE {_g(err['rmse'])}  ·  max {_g(err['max_err'])}"
+            f"  ·  {comp:.0f}×  ·  {over_res}"
+        )
+        ax.text(
+            0.006,
+            0.94,
+            note,
+            transform=ax.transAxes,
+            fontsize=7,
+            va="top",
+            ha="left",
+            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="0.7", alpha=0.75),
+        )
     axes[-1].set_xlabel("Time")
 
     fig.savefig(plots.plot_path(out_dir, "overlay", logger_name), dpi=120)
     plt.close(fig)
 
 
-_METRICS_HEADER = ["logger", "sensor", "n_raw", "compression_ratio", "nrmse", "mean_latency_hr"]
+_METRICS_HEADER = [
+    "logger",
+    "sensor",
+    "n_raw",
+    "mean",
+    "range",
+    "compression_ratio",
+    "rmse",
+    "mae",
+    "max_err",
+    "rmse_over_res",
+    "mean_latency_hr",
+]
 
 
 def _metric_rows(all_diffs: dict) -> list[list[str]]:
     """One lean row per (logger, sensor): compression, fidelity, timeliness.
+
+    Fidelity is reported in the channel's own physical units (rmse/mae/max_err)
+    plus rmse_over_res, the error as a multiple of the sensor's resolution — a
+    dimensionless, cross-channel number that doesn't blow up on zero-mean or
+    dead-calm channels the way a mean- or std-normalized nrmse does.
 
     The full per-sensor detail (counts, rates, mean/std deltas, interp errors)
     is still written to metrics.json; these rows are the at-a-glance summary.
@@ -174,16 +221,24 @@ def _metric_rows(all_diffs: dict) -> list[list[str]]:
             ratio = (
                 row["n_raw"] / row["n_filtered"] if row["n_filtered"] else float("inf")
             )
-            nrmse = row["nrmse"]
             lat_hr = row["mean_latency_hr"]
+
+            def _fmt(v, prec=4):
+                return f"{v:.{prec}f}" if v is not None else ""
+
             rows.append(
                 [
                     logger_name,
                     sensor_name,
                     str(row["n_raw"]),
+                    _fmt(row.get("value_mean")),
+                    _fmt(row.get("value_range")),
                     f"{ratio:.2f}",
-                    f"{nrmse:.4f}" if nrmse is not None else "",
-                    f"{lat_hr:.2f}" if lat_hr is not None else "",
+                    _fmt(row["rmse"]),
+                    _fmt(row["mae"]),
+                    _fmt(row["max_err"]),
+                    _fmt(row["rmse_over_res"], 2),
+                    _fmt(lat_hr, 2),
                 ]
             )
     return rows
