@@ -7,12 +7,30 @@ The public entry point is `filter`, a pure function that takes a list of
 Sensors and returns a new list with the same shape but only the data points
 that pass the algorithm. Each rejected datum is recorded in `last_drops` so
 the comparison harness can attribute drops to specific reasons.
+
+An "event" fires when EITHER of two independent tests trips:
+
+  1. Level guard (bounds reconstruction error): |value - prev.value| exceeds an
+     adaptive threshold max(alpha * sigma, resolution), sigma being the rolling
+     stddev over a trailing window. This directly caps how far the held value
+     can drift from the truth, so worst-case error stays bounded.
+
+  2. Regime change (adds sensitivity): a two-sample Welch t-test on the stream's
+     consecutive first differences (deltas) — a frozen `baseline` window from the
+     last transmission vs. the sliding `recent` window — rejects equal mean
+     deltas at p < significance and by more than the sensor resolution.
+
+The level guard is the safety net that keeps fidelity bounded; the t-test layers
+on extra sensitivity to shifts in the signal's rate that the guard might ride
+through. `prev` is the most recently kept datum, so the guard is measured
+against exactly what the receiver would hold.
 """
 
 from collections import deque
 from copy import deepcopy
 from dataclasses import dataclass, field
 from math import sqrt
+from statistics import fmean
 
 from simulation.src import config
 from simulation.src.models import Datum, Sensor
@@ -23,7 +41,10 @@ from simulation.src.config import (
     quietHeartbeatHours,
     samplePeriodSec,
     stdDevWindowHours,
+    numWarmupTx,
+    significance,
 )
+from scipy.stats import ttest_ind
 
 
 @dataclass
@@ -83,27 +104,57 @@ def _select_heartbeat_hours(state: HeartbeatState) -> float:
     return normalHeartbeatHours
 
 
+def _ttest_event(baseline: deque, recent: deque, channel: str) -> bool:
+    """True when the recent delta window differs from the baseline delta window.
+
+    Welch's t-test (equal_var=False) rejects equal means at p < significance,
+    gated by a physical floor: the shift in mean delta must clear the sensor's
+    resolution so a statistically-significant but trivially-small change does
+    not fire. Constant (zero-variance) windows yield a nan p-value, which fails
+    the `< significance` comparison and is correctly treated as a non-event.
+    """
+    _, p = ttest_ind(list(baseline), list(recent), equal_var=False)
+    if not (p < significance):
+        return False
+    return abs(fmean(recent) - fmean(baseline)) >= config.resolution_for(channel)
+
+
 def _should_log(
+    recent: deque,
+    baseline: deque,
     datum: Datum,
     prev: Datum | None,
     delta: float,
     heartbeatState: HeartbeatState,
     runState: RunState,
 ) -> tuple[bool, str]:
-    """Return (keep, reason). `delta` is the current event threshold from
-    update_delta. `prev` is the most recently kept Datum, or None on first
-    sample. `state` is mutated to track the burst/normal/quiet reporting tier.
+    """Return (keep, reason). `delta` is the current level-guard threshold from
+    update_delta. `prev` is the most recently kept Datum, or None on the first
+    sample. `baseline`/`recent` are the delta windows; `baseline` is reseeded
+    from `recent` on every transmission so it always reflects what the receiver
+    last saw. `heartbeatState` tracks the burst/normal/quiet tier.
     """
     if prev is None:
         return True, "first"
 
-    # An event always transmits and resets the run, dropping us into burst mode.
-    if abs(datum.value - prev.value) >= delta:
+    # Warm-up: force-transmit until the recent delta window is full, keeping
+    # baseline in step so the first t-test has a full reference window.
+    if len(recent) < numWarmupTx:
+        baseline.clear()
+        baseline.extend(recent)
+        return True, "warmup"
+
+    # Event = level guard OR regime change. The guard is cheap and bounds error,
+    # so it is checked first and short-circuits the costlier t-test when it trips.
+    if abs(datum.value - prev.value) >= delta or _ttest_event(
+        baseline, recent, datum.name
+    ):
         heartbeatState.quiet_run = 0
         if runState.run_count > 0:
             datum.run_length = runState.run_count
             runState.run_count = 0
-
+        baseline.clear()
+        baseline.extend(recent)
         return True, "event"
 
     # Non-event: select the heartbeat for the current tier before advancing the
@@ -115,6 +166,8 @@ def _should_log(
         if runState.run_count > 0:
             datum.run_length = runState.run_count
             runState.run_count = 0
+        baseline.clear()
+        baseline.extend(recent)
         return True, "heartbeat"
     else:
         runState.run_count += 1
@@ -130,8 +183,11 @@ def _estimate_period_sec(data: list[Datum]) -> float:
     `config.samplePeriodSec` when a stream is too short to infer a cadence.
     """
     ts = sorted(d.timestamp for d in data if d.is_present())
-    diffs = [(b - a).total_seconds() for a, b in zip(ts, ts[1:])
-             if (b - a).total_seconds() > 0]
+    diffs = [
+        (b - a).total_seconds()
+        for a, b in zip(ts, ts[1:])
+        if (b - a).total_seconds() > 0
+    ]
     if not diffs:
         return samplePeriodSec
     diffs.sort()
@@ -155,20 +211,32 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
 
     out: list[Sensor] = []
     for sensor in sensors:
+        last_value: float | None = None
         kept: list[Datum] = []
         prev: Datum | None = None
-        # Size the rolling stddev window from this stream's own sampling cadence.
+        # Rolling stddev for the level guard, sized from this stream's cadence.
         stats = RollingStats(W=_window_size(sensor.data))
         heartbeat = HeartbeatState()
         runState = RunState()
+        # Delta windows for the t-test: `recent` slides every present sample,
+        # `baseline` is frozen at the last transmission. numWarmupTx deltas need
+        # numWarmupTx+1 present samples (the first sample yields no delta).
+        recent = deque(maxlen=numWarmupTx)
+        baseline = deque(maxlen=numWarmupTx)
         for datum in sensor.data:
+            if datum.is_present():
+                if last_value is not None:
+                    recent.append(datum.value - last_value)
+                last_value = datum.value
             delta = update_delta(
                 datum,
                 stats,
                 config.resolution_for(datum.name),
                 config.event_multiplier_for(datum.name),
             )
-            keep, reason = _should_log(datum, prev, delta, heartbeat, runState)
+            keep, reason = _should_log(
+                recent, baseline, datum, prev, delta, heartbeat, runState
+            )
             if keep:
                 kept.append(datum)
                 prev = datum
@@ -197,17 +265,14 @@ def update_delta(
     alpha: float,
 ) -> float:
     """Maintain rolling mean/variance over `stats.window` (length W) and
-    return the event threshold = max(alpha * sigma, sensor_resolution), where
-    `alpha` is the channel's sigma multiplier (config.event_multiplier_for).
+    return the level-guard threshold = max(alpha * sigma, sensor_resolution),
+    where `alpha` is the channel's sigma multiplier (config.event_multiplier_for).
 
     During warm-up (fewer than W samples seen) sigma is estimated over the
     partial window so the threshold adapts from the start, floored at
-    sensor_resolution, rather than force-transmitting every early sample. This
-    matters most for fast-cadence streams (SensorScope ~120 s -> W=720): a
-    24 h all-transmit warm-up would otherwise dominate short records. The first
-    sample still transmits (prev is None -> "first" in _should_log). Once the
-    window fills, mean/variance are seeded from it; thereafter an O(1)
-    incremental update takes over, consistent with the warm-up seed.
+    sensor_resolution. Once the window fills, mean/variance are seeded from it;
+    thereafter an O(1) incremental update takes over, consistent with the
+    warm-up seed.
     """
     x = datum.value
 

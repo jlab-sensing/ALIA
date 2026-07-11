@@ -20,7 +20,7 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-from simulation.src import metrics, pipeline, plots
+from simulation.src import metrics, pipeline, plots, summarize
 
 
 def _ingest_xlsx(paths_files: list[str], path_dir: str):
@@ -332,10 +332,16 @@ def main():
         )
         _plot_original_histogram(logger_name, branches["raw"], plots_dir)
 
-    _write_metrics_csv(all_diffs, os.path.join(args.output, "metrics.csv"))
+    csv_path = os.path.join(args.output, "metrics.csv")
+    _write_metrics_csv(all_diffs, csv_path)
     _write_metrics_table(all_diffs, os.path.join(args.output, "metrics.txt"))
     with open(os.path.join(args.output, "metrics.json"), "w") as fp:
         json.dump(all_diffs, fp, indent=2, default=str)
+
+    # Summary figures: the compression/fidelity map + per-channel ranking,
+    # generated from the metrics just written so they never drift from it.
+    label = os.path.basename(os.path.normpath(args.output)) or "dataset"
+    summarize.summarize(summarize._load(csv_path), label, plots_dir)
 
     if args.show:
         plt.show()

@@ -68,3 +68,5 @@ normalHeartbeatHours = 3  # hours
 quietHeartbeatHours = 12  # hours
 burstHeartbeatHours = 0.5  # hours
 quietEntryRunLength = 48  # measurements before entering quiet mode
+numWarmupTx = 100  # number of warmup measurements for students-t-test
+significance = 0.01  # p-value threshold; event when ttest_ind p < significance

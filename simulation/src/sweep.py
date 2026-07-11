@@ -3,27 +3,28 @@
 
 Traces the compression-ratio tradeoff curves for the filter algorithm.
 
-Two knobs move the operating point. `eventDeltaThreshold` (the sigma-multiplier
-above which a change counts as an event) controls how readily the algorithm
-fires on transients; on this data it is a weak compression lever because most
-samples are held by the heartbeat/quiet-run logic regardless. The heartbeat
-intervals are the dominant lever: longer heartbeats force fewer transmissions
-during silent runs, sweeping compression over a much wider range.
+Two knobs move the operating point. `significance` (the p-value threshold below
+which the Welch t-test on consecutive deltas declares an event) controls how
+readily the algorithm fires on a change in the signal's rate: a larger
+significance fires more easily (lower compression), a smaller one is stricter
+(higher compression). The heartbeat intervals are the other lever: longer
+heartbeats force fewer transmissions during silent runs, sweeping compression
+over a wider range.
 
 Four modes:
-  --mode delta      sweep eventDeltaThreshold, one curve         (default)
-  --mode heartbeat  sweep normalHeartbeatHours (quiet/burst scaled
-                    proportionally), one curve over a wide range
-  --mode both       sweep eventDeltaThreshold at several heartbeat
-                    settings, one curve per setting (multi-curve)
-  --mode overlay    render the raw-vs-filtered overlay graphs (as compare.py
-                    does) once per eventDeltaThreshold value, each delta in its
-                    own subfolder — to eyeball how the threshold reshapes the
-                    filtered series rather than a summary curve
+  --mode significance  sweep `significance`, one curve              (default)
+  --mode heartbeat     sweep normalHeartbeatHours (quiet/burst scaled
+                       proportionally), one curve over a wide range
+  --mode both          sweep `significance` at several heartbeat
+                       settings, one curve per setting (multi-curve)
+  --mode overlay       render the raw-vs-filtered overlay graphs (as compare.py
+                       does) once per `significance` value, each in its own
+                       subfolder — to eyeball how the threshold reshapes the
+                       filtered series rather than a summary curve
 
 At each operating point we pool across all sensors/loggers:
   - compression ratio  = raw samples / transmitted packets        (x-axis)
-  - reconstruction RMSE = zero-order-hold error on VWC            (error curve)
+  - reconstruction RMSE = zero-order-hold error                   (error curve)
   - mean latency        = avg delay from sample to transmission   (latency curve)
 
 and emit two charts plus a CSV of the raw points.
@@ -46,16 +47,19 @@ import matplotlib.pyplot as plt
 from simulation.src import config, filter_algo, metrics, pipeline, plots
 from simulation.src.compare import _ingest, _plot_overlay_generic
 
-# Knob settings per mode.
-DEFAULT_DELTAS = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0]
+# Knob settings per mode. Significance is a p-value in (0, 1): larger fires more
+# events (lower compression), smaller is stricter (higher compression).
+DEFAULT_SIGNIFICANCES = [0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.001]
 DEFAULT_HEARTBEAT_HRS = [0.5, 1.0, 2.0, 3.0, 6.0, 12.0, 24.0, 48.0]
-# Heartbeat settings that each get their own delta-curve in `both` mode.
+# Heartbeat settings that each get their own significance-curve in `both` mode.
 MULTI_HEARTBEAT_HRS = [3.0, 6.0, 12.0]
 
-# Heartbeat globals on filter_algo that any mode may rebind; snapshotted and
-# restored. The event multiplier is swept through config (per-channel) instead,
-# so it is snapshotted separately in _snapshot/_restore.
+# Globals on filter_algo that a sweep may rebind; snapshotted and restored.
+# These are module-level names filter_algo binds at import (from config), so the
+# algorithm reads them by bare name — they must be set on filter_algo, not on
+# config, to take effect.
 SWEPT_PARAMS = [
+    "significance",
     "normalHeartbeatHours",
     "quietHeartbeatHours",
     "burstHeartbeatHours",
@@ -64,18 +68,13 @@ SWEPT_PARAMS = [
 
 def _snapshot() -> dict:
     """Capture every knob a sweep may rebind so it can be restored afterward."""
-    return {
-        "hb": {k: getattr(filter_algo, k) for k in SWEPT_PARAMS},
-        "delta": config.eventDeltaThreshold,
-        "by_channel": dict(config.eventDeltaThresholdByChannel),
-    }
+    return {k: getattr(filter_algo, k) for k in SWEPT_PARAMS}
 
 
 def _restore(snap: dict) -> None:
-    for k, v in snap["hb"].items():
+    for k, v in snap.items():
         setattr(filter_algo, k, v)
-    config.eventDeltaThreshold = snap["delta"]
-    config.eventDeltaThresholdByChannel = snap["by_channel"]
+
 
 # Tier proportions from config defaults, preserved as the heartbeat is scaled.
 _QUIET_OVER_NORMAL = config.quietHeartbeatHours / config.normalHeartbeatHours
@@ -94,14 +93,7 @@ def _heartbeat_overrides(normal_hr: float) -> dict:
 def _operating_point(sensors_by_logger: dict, overrides: dict) -> dict:
     """Apply `overrides` to filter_algo, run every logger, pool the metrics."""
     for key, val in overrides.items():
-        if key == "eventDeltaThreshold":
-            # The event multiplier now lives in config and is per-channel; to
-            # sweep it as one global knob, set the default and clear the
-            # per-channel overrides so every channel uses the swept value.
-            config.eventDeltaThreshold = val
-            config.eventDeltaThresholdByChannel = {}
-        else:
-            setattr(filter_algo, key, val)
+        setattr(filter_algo, key, val)
 
     n_raw = 0
     n_tx = 0
@@ -136,7 +128,7 @@ def _operating_point(sensors_by_logger: dict, overrides: dict) -> dict:
             lat_n += lat["n"]
 
     return {
-        "delta": config.eventDeltaThreshold,
+        "significance": filter_algo.significance,
         "heartbeat_hr": filter_algo.normalHeartbeatHours,
         "n_raw": n_raw,
         "n_tx": n_tx,
@@ -151,16 +143,16 @@ def _operating_point(sensors_by_logger: dict, overrides: dict) -> dict:
 
 
 def _collect(
-    sensors_by_logger: dict, mode: str, deltas: list, heartbeats: list
+    sensors_by_logger: dict, mode: str, significances: list, heartbeats: list
 ) -> list:
     """Return a list of (series_label, points) curves for the given mode."""
-    if mode == "delta":
+    if mode == "significance":
         pts = []
-        for d in deltas:
-            p = _operating_point(sensors_by_logger, {"eventDeltaThreshold": d})
+        for s in significances:
+            p = _operating_point(sensors_by_logger, {"significance": s})
             pts.append(p)
             print(
-                f"  δ={d:>5g}  ratio={p['compression_ratio']:7.2f}:1  "
+                f"  p={s:>6g}  ratio={p['compression_ratio']:7.2f}:1  "
                 f"rmse={p['rmse']:.4f} (interp {p['rmse_interp']:.4f})  "
                 f"latency={p['mean_latency_hr']:.2f} hr"
             )
@@ -182,12 +174,12 @@ def _collect(
         series = []
         for hb in MULTI_HEARTBEAT_HRS:
             pts = []
-            for d in deltas:
-                overrides = {"eventDeltaThreshold": d, **_heartbeat_overrides(hb)}
+            for s in significances:
+                overrides = {"significance": s, **_heartbeat_overrides(hb)}
                 p = _operating_point(sensors_by_logger, overrides)
                 pts.append(p)
                 print(
-                    f"  hb={hb:>4g}h δ={d:>4g}  ratio={p['compression_ratio']:7.2f}:1  "
+                    f"  hb={hb:>4g}h p={s:>6g}  ratio={p['compression_ratio']:7.2f}:1  "
                     f"rmse={p['rmse']:.4f} (interp {p['rmse_interp']:.4f})  "
                     f"latency={p['mean_latency_hr']:.2f} hr"
                 )
@@ -197,14 +189,15 @@ def _collect(
     raise ValueError(f"unknown mode: {mode}")
 
 
-def _render_overlays(sensors_by_logger: dict, deltas: list, plots_dir: str) -> None:
-    """Write the compare.py overlay graphs once per eventDeltaThreshold value.
+def _render_overlays(
+    sensors_by_logger: dict, significances: list, plots_dir: str
+) -> None:
+    """Write the compare.py overlay graphs once per `significance` value.
 
-    For each delta we set the global event multiplier (config.eventDeltaThreshold
-    with per-channel overrides cleared), run both branches for every logger, and
-    drop the raw-vs-filtered overlays into a per-delta subfolder
-    (`plots/overlay_sweep/delta_<d>/overlay/<logger>.png`) so runs at different
-    thresholds sit side by side instead of clobbering each other.
+    For each p-threshold we rebind filter_algo.significance, run both branches
+    for every logger, and drop the raw-vs-filtered overlays into a per-value
+    subfolder (`plots/overlay_sweep/p_<s>/overlay/<logger>.png`) so runs at
+    different thresholds sit side by side instead of clobbering each other.
 
     Sensors are channel-split first, matching compare.py, so every overlay axis
     is a single channel scored on its own dynamics.
@@ -213,17 +206,16 @@ def _render_overlays(sensors_by_logger: dict, deltas: list, plots_dir: str) -> N
         name: pipeline.to_channel_streams(sensors)
         for name, sensors in sensors_by_logger.items()
     }
-    for d in deltas:
-        config.eventDeltaThreshold = d
-        config.eventDeltaThresholdByChannel = {}
-        # A filesystem-safe stamp for the delta (e.g. 1.5 -> "1p5").
-        stamp = f"delta_{d:g}".replace(".", "p")
-        delta_dir = os.path.join(plots_dir, "overlay_sweep", stamp)
-        print(f"  δ={d:>5g}  ->  {delta_dir}")
+    for s in significances:
+        filter_algo.significance = s
+        # A filesystem-safe stamp for the p-value (e.g. 0.05 -> "0p05").
+        stamp = f"p_{s:g}".replace(".", "p")
+        p_dir = os.path.join(plots_dir, "overlay_sweep", stamp)
+        print(f"  p={s:>6g}  ->  {p_dir}")
         for logger_name, sensors in split_by_logger.items():
             branches = pipeline.run_both(sensors)
             _plot_overlay_generic(
-                logger_name, branches["raw"], branches["filtered"], delta_dir
+                logger_name, branches["raw"], branches["filtered"], p_dir
             )
 
 
@@ -303,7 +295,7 @@ def _plot_error_comparison(series, title, path, annotate, legend):
                     alpha=0.7,
                 )
     ax.set_xlabel("Compression ratio (raw samples : transmitted packets)")
-    ax.set_ylabel("Reconstruction RMSE (VWC, m³/m³)")
+    ax.set_ylabel("Reconstruction RMSE (pooled, channel units)")
     ax.set_title(title)
     ax.grid(True, alpha=0.3)
     # Always legend here — the ZOH vs interp distinction needs labelling even in
@@ -319,7 +311,7 @@ def _write_sweep_csv(series, path: str):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     cols = [
         "series",
-        "delta",
+        "significance",
         "heartbeat_hr",
         "n_raw",
         "n_tx",
@@ -358,23 +350,24 @@ def main():
     )
     parser.add_argument(
         "--mode",
-        default="delta",
-        choices=["delta", "heartbeat", "both", "overlay"],
+        default="significance",
+        choices=["significance", "heartbeat", "both", "overlay"],
         help="Which knob drives the compression-ratio axis "
-        "('overlay' renders per-delta overlay graphs "
+        "('overlay' renders per-significance overlay graphs "
         "instead of tradeoff curves).",
     )
     parser.add_argument(
-        "--deltas",
+        "--significances",
         default="",
         type=str,
-        help="Comma-separated eventDeltaThreshold values " "(delta/both modes).",
+        help="Comma-separated significance (p-value) values "
+        "(significance/both/overlay modes).",
     )
     parser.add_argument(
         "--heartbeats",
         default="",
         type=str,
-        help="Comma-separated normalHeartbeatHours values " "(heartbeat mode).",
+        help="Comma-separated normalHeartbeatHours values (heartbeat mode).",
     )
     parser.add_argument(
         "--show",
@@ -383,10 +376,10 @@ def main():
     )
     args = parser.parse_args()
 
-    deltas = (
-        [float(x) for x in args.deltas.split(",") if x.strip()]
-        if args.deltas
-        else DEFAULT_DELTAS
+    significances = (
+        [float(x) for x in args.significances.split(",") if x.strip()]
+        if args.significances
+        else DEFAULT_SIGNIFICANCES
     )
     heartbeats = (
         [float(x) for x in args.heartbeats.split(",") if x.strip()]
@@ -401,11 +394,11 @@ def main():
     plots_dir = os.path.join(args.output, "plots")
 
     # Overlay mode is not a tradeoff curve: it renders the raw-vs-filtered
-    # graphs once per delta and returns, leaving the config globals restored.
+    # graphs once per significance and returns, leaving the globals restored.
     if args.mode == "overlay":
         saved = _snapshot()
         try:
-            _render_overlays(sensors_by_logger, deltas, plots_dir)
+            _render_overlays(sensors_by_logger, significances, plots_dir)
         finally:
             _restore(saved)
         print(f"\nWrote overlay graphs to {os.path.join(plots_dir, 'overlay_sweep')}")
@@ -415,16 +408,20 @@ def main():
 
     saved = _snapshot()
     try:
-        series = _collect(sensors_by_logger, args.mode, deltas, heartbeats)
+        series = _collect(sensors_by_logger, args.mode, significances, heartbeats)
     finally:
         _restore(saved)
 
     # Mode-specific filenames so charts from different modes don't clobber.
-    suffix = {"delta": "", "heartbeat": "_heartbeat", "both": "_multi"}[args.mode]
+    suffix = {
+        "significance": "",
+        "heartbeat": "_heartbeat",
+        "both": "_multi",
+    }[args.mode]
     # Single-curve modes annotate each marker with the swept value; the
     # multi-curve mode uses a legend instead to stay readable.
     annotate = {
-        "delta": ("δ", "delta"),
+        "significance": ("p", "significance"),
         "heartbeat": ("hb", "heartbeat_hr"),
         "both": None,
     }[args.mode]
