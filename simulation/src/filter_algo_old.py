@@ -16,9 +16,12 @@ An "event" fires when EITHER of two independent tests trips:
      can drift from the truth, so worst-case error stays bounded.
 
   2. Regime change (adds sensitivity): a two-sample Welch t-test on the stream's
-     consecutive first differences (deltas) — a frozen `baseline` window from the
-     last transmission vs. the sliding `recent` window — rejects equal mean
-     deltas at p < significance and by more than the sensor resolution.
+     consecutive first differences (deltas) between two sliding windows — a
+     `recent` window ending at the newest delta and a `baseline` window lagging
+     it by one sample — rejects equal mean deltas at p < significance and by
+     more than the sensor resolution. The windows overlap in all but their
+     endpoints (baseline keeps the just-evicted oldest delta, recent gains the
+     newest), so this tracks the signal's rate as each new sample shifts it.
 
 The level guard is the safety net that keeps fidelity bounded; the t-test layers
 on extra sensitivity to shifts in the signal's rate that the guard might ride
@@ -130,31 +133,35 @@ def _should_log(
 ) -> tuple[bool, str]:
     """Return (keep, reason). `delta` is the current level-guard threshold from
     update_delta. `prev` is the most recently kept Datum, or None on the first
-    sample. `baseline`/`recent` are the delta windows; `baseline` is reseeded
-    from `recent` on every transmission so it always reflects what the receiver
-    last saw. `heartbeatState` tracks the burst/normal/quiet tier.
+    sample. `baseline`/`recent` are two sliding delta windows lagged by one
+    sample (see `filter`); both advance every present sample, so the t-test
+    compares the signal's current rate of change against its recent past.
+    `heartbeatState`
+    tracks the burst/normal/quiet tier.
     """
     if prev is None:
         return True, "first"
 
-    # Warm-up: force-transmit until the recent delta window is full, keeping
-    # baseline in step so the first t-test has a full reference window.
-    if len(recent) < numWarmupTx:
-        baseline.clear()
-        baseline.extend(recent)
+    # Warm-up: force-transmit until BOTH delta windows are full, so the first
+    # t-test compares two full windows. baseline lags recent by one sample and
+    # so fills one sample later, so a full baseline implies a full recent.
+    if len(baseline) < numWarmupTx:
         return True, "warmup"
 
-    # Event = level guard OR regime change. The guard is cheap and bounds error,
-    # so it is checked first and short-circuits the costlier t-test when it trips.
-    if abs(datum.value - prev.value) >= delta or _ttest_event(
-        baseline, recent, datum.name
-    ):
+    # Event = level guard OR regime change. The guard bounds reconstruction
+    # error by capping how far the held value (prev) may drift from the truth;
+    # it is cheap and short-circuits the costlier t-test when it trips. Only
+    # meaningful when both endpoints are real readings.
+    level_guard = (
+        datum.is_present()
+        and prev.is_present()
+        and abs(datum.value - prev.value) >= delta
+    )
+    if level_guard or _ttest_event(baseline, recent, datum.name):
         heartbeatState.quiet_run = 0
         if runState.run_count > 0:
             datum.run_length = runState.run_count
             runState.run_count = 0
-        baseline.clear()
-        baseline.extend(recent)
         return True, "event"
 
     # Non-event: select the heartbeat for the current tier before advancing the
@@ -166,8 +173,6 @@ def _should_log(
         if runState.run_count > 0:
             datum.run_length = runState.run_count
             runState.run_count = 0
-        baseline.clear()
-        baseline.extend(recent)
         return True, "heartbeat"
     else:
         runState.run_count += 1
@@ -218,15 +223,26 @@ def filter(sensors: list[Sensor]) -> list[Sensor]:
         stats = RollingStats(W=_window_size(sensor.data))
         heartbeat = HeartbeatState()
         runState = RunState()
-        # Delta windows for the t-test: `recent` slides every present sample,
-        # `baseline` is frozen at the last transmission. numWarmupTx deltas need
-        # numWarmupTx+1 present samples (the first sample yields no delta).
+        # Two sliding delta windows for the t-test, each numWarmupTx long:
+        # `recent` is the newest numWarmupTx deltas, `baseline` the same window
+        # lagged by one sample. They overlap in all but their endpoints (see the
+        # eviction handoff below), so the test compares the signal's current rate
+        # against its rate one sample ago. Both are full ~numWarmupTx+1 present
+        # samples in (the first sample yields no delta).
         recent = deque(maxlen=numWarmupTx)
         baseline = deque(maxlen=numWarmupTx)
         for datum in sensor.data:
             if datum.is_present():
                 if last_value is not None:
-                    recent.append(datum.value - last_value)
+                    d = datum.value - last_value
+                    if recent:
+                        # baseline lags recent by exactly one sample: hand it
+                        # recent's current newest delta before we push the new
+                        # one on. The two windows then overlap in all but their
+                        # endpoints — baseline still holds the oldest delta that
+                        # recent is about to evict, recent gains the newest.
+                        baseline.append(recent[-1])
+                    recent.append(d)
                 last_value = datum.value
             delta = update_delta(
                 datum,
@@ -274,6 +290,12 @@ def update_delta(
     thereafter an O(1) incremental update takes over, consistent with the
     warm-up seed.
     """
+    if not datum.is_present():
+        # Absent sample: no real reading to fold in. Folding None/NaN would
+        # poison the rolling mean/variance (and thus every later threshold), so
+        # leave the stats untouched and return the current threshold.
+        return max(alpha * stats.sdev, sensor_resolution)
+
     x = datum.value
 
     if not stats.warmed_up:

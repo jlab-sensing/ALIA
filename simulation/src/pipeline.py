@@ -8,7 +8,7 @@ mutation inside the algorithm cannot invalidate the comparison.
 
 from copy import deepcopy
 
-from simulation.src import filter_algo
+from simulation.src import filter
 from simulation.src.models import Datum, Sensor
 
 
@@ -60,5 +60,5 @@ def to_channel_streams(sensors: list[Sensor]) -> list[Sensor]:
 def run_both(sensors: list[Sensor]) -> dict[str, list[Sensor]]:
     """Return {"raw": <untouched copy>, "filtered": <algorithm output>}."""
     raw = deepcopy(sensors)
-    filtered = filter_algo.filter(deepcopy(sensors))
+    filtered = filter.filter(deepcopy(sensors))
     return {"raw": raw, "filtered": filtered}
