@@ -1,10 +1,5 @@
-"""
-@file       pipeline.py
-
-Runs ingested sensor data through both the unfiltered and filtered branches
-so they can be compared. The raw branch is preserved untouched so any
-mutation inside the algorithm cannot invalidate the comparison.
-"""
+"""Run ingested sensor data through both branches for comparison. The raw
+branch is kept untouched so algorithm mutations can't invalidate it."""
 
 from copy import deepcopy
 
@@ -15,22 +10,14 @@ from simulation.src.models import Datum, Sensor
 def to_channel_streams(sensors: list[Sensor]) -> list[Sensor]:
     """Split each Sensor into one single-channel Sensor per data type present.
 
-    A physical probe reports several quantities (VWC, SC, ST) as separate
-    Datums that share a timestamp; a meteo station reports a single channel.
-    ALIA decides keep/drop independently for each stream, so before filtering
-    we explode every Sensor into one stream per channel name that actually
-    carries data — each is then filtered on its own dynamics (rolling sigma,
-    delta, run-length, heartbeat) instead of riding on another channel's
-    decision.
-
-    The channel name is appended to the sensor name when the source carried
-    more than one channel (so already single-channel inputs, e.g. the meteo
-    path, keep their names).
+    ALIA decides keep/drop independently per stream, so a multi-channel probe
+    (VWC, SC, ST) is exploded into one stream per channel before filtering. The
+    channel name is appended to the sensor name only when the source was
+    multi-channel (single-channel meteo inputs keep their names).
     """
     out: list[Sensor] = []
     for sensor in sensors:
-        # Channel names present anywhere in this sensor's series, in first-seen
-        # order.
+        # Channel names present anywhere in this series, first-seen order.
         seen: list[str] = []
         for datum in sensor.data:
             if datum.is_present() and datum.name not in seen:

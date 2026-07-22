@@ -1,16 +1,11 @@
-"""
-@file       metrics.py
-
-Computes per-sensor statistics and the diff between raw and filtered runs.
-Used by compare.py to decide whether the filter algorithm is worth keeping.
-"""
+"""Per-sensor statistics and the raw-vs-filtered diff used by compare.py."""
 
 from collections import Counter
 import math
 
 import numpy as np
 
-from simulation.src import config, filter_algo
+from simulation.src import config, filter as filter_algo
 from simulation.src.models import Sensor
 
 
@@ -37,8 +32,7 @@ def _stats(values: list[float]) -> dict:
 
 
 def _first_diff_var(values: list[float]) -> float | None:
-    """Variance of consecutive sample differences. A spike-removal filter
-    should reduce this without flattening the underlying signal."""
+    """Variance of consecutive-sample diffs; spike removal should lower it without flattening the signal."""
     if len(values) < 2:
         return None
     diffs = np.diff(np.array(values, dtype=float))
@@ -48,10 +42,9 @@ def _first_diff_var(values: list[float]) -> float | None:
 def compute(sensors: list[Sensor]) -> dict:
     """Per-stream descriptive stats plus first-diff variance.
 
-    Each Sensor is single-channel after `pipeline.to_channel_streams` (its
-    reading in `.value`, the data type named by the stream's suffix), so we
-    report one `value` block per stream rather than separate VWC/SC/ST
-    blocks."""
+    Sensors are single-channel after `pipeline.to_channel_streams`, so one
+    `value` block per stream rather than separate VWC/SC/ST blocks.
+    """
     out = {}
     for sensor in sensors:
         values = _series(sensor, "value")
@@ -64,37 +57,20 @@ def compute(sensors: list[Sensor]) -> dict:
 
 
 def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
-    """Reconstruction error of the channel value, raw vs received signal, under
-    two reconstruction strategies.
+    """Raw-vs-received reconstruction error, in the channel's physical units.
 
-    Reported in the channel's own physical units — RMSE, MAE, and the worst-case
-    `max_err` — because that is what a domain reader interprets directly (±0.004
-    m³/m³, ±0.1 °C) and what the algorithm actually bounds: the zero-order-hold
-    error is guaranteed below `delta = max(3*sigma_window, resolution)`. For a
-    dimensionless, cross-channel number we normalize by the sensor's resolution
-    (`config.resolution_for`), not by the signal's mean or std: resolution is a
-    fixed positive datasheet constant, so `rmse_over_res` never blows up on a
-    zero-mean channel (temperature at freezing, wind direction, rain) or a
-    dead-calm one, and it answers the useful question — how large is the
-    reconstruction error relative to the sensor's own measurement floor.
+    Normalized by sensor resolution (`config.resolution_for`), a fixed positive
+    datasheet constant, not mean/std — so `rmse_over_res` never blows up on a
+    zero-mean or dead-calm channel and reads against the sensor's measurement floor.
 
-    The receiver only ever sees the transmitted packets in `filtered`. We score
-    the reconstruction two ways:
+    Two reconstructions of the transmitted packets in `filtered`:
+    - Zero-order hold (`rmse`/`mae`/`max_err`): causal, holds the last packet;
+      held samples were within `delta`, so ZOH is the error the algorithm bounds.
+    - Linear interpolation (`*_interp`): non-causal (needs the next packet), a
+      better fit between packets; tails outside the first/last packet fall back to held.
 
-    - Zero-order hold (`rmse`/`mae`/`max_err`): the live, causal reconstruction —
-      hold the most recently transmitted value until the next packet arrives.
-      The held samples were, by construction, within `delta` of it, so ZOH is
-      the error the algorithm actually bounds.
-    - Linear interpolation (`*_interp`): the offline reconstruction — a straight
-      line between the bracketing transmitted packets. Non-causal (it needs the
-      *next* packet, so it's only available in post-hoc analysis of the archived
-      series), but a strictly better reconstruction on the trends between
-      packets. Samples before the first / after the last packet have no bracket
-      on one side and fall back to the held endpoint value.
-
-    Returns `sse`/`abs_sum`/`n`/`max_abs` (and the interp counterparts) so
-    callers can pool across sensors, plus the derived per-sensor
-    `rmse`/`mae`/`max_err` and their resolution-normalized ratios.
+    Returns `sse`/`abs_sum`/`n`/`max_abs` (+ interp) for cross-sensor pooling,
+    plus derived `rmse`/`mae`/`max_err` and resolution-normalized ratios.
     """
     tx = sorted(
         (d for d in filtered.data if d.value is not None),
@@ -136,9 +112,7 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     abs_sum_interp = 0.0
     max_abs_interp = 0.0
     n = 0
-    # `k` indexes the latest packet transmitted at or before the current sample,
-    # so tx[k] is the held value and tx[k + 1] (if any) is the next packet used
-    # for the interpolation bracket.
+    # k = latest packet at/before current sample: tx[k] held, tx[k+1] interp bracket.
     k = -1
     for d in raw_data:
         while k + 1 < len(tx) and tx[k + 1].timestamp <= d.timestamp:
@@ -148,8 +122,7 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
 
         held = tx[k].value if k >= 0 else tx[0].value
 
-        # Linear interpolation between the bracketing packets. Falls back to the
-        # held value at the leading/trailing tails where only one side exists.
+        # Interp between bracketing packets; held at the tails with only one side.
         if 0 <= k < len(tx) - 1:
             lo, hi = tx[k], tx[k + 1]
             span = (hi.timestamp - lo.timestamp).total_seconds()
@@ -202,16 +175,12 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
 
 
 def transmission_latency(raw: Sensor, filtered: Sensor) -> dict:
-    """Mean delay (seconds) between a sample being taken and its information
-    reaching the receiver.
+    """Mean delay (s) between a sample and its info reaching the receiver.
 
-    A transmitted sample has zero latency. A held (`in_run`) sample's
-    information is conveyed by the next transmitted packet (which carries the
-    run_length), so its latency is the gap to that packet. The trailing flush
-    packet shares the last raw timestamp, so every raw sample has a covering
-    transmission.
-
-    Returns `sum_sec` and `n` for pooling, plus `mean_sec` and `max_sec`.
+    Transmitted samples have zero latency; a held (`in_run`) sample's info
+    arrives with the next packet (carrying run_length), so latency is the gap
+    to it. The trailing flush packet shares the last raw timestamp, so every
+    raw sample is covered. Returns `sum_sec`/`n` for pooling, plus `mean_sec`/`max_sec`.
     """
     tx_times = sorted(d.timestamp for d in filtered.data)
     raw_times = sorted(d.timestamp for d in raw.data)
@@ -226,7 +195,7 @@ def transmission_latency(raw: Sensor, filtered: Sensor) -> dict:
         while j < len(tx_times) and tx_times[j] < t:
             j += 1
         if j >= len(tx_times):
-            # No transmission at or after this sample; its info never arrives.
+            # No transmission at/after this sample; its info never arrives.
             continue
         delay = (tx_times[j] - t).total_seconds()
         sum_sec += delay
@@ -242,11 +211,11 @@ def transmission_latency(raw: Sensor, filtered: Sensor) -> dict:
 
 
 def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
-    """Side-by-side comparison of raw and filtered runs.
+    """Side-by-side raw-vs-filtered comparison.
 
-    `in_run` samples are encoded into a downstream packet's run_length and so
-    are reconstructable on receive — they are reported as `n_compressed`, not
-    `n_dropped`. `n_dropped` covers only unrecoverable loss.
+    `in_run` samples are encoded in a downstream packet's run_length and thus
+    reconstructable, so they count as `n_compressed`; `n_dropped` is only
+    unrecoverable loss.
     """
     raw_stats = compute(raw)
     filt_stats = compute(filtered)
@@ -271,7 +240,7 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
         n_filt = len(fs.data)
         n_compressed = compressed_by_sensor.get(fs.name, 0)
         n_dropped = dropped_by_sensor.get(fs.name, 0)
-        # Transmitted packets plus samples the receiver can backfill from run_length.
+        # Transmitted packets plus samples backfillable from run_length.
         n_reconstructable = n_filt + sum(d.run_length for d in fs.data)
         err = reconstruction_error(rs, fs)
         lat = transmission_latency(rs, fs)
@@ -282,8 +251,7 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
             "n_filtered": n_filt,
             "n_compressed": n_compressed,
             "n_dropped": n_dropped,
-            # Raw-signal scale, so RMSE/max_err can be read against the signal
-            # they're measuring (a 0.72 error means little without the mean/range).
+            # Raw-signal scale, so RMSE/max_err reads against the signal measured.
             "value_mean": rval.get("mean"),
             "value_range": (
                 (_vmax - _vmin) if (_vmin is not None and _vmax is not None) else None

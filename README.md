@@ -14,17 +14,21 @@ pip install -r requirements.txt
 
 ```
 ALIA/
-├── simulation/src/             # algorithm + comparison harness
-│   ├── models.py               # Datum, Sensor
-│   ├── filter_algo.py          # the logging-decision algorithm
-│   ├── pipeline.py             # runs raw and filtered branches
-│   ├── metrics.py              # per-sensor stats and raw-vs-filtered diff
-│   └── compare.py              # CLI entry point
+├── simulation/
+│   ├── data_transformer.py         # XLSX → Sensor ingestion
+│   ├── sensorscope_transformer.py  # SensorScope .txt → Sensor ingestion
+│   └── src/                        # algorithm + comparison harness
+│       ├── models.py               # Datum, Sensor
+│       ├── config.py               # tunable filter parameters
+│       ├── filter.py               # the logging-decision algorithm
+│       ├── pipeline.py             # runs raw and filtered branches
+│       ├── metrics.py              # per-sensor stats and raw-vs-filtered diff
+│       ├── plots.py                # shared plotting helpers
+│       ├── sweep.py                # compression/error tradeoff sweeps
+│       ├── detector_overlay.py     # per-detector overlay plots
+│       └── compare.py              # CLI entry point
 ├── data/
-│   ├── UCSC_Haybarn_Field/     # Haybarn site
-│   │   ├── data_transformer.py       # XLSX → Sensor ingestion
-│   │   ├── sensorscope_transformer.py # SensorScope .txt → Sensor ingestion
-│   │   └── logger_*.xlsx             # XLSX logger files (directly here)
+│   ├── UCSC_Haybarn_Field/     # Haybarn site — logger_*.xlsx files
 │   ├── fishnet-meteo/          # SensorScope .txt station logs
 │   ├── genepi-meteo/           #   "
 │   ├── luce_stations_1x/       #   "
@@ -55,12 +59,12 @@ Flags:
 The `fishnet-meteo`, `genepi-meteo`, `luce_stations_1x`, and
 `plaine_morte-meteo` deployments ship as whitespace-delimited SensorScope
 `.txt` logs. They are ingested by
-`data/UCSC_Haybarn_Field/sensorscope_transformer.py`, which emits **one
+`simulation/sensorscope_transformer.py`, which emits **one
 `Sensor` per (station file, channel)** — the nine physical channels
 (ambient/surface temperature, solar radiation, relative humidity, soil
 moisture, watermark, rain, wind speed, wind direction) each become their own
-series, with the reading stored in `Datum.VWC` so the single-channel ALIA
-filter and metrics run unchanged. Both on-disk schema variants (with and
+series, each reading stored in `Datum.value` and tagged by `Datum.name`, so the
+single-channel ALIA filter and metrics run unchanged. Both on-disk schema variants (with and
 without the extra sequence-number column) are handled automatically. To
 analyze a station:
 
@@ -89,7 +93,9 @@ Inputs that are already single-channel (the meteo path) pass through with their
 names intact.
 
 Outputs land in `<output>/`:
-- `plots/<logger>.png` — one panel per single-channel stream, raw (faded) and filtered (solid) overlaid.
+- `plots/overlay/<logger>.png` — one panel per single-channel stream, raw (faded) and filtered (solid) overlaid.
+- `plots/histogram/<logger>.png` — value distribution of the original (raw) stream.
+- `metrics.txt` — human-readable table of the same rows as `metrics.csv`.
 - `metrics.csv` — one row per `(logger, stream)`: `n_raw`, `compression_ratio`, and
   reconstruction fidelity in the channel's own units (`rmse`, `mae`, `max_err`),
   plus `rmse_over_res` (RMSE as a multiple of the sensor's resolution, a
@@ -102,7 +108,7 @@ Outputs land in `<output>/`:
 
 ## Editing the algorithm
 
-The decision logic lives in `simulation/src/filter_algo.py` in `_should_log(datum, prev, sensor)`, which returns `(keep: bool, reason: str)`. `prev` is the most recently kept datum for the sensor (or `None` for the first sample); `sensor` exposes `depth`, `coordinates`, and `name` for context. Rejected points are recorded in `filter_algo.last_drops` and surfaced by `metrics.diff` as `drops_by_reason` — name reasons clearly so the metrics output is useful.
+The decision logic lives in `simulation/src/filter.py` in `_should_log(...)`, which returns `(keep: bool, reason: str)`. `prev` is the most recently kept datum for the sensor (or `None` for the first sample). Rejected points are recorded in `filter.last_drops` and surfaced by `metrics.diff` as `drops_by_reason` — name reasons clearly so the metrics output is useful.
 
 
 ## Running ingestion only
@@ -110,42 +116,66 @@ The decision logic lives in `simulation/src/filter_algo.py` in `_should_log(datu
 The original ingest-and-plot path still works:
 
 ```sh
-python data/UCSC_Haybarn_Field/data_transformer.py --dir data/UCSC_Haybarn_Field
+python simulation/data_transformer.py --dir data/UCSC_Haybarn_Field
 ```
 
 # Algorithm Specifications
-## Configurables:
-α: Confidence Interval (Usually just 3)
-Δmin: Sensor Resolutino
-ω: Sampling raet x desired time for delta window
-Tmax: Time for heartbeat (Max amount of time without Tx)
-Δburst: Required Δ from previous value to enter burst mode
-θquiet: Required RLE count to enter quiet mode
-Tburst: Time for heartbeat in Burst mode (Max amount of time without Tx in Burst mode)
-Tquiet: Time for heartbeat in Quiet mode (Max amount of time without Tx in Quiet mode)
 
-## Reporting Tiers (Subject to Change)
-| Tier        | Tmax | Tquiet | Tburst | θquiet |
-|-------------|------|--------|--------|--------|
-|  Responsive | 1 H  | 6 H    | 15 min | 24     |
-| Standard    | 3 H  | 12 H   | 30 min | 48     |
-| Low Power   | 6 H  | 24 H   | 60 min | 96     |
+For each single-channel stream the filter walks the samples in order and, per
+sample, decides keep (transmit) or drop. The decision is, in priority order:
 
-### Rule 1: Delta Supression 
-Is new value - prev value > Δ? If so, transmit. 
-    - Δ = α x σ over ω
+1. **First sample** — always kept (`reason = "first"`).
+2. **Warm-up** — kept until `numWarmupTx` samples have accumulated, so detectors
+   have a baseline (`reason = "warmup"`).
+3. **Event** — if the active detector fires, transmit (`reason = "event"`). This
+   closes any open run and drops the stream into the **burst** tier.
+4. **Heartbeat** — otherwise, if the time since the last transmission exceeds the
+   current tier's interval, transmit anyway (`reason = "heartbeat"`).
+5. **Run** — otherwise drop and extend the current run-length-encoded run
+   (`reason = "in_run"`); the run count rides on the next transmitted packet.
 
-### Rule 2: Run Length Encoding (RLE)
-Is new value - prev value < Δ? If so, add to a new packet and begin incrementing data for every value new value seen < Δ. 
+## Event detectors
 
-### Rule 3: Heartbeat
-Send current value if time since last transmission > Tmax
-    - Does NOT stop current RLE Run
+The active detector is `config.eventDetector`; all three run per channel:
 
-### Rule 4: Burst Mode
-Is new value - prev value > Δburst? If so, enter burst mode
-    - If burst mode, change Tmax to Tburst
+- **`delta`** (current default) — level guard: fire when
+  `|value − prev| ≥ Δ`, where `Δ = max(α·σ, resolution)`. `σ` is a rolling
+  standard deviation over `stdDevWindowHours`; `α` is `eventDeltaThreshold`
+  (global default 3, with per-channel overrides in `eventDeltaThresholdByChannel`);
+  `resolution` is the channel's `sensorResolution` floor so calm streams don't
+  fire on noise.
+- **`ttest`** — Welch's t-test (unequal variance) between the recent and baseline
+  delta windows; fire when `p < significance`, floored by the channel resolution
+  so a significant-but-trivial shift doesn't fire.
+- **`kl`** — histogram KL-divergence between a baseline and a recent window; the
+  threshold auto-calibrates per stream to the `(1 − klEventRate)` quantile of
+  recent KL values.
 
-### Rule 5: Quiet Mode
-Is RLE count > θquiet? If so, enter quiet mode
-    - If quiet mode, change Tmax to Tquiet 
+## Reporting tiers
+
+Each stream moves between three heartbeat tiers based on its recent activity;
+the tier only sets the max quiet interval before a heartbeat transmission:
+
+| Tier   | Entered when                              | Heartbeat (`config`)          |
+|--------|-------------------------------------------|-------------------------------|
+| Burst  | an event just fired                       | `burstHeartbeatHours` (0.5 h) |
+| Normal | default                                   | `normalHeartbeatHours` (1 h)  |
+| Quiet  | no event for `quietEntryHours` of samples | `quietHeartbeatHours` (3 h)   |
+
+## Configurables (`simulation/src/config.py`)
+
+| Name                        | Meaning                                              |
+|-----------------------------|------------------------------------------------------|
+| `eventDetector`             | Active detector: `delta`, `ttest`, or `kl`           |
+| `eventDeltaThreshold` (α)   | Sigma multiplier for the `delta` guard (default 3)   |
+| `sensorResolution`          | Per-channel smallest change worth sending (Δ floor)  |
+| `stdDevWindowHours`         | Rolling-σ window for the `delta` guard               |
+| `significance`              | p-value threshold for the `ttest` detector           |
+| `numWarmupTx`               | Warm-up samples before any detector may fire         |
+| `normalHeartbeatHours`      | Normal-tier max interval between transmissions       |
+| `quietHeartbeatHours`       | Quiet-tier max interval                              |
+| `burstHeartbeatHours`       | Burst-tier max interval (after an event)             |
+| `quietEntryHours`           | Quiet duration before backing off to the quiet tier  |
+
+KL-specific knobs (`klHistogramBins`, `klEventRate`, `klRollingWindow`,
+`klBaselineLen`, `klRecentLen`) also live in `config.py`.

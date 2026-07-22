@@ -1,11 +1,4 @@
-"""
-@file       models.py
-
-Shared data types for sensor measurements.
-
-@author     jLab
-@author     HARE Lab
-"""
+"""Shared data types for sensor measurements. (jLab, HARE Lab)"""
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -16,15 +9,9 @@ import os
 
 @dataclass
 class Datum:
-    """A single measurement sample.
-
-    ALIA is data-type agnostic: a Datum carries one scalar `value` tagged with
-    the `name` of the quantity it measures (e.g. "VWC", "SC", "ST", or a meteo
-    channel like "AmbientTemp_C"). The name is filled in by the input
-    transformer from whatever the source file calls the channel. A physical
-    probe that reports several quantities emits one Datum per quantity at the
-    same timestamp, and ALIA makes the keep/drop decision independently for
-    each name.
+    """A single measurement sample: one scalar `value` tagged with the `name` of
+    the quantity (e.g. "VWC", "AmbientTemp_C"). A multi-quantity probe emits one
+    Datum per quantity per timestamp; keep/drop is decided independently per name.
     """
 
     timestamp: datetime

@@ -1,19 +1,11 @@
-"""
-@file       config.py
+"""Tunable parameters for the filter algorithm. Edit values here."""
 
-Tunable parameters for the filter algorithm. Edit values here.
-"""
-
-# Fallback sampling cadence, used only when a stream is too short to infer its
-# own. The stddev window is normally sized from each stream's actual timestamps
-# (UCSC Haybarn ZL6 ~600 s, SensorScope meteo ~120 s); see filter_algo.
+# Fallback cadence (s) when a stream is too short to infer its own timing.
 samplePeriodSec = 600  # seconds
 
-# Per-channel measurement resolution: the smallest change worth transmitting.
-# Used as the floor on the event threshold, max(k*sigma, resolution), so a
-# dead-calm stream (sigma ~ 0) never fires on sub-resolution noise. Keyed by the
-# channel name the input transformer stamps on each Datum. Set these from your
-# sensors' datasheets; channels not listed fall back to defaultSensorResolution.
+# Per-channel resolution (smallest change worth transmitting); floors the event
+# threshold max(k*sigma, resolution) so calm streams don't fire on noise. From
+# datasheets; unlisted channels use defaultSensorResolution.
 sensorResolution = {
     "VWC": 0.001,  # TEROS-10/12 volumetric water content (m³/m³)
     "SC": 0.001,  # TEROS-12 bulk electrical conductivity (dS/m)
@@ -25,24 +17,18 @@ sensorResolution = {
     "WindSpeed_ms": 0.5,  # wind speed (m/s)
     "WindDirection_deg": 1.0,  # wind direction (°)
 }
-defaultSensorResolution = 0.02  # fallback for any channel not listed above
+defaultSensorResolution = 0.02  # fallback for unlisted channels
 
 
 def resolution_for(channel: str) -> float:
-    """Measurement resolution for a channel name, or the default if unlisted."""
     return sensorResolution.get(channel, defaultSensorResolution)
 
 
-# Sigma multiplier (alpha) in the event threshold: delta = max(alpha*sigma, resolution).
-# Lower alpha => tighter deadband => better reconstruction fidelity, but less
-# compression. The multiplier is PER CHANNEL because a single global value can't
-# serve both signal types: calm soil channels can afford a wide (alpha=3)
-# deadband with near-perfect reconstruction, but dynamic meteo channels
-# (temperature, solar, humidity) have a large 24h sigma, so alpha*sigma becomes
-# several units wide and the zero-order-hold holds a stale value straight
-# through the diurnal ramp. Tightening alpha on those channels trades some
-# compression for a large fidelity gain. Channels not listed here fall back to
-# eventDeltaThreshold. Values tuned from the per-channel alpha sweep.
+# Sigma multiplier alpha in the event threshold delta = max(alpha*sigma, resolution).
+# Lower alpha => tighter deadband => more fidelity, less compression. Per channel:
+# calm soil channels tolerate alpha=3; dynamic meteo channels need tighter alpha
+# so the zero-order-hold doesn't hold stale values through the diurnal ramp.
+# Unlisted channels use eventDeltaThreshold. Tuned from the per-channel alpha sweep.
 eventDeltaThreshold = 3  # global default / fallback multiplier
 eventDeltaThresholdByChannel = {
     "AmbientTemp_C": 1.0,
@@ -51,22 +37,37 @@ eventDeltaThresholdByChannel = {
     "SolarRadiation_Wm2": 1.5,
     "WindSpeed_ms": 1.5,
     "Rain_mm": 1.0,
-    # WindDirection is circular (0..360 wraps) — sigma/threshold are not
-    # meaningful for it yet, so it keeps the default until circular handling
-    # lands; see the wind-direction note in the metrics discussion.
+    # WindDirection circular (0..360 wraps) — sigma not meaningful yet; keeps
+    # default until circular handling lands.
 }
 
 
 def event_multiplier_for(channel: str) -> float:
-    """Sigma multiplier (alpha) for a channel, or the global default."""
     return eventDeltaThresholdByChannel.get(channel, eventDeltaThreshold)
 
 
-stdDevWindowHours = 24  # hours, window for stddev calculation
-# reporting tier
-normalHeartbeatHours = 3  # hours
-quietHeartbeatHours = 12  # hours
-burstHeartbeatHours = 0.5  # hours
-quietEntryRunLength = 48  # measurements before entering quiet mode
-numWarmupTx = 100  # number of warmup measurements for students-t-test
+# KL-divergence detector params (alternative to Welch t-test). Compares two
+# windows by histogram KL; use kl_sweep.py to pick thresholds per stream.
+klHistogramBins = 20  # shared histogram bin count
+# Threshold auto-calibrates per stream: (1 - klEventRate) quantile of KL over the
+# trailing klRollingWindow (0.10 => 90th pct => ~10% fire); causal, look-back only.
+klEventRate = 0.10  # target fraction of windows that fire
+klRollingWindow = 1000  # trailing KLs the quantile threshold spans
+klMinCalibrationWindows = 100  # KLs needed before events may fire
+klEventThreshold = 1.5  # nats; fallback when stream too short to calibrate
+
+# Active detector: "ttest" (Welch t-test), "delta" (level guard), "kl" (histogram KL).
+eventDetector = "delta"
+klBaselineLen = 100  # samples in reference (older) window
+klRecentLen = 100  # samples in recent (trailing) window
+
+stdDevWindowHours = 2  # hours; stddev window
+# reporting tier heartbeat intervals
+normalHeartbeatHours = 1  # hours
+quietHeartbeatHours = 3  # hours
+burstHeartbeatHours = 0.5  # hours; after an event
+# Quiet duration before backing off to quiet tier; converted per stream to a
+# sample count so it's the same wall-clock time at any log rate.
+quietEntryHours = 1  # hours
+numWarmupTx = 100  # warmup measurements for t-test
 significance = 0.01  # p-value threshold; event when ttest_ind p < significance

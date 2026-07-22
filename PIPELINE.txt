@@ -1,0 +1,264 @@
+================================================================================
+ALIA PIPELINE — HOW IT ALL WORKS
+================================================================================
+
+A complete walkthrough of the pipeline, from raw files to metrics. Data flow
+first, then the algorithm (the heart of it), then the metrics.
+
+
+--------------------------------------------------------------------------------
+THE GOAL
+--------------------------------------------------------------------------------
+
+ALIA decides, for a stream of sensor readings, WHICH ONES ACTUALLY NEED TO BE
+TRANSMITTED over the radio. A field logger samples far more often than the
+signal meaningfully changes; transmitting every sample wastes battery and
+bandwidth. ALIA suppresses samples that are "boring" (close to the last
+transmitted value) while guaranteeing the receiver can still reconstruct the
+full series and never goes silent too long. The harness runs the data TWICE —
+raw and filtered — and measures what was saved.
+
+
+--------------------------------------------------------------------------------
+DATA FLOW AT A GLANCE
+--------------------------------------------------------------------------------
+
+    files (.xlsx | .txt)
+          |
+          v  ingestion (data_transformer | sensorscope_transformer)
+    list[Sensor]  -- each Sensor.data = list[Datum]; a Datum may carry several
+                     channels (VWC/SC/ST)
+          |
+          v  pipeline.to_channel_streams(sensors)
+    list[Sensor]  -- one SINGLE-channel Sensor per data type present; each
+                     channel's value now lives in Datum.VWC, named "<sensor>-<ch>"
+          |
+          v  pipeline.run_both(sensors)
+      {"raw": <deepcopy, untouched>, "filtered": filter_algo.filter(<deepcopy>)}
+          |
+          v  metrics.diff(raw, filtered)
+      per-sensor + total stats  -->  printed, metrics.csv, metrics.json
+          |
+          v  compare._plot_overlay[_generic]
+      plots/<logger>.png   (raw faded vs filtered solid)
+
+compare.py:main() orchestrates all of it.
+
+
+--------------------------------------------------------------------------------
+1. THE DATA MODEL  (models.py)
+--------------------------------------------------------------------------------
+
+Two types carry everything:
+
+- Datum (models.py:17) — one reading: timestamp, plus any of the measurement
+  channels in models.CHANNELS (VWC/SC/ST), and run_length (defaults to 0). A
+  Datum may carry several channels at once (a probe measures all three at the
+  same timestamp). Datum.present_channels() returns the ones actually populated.
+  run_length is how a transmitted packet says "N suppressed samples came before
+  me."
+
+- Sensor (models.py) — coordinates, crs, depth, layer, name, and
+  data: list[Datum]. The unit of analysis.
+
+- to_channel_streams (pipeline.py) — splits each Sensor into one SINGLE-channel
+  Sensor per data type present, so the algorithm decides keep/drop SEPARATELY
+  for each stream (VWC, SC, ST) instead of SC/ST riding on VWC's decision. Each
+  stream's value is moved into Datum.VWC (the slot the filter and metrics key
+  off) and the channel name is appended to the sensor name ("<sensor>-VWC",
+  "<sensor>-SC", "<sensor>-ST"). Inputs that were already single-channel (the
+  meteo path) pass through with their names unchanged. After this step every
+  Sensor downstream is single-channel, so the filter and metrics run unchanged.
+
+
+--------------------------------------------------------------------------------
+2. INGESTION — TWO FRONT-ENDS, SAME OUTPUT
+--------------------------------------------------------------------------------
+
+Both transformers exist to produce list[Sensor]; the rest of the pipeline
+doesn't care where the data came from.
+
+- Haybarn XLSX (data_transformer._convert_xlsx_to_sensors): reads the
+  multi-header "Processed Data Config" sheets, maps each logger port to its
+  Water Content / Soil Temperature / Bulk EC columns, and builds one Sensor per
+  physical probe with VWC, ST, AND SC all populated on each Datum.
+  Coordinates/depth come from the coord_lut/depth_lut keyed off the filename.
+
+- SensorScope meteo (sensorscope_transformer.convert_txt_to_sensors): one
+  Sensor PER (file, channel), with that channel's reading in .VWC and SC/ST
+  left empty.
+
+The two front-ends differ in shape — XLSX builds multi-channel probes, meteo
+builds single-channel ones — but to_channel_streams (above) normalizes BOTH to
+single-channel streams before filtering, so SC and ST are each filtered on
+their own dynamics rather than riding on VWC's decision. The meteo path is
+already single-channel, so it passes through unchanged.
+
+compare._detect_format picks the front-end by file extension (.txt ->
+sensorscope, else xlsx), overridable with --format. After ingestion,
+compare.main() applies to_channel_streams to every logger's sensors.
+
+
+--------------------------------------------------------------------------------
+3. THE A/B SPLIT  (pipeline.py)
+--------------------------------------------------------------------------------
+
+run_both (pipeline.py:15) is deliberately tiny:
+
+    raw      = deepcopy(sensors)                    # untouched reference
+    filtered = filter_algo.filter(deepcopy(sensors))
+
+Two independent deep copies, so nothing the algorithm does can corrupt the
+baseline it's compared against.
+
+
+--------------------------------------------------------------------------------
+4. THE ALGORITHM  (filter_algo.py) — THE CORE
+--------------------------------------------------------------------------------
+
+filter() (filter_algo.py:127) walks each sensor's data in order, keeping
+per-sensor state:
+
+- RollingStats — sliding window of the last W VWC values
+  (W = numSamplesPerDay = 144, i.e. a 24h window at 10-min cadence),
+  maintaining mean/variance/sigma.
+- HeartbeatState.quiet_run — counts consecutive "calm" samples; selects the
+  reporting tier.
+- RunState.run_count — how many samples are currently suppressed in the open
+  run.
+
+For each datum it does two things: compute the current threshold delta, then
+decide keep/drop.
+
+4a. THE ADAPTIVE THRESHOLD  (update_delta, filter_algo.py:168)
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+    delta = max(eventDeltaThreshold * sigma, sensorResolution)
+          = max(3 * sigma, 0.02)
+
+sigma is computed over the trailing 24h window with an O(1) sliding update
+(evict oldest, admit newest, adjust mean and variance incrementally —
+filter_algo.py:192). So the bar for "this is a real change" SCALES WITH HOW
+NOISY THE SIGNAL HAS RECENTLY BEEN: a quiet signal gets a tight threshold, a
+jumpy one gets a loose one, floored at the sensor's resolution so noise alone
+never trips it.
+
+During WARM-UP (first W samples, before the window fills) it returns 0.0, which
+makes every sample count as an event and transmit — the algorithm can't
+suppress until it has a baseline.
+
+4b. THE KEEP/DROP DECISION  (_should_log, filter_algo.py:89)
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+This implements the rules from the README. Given the new datum, the previously
+KEPT datum prev, and delta:
+
+1. First sample -> keep, reason "first".
+
+2. Rule 1 — Event / delta suppression: if |VWC - prev.VWC| >= delta, it's a
+   real change. TRANSMIT (reason "event"), reset quiet_run = 0 (drop into burst
+   mode), and if a run was open, ATTACH ITS LENGTH TO THIS PACKET
+   (datum.run_length = run_count; run_count = 0) — the run is now closed and
+   conveyed.
+
+3. Otherwise (calm sample): pick the heartbeat interval for the current tier,
+   then check elapsed time:
+   - Rule 3 — Heartbeat: if hoursSinceLastTx >= heartbeatHours, transmit anyway
+     (reason "heartbeat") so the receiver knows the sensor is alive, closing any
+     open run. The heartbeat fires on WALL-CLOCK TIME BETWEEN TRANSMISSIONS, so
+     it's robust to sampling rate.
+   - else — suppress: run_count += 1, return False, "in_run". The sample is
+     encoded into the next packet's run_length, not lost.
+
+4c. THE REPORTING TIERS  (_select_heartbeat_hours, filter_algo.py:80)
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+quiet_run drives an adaptive heartbeat:
+
+    quiet_run               tier      heartbeat
+    ---------------------   -------   -----------------------------------------
+    0 (just had an event)   burst     0.5h — report aggressively, catch transient
+    1 .. 47                 normal    3h
+    >= 48 (quietEntryRun.)  quiet     12h — stable signal, save power
+
+So after a real change it watches closely; through a long flat stretch it goes
+nearly silent.
+
+(Note: in the code, burst mode is entered by ANY event resetting quiet_run to
+0 — there isn't a separate Delta-burst threshold like the README spec sketches.
+The README is the design intent; the code is the simplified realization.)
+
+4d. THE FLUSH  (filter_algo.py:153)
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+After the loop, if a run is still open (run_count > 0), it appends a synthetic
+packet at the final timestamp carrying prev.VWC and run_length = run_count - 1.
+This closes the trailing run so every raw sample is covered by some
+transmission (important for the reconstruction and latency math).
+
+KEY CONSEQUENCE
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+Every sample ends up in exactly one of: TRANSMITTED (first/event/heartbeat) or
+SUPPRESSED (in_run). There is currently NO PATH that produces an unrecoverable
+drop — that's why every run reports n_dropped: 0 and drop_rate: 0. Everything
+suppressed is reconstructable via run_length. The n_dropped machinery exists
+for a future rule that genuinely discards data.
+
+
+--------------------------------------------------------------------------------
+5. METRICS  (metrics.py)
+--------------------------------------------------------------------------------
+
+compare.py calls metrics.diff(raw, filtered) (metrics.py:144), which produces:
+
+- compute() descriptive stats per stream for its single channel (mean, std,
+  min, max) plus the channel's first-difference variance, under a "value" block.
+
+- Drop attribution from filter_algo.last_drops (a module global the last
+  filter() call populated): drops_by_reason, and the crucial split — "in_run"
+  drops are counted as n_compressed (recoverable), everything else as
+  n_dropped (unrecoverable).
+
+- Per-sensor rollup: n_raw, n_filtered, n_compressed, n_dropped,
+  n_reconstructable (= transmitted packets + sum of run_length),
+  compression_rate = (n_raw - n_filtered)/n_raw, drop_rate, and
+  value_mean_delta / value_std_delta (how much the filtered stream's
+  mean/spread shifted vs raw — a bias check).
+
+- Totals across all sensors.
+
+Two more functions — reconstruction_error (zero-order-hold RMSE/MAE,
+metrics.py:58) and transmission_latency (metrics.py:104) — are written and
+correct but NOT YET WIRED INTO diff(), so they don't appear in the current
+output. They're the scaffolding for the fidelity/timeliness metrics; hooking
+them into diff() is the next step if you want them in the CSV/JSON.
+
+
+--------------------------------------------------------------------------------
+6. OUTPUTS  (compare.py)
+--------------------------------------------------------------------------------
+
+Per logger, main():
+- prints totals and drops_by_reason,
+- writes a plot — _plot_overlay_generic for every format: one panel per
+  single-channel stream (raw faded vs filtered solid). Since every Sensor is
+  single-channel after to_channel_streams, an XLSX logger gets one panel per
+  (probe, channel) rather than three shared VWC/SC/ST axes.
+
+then across all loggers writes:
+- metrics.csv  (one row per (logger, sensor))
+- metrics.json (the full nested all_diffs)
+
+
+--------------------------------------------------------------------------------
+THE ONE-SENTENCE VERSION
+--------------------------------------------------------------------------------
+
+Ingest -> duplicate into raw/filtered -> the filter keeps a sample only when it
+moves more than 3*sigma from the last kept value (event) or when a
+tier-dependent heartbeat timer expires, encoding everything in between as a
+run-length the receiver can replay -> metrics quantify how much was suppressed
+vs. preserved.
+
+================================================================================

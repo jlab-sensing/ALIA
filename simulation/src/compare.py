@@ -1,15 +1,5 @@
-"""
-@file       compare.py
-
-CLI entry point for the A/B comparison harness. Ingests sensor data via the
-existing data_transformer, runs both the unfiltered and filtered branches,
-overlays the two on the same plot, and writes metrics to CSV.
-
-Example:
-    python -m simulation.src.compare \\
-        --dir data/UCSC_Haybarn_Field/data \\
-        --output data/UCSC_Haybarn_Field/out
-"""
+"""CLI for the A/B comparison harness: ingest sensor data, run unfiltered and
+filtered branches, overlay them, and write metrics."""
 
 import argparse
 import csv
@@ -20,7 +10,7 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-from simulation.src import metrics, pipeline, plots, summarize
+from simulation.src import metrics, pipeline, plots
 
 
 def _ingest_xlsx(paths_files: list[str], path_dir: str):
@@ -36,8 +26,8 @@ def _ingest_xlsx(paths_files: list[str], path_dir: str):
 
 
 def _ingest_sensorscope(paths_files: list[str], path_dir: str):
-    """Bridge to SensorScope meteo .txt ingestion (fishnet/genepi/luce/
-    plaine_morte). One logger == one station file, one Sensor per channel."""
+    """SensorScope meteo .txt ingestion: one station file per logger, one
+    Sensor per channel."""
     from simulation import sensorscope_transformer as ss
 
     paths_files = list(paths_files) + ss.get_txt_files_from_dir(path_dir)
@@ -72,13 +62,8 @@ def _ingest(paths_files: list[str], path_dir: str, fmt: str):
 
 
 def _plot_original_histogram(logger_name: str, raw, out_dir: str):
-    """One subplot per Sensor (channel): density histogram of raw values
-    with a fitted normal PDF overlaid.
-
-    Every Sensor is single-channel (its reading in `.value`) after the
-    per-channel split, and different channels carry different units, so each
-    gets its own axis rather than sharing one.
-    """
+    """One subplot per channel: density histogram of raw values with a fitted
+    normal PDF. Channels carry different units, so each gets its own axis."""
     channels = [fs for fs in raw if fs.data]
     if not channels:
         return
@@ -93,8 +78,7 @@ def _plot_original_histogram(logger_name: str, raw, out_dir: str):
     fig.suptitle(f"{logger_name} — histogram of raw")
 
     for ax, fs in zip(axes, channels):
-        # Strip the "<station>-" prefix for a compact axis label.
-        label = fs.name.split("-")[-1]
+        label = fs.name.split("-")[-1]  # strip "<station>-" prefix
         data = np.asarray([d.value for d in fs.data], dtype=float)
         mu, sigma = data.mean(), data.std()
         ax.hist(
@@ -116,12 +100,8 @@ def _plot_original_histogram(logger_name: str, raw, out_dir: str):
 
 
 def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
-    """One subplot per Sensor (channel), raw faded vs filtered solid.
-
-    Every Sensor is single-channel (its reading in `.value`) after the
-    per-channel split, and different channels carry different units, so each
-    gets its own axis rather than sharing one.
-    """
+    """One subplot per channel, raw faded vs filtered solid. Channels carry
+    different units, so each gets its own axis."""
     raw_by_name = {s.name: s for s in raw}
     channels = [fs for fs in filtered if fs.name in raw_by_name]
     if not channels:
@@ -139,8 +119,7 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
 
     for ax, fs in zip(axes, channels):
         rs = raw_by_name[fs.name]
-        # Strip the "<station>-" prefix for a compact axis label.
-        label = fs.name.split("-")[-1]
+        label = fs.name.split("-")[-1]  # strip "<station>-" prefix
         ax.plot(
             [d.timestamp for d in rs.data],
             [d.value for d in rs.data],
@@ -154,10 +133,8 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
         )
         ax.set_ylabel(label, fontsize="small")
 
-        # Guide-rail annotation: put the fidelity/compression numbers on the
-        # panel so the picture and the metric sit together. RMSE and max_err are
-        # in the channel's own units (same axis as the y-scale); "×N" is the
-        # compression ratio; "Nx res" is RMSE as a multiple of sensor resolution.
+        # Annotate panel: RMSE/max_err in channel units, "×N" compression ratio,
+        # "Nx res" is RMSE as a multiple of sensor resolution.
         err = metrics.reconstruction_error(rs, fs)
         comp = len(rs.data) / len(fs.data) if fs.data else float("inf")
 
@@ -205,15 +182,11 @@ _METRICS_HEADER = [
 
 
 def _metric_rows(all_diffs: dict) -> list[list[str]]:
-    """One lean row per (logger, sensor): compression, fidelity, timeliness.
+    """One row per (logger, sensor): compression, fidelity, timeliness.
 
-    Fidelity is reported in the channel's own physical units (rmse/mae/max_err)
-    plus rmse_over_res, the error as a multiple of the sensor's resolution — a
-    dimensionless, cross-channel number that doesn't blow up on zero-mean or
-    dead-calm channels the way a mean- or std-normalized nrmse does.
-
-    The full per-sensor detail (counts, rates, mean/std deltas, interp errors)
-    is still written to metrics.json; these rows are the at-a-glance summary.
+    Fidelity is in the channel's own units (rmse/mae/max_err) plus rmse_over_res
+    (error as a multiple of sensor resolution — dimensionless, cross-channel,
+    stable on zero-mean/dead-calm channels). Full detail is in metrics.json.
     """
     rows = []
     for logger_name, d in all_diffs.items():
@@ -260,7 +233,7 @@ def _write_metrics_table(all_diffs: dict, table_path: str):
     widths = [max(len(r[i]) for r in rows) for i in range(len(_METRICS_HEADER))]
 
     def fmt(r):
-        # Left-align the text columns, right-align the numeric ones.
+        # Left-align text columns (first 2), right-align numeric ones.
         cells = [r[i].ljust(widths[i]) if i < 2 else r[i].rjust(widths[i])
                  for i in range(len(r))]
         return "  ".join(cells)
@@ -306,10 +279,8 @@ def main():
         print("No sensor data found for the given inputs.")
         return
 
-    # Split every Sensor into one single-channel stream per data type present,
-    # so each channel is filtered and scored on its own dynamics rather than
-    # riding on another channel's keep/drop decision. After this, every Sensor
-    # is single-channel, so the per-channel plot is used for both formats.
+    # Explode each Sensor into single-channel streams so every channel is
+    # filtered and scored on its own dynamics, not another channel's keep/drop.
     sensors_by_logger = {
         name: pipeline.to_channel_streams(sensors)
         for name, sensors in sensors_by_logger.items()
@@ -337,11 +308,6 @@ def main():
     _write_metrics_table(all_diffs, os.path.join(args.output, "metrics.txt"))
     with open(os.path.join(args.output, "metrics.json"), "w") as fp:
         json.dump(all_diffs, fp, indent=2, default=str)
-
-    # Summary figures: the compression/fidelity map + per-channel ranking,
-    # generated from the metrics just written so they never drift from it.
-    label = os.path.basename(os.path.normpath(args.output)) or "dataset"
-    summarize.summarize(summarize._load(csv_path), label, plots_dir)
 
     if args.show:
         plt.show()

@@ -1,33 +1,11 @@
 """
 @file       sweep.py
 
-Traces the compression-ratio tradeoff curves for the filter algorithm.
-
-Two knobs move the operating point. `significance` (the p-value threshold below
-which the Welch t-test on consecutive deltas declares an event) controls how
-readily the algorithm fires on a change in the signal's rate: a larger
-significance fires more easily (lower compression), a smaller one is stricter
-(higher compression). The heartbeat intervals are the other lever: longer
-heartbeats force fewer transmissions during silent runs, sweeping compression
-over a wider range.
-
-Four modes:
-  --mode significance  sweep `significance`, one curve              (default)
-  --mode heartbeat     sweep normalHeartbeatHours (quiet/burst scaled
-                       proportionally), one curve over a wide range
-  --mode both          sweep `significance` at several heartbeat
-                       settings, one curve per setting (multi-curve)
-  --mode overlay       render the raw-vs-filtered overlay graphs (as compare.py
-                       does) once per `significance` value, each in its own
-                       subfolder — to eyeball how the threshold reshapes the
-                       filtered series rather than a summary curve
-
-At each operating point we pool across all sensors/loggers:
-  - compression ratio  = raw samples / transmitted packets        (x-axis)
-  - reconstruction RMSE = zero-order-hold error                   (error curve)
-  - mean latency        = avg delay from sample to transmission   (latency curve)
-
-and emit two charts plus a CSV of the raw points.
+Traces filter compression-ratio tradeoff curves, pooled across all
+sensors/loggers, swept over `significance` (t-test p-value) and/or heartbeat
+interval. Modes: significance, heartbeat, both (multi-curve), overlay (renders
+per-significance raw-vs-filtered graphs instead of curves). Emits two charts
+plus a CSV.
 
 Example:
     python -m simulation.src.sweep \\
@@ -44,20 +22,19 @@ import sys
 
 import matplotlib.pyplot as plt
 
-from simulation.src import config, filter_algo, metrics, pipeline, plots
+from simulation.src import config, filter as filter_algo, metrics, pipeline, plots
 from simulation.src.compare import _ingest, _plot_overlay_generic
 
-# Knob settings per mode. Significance is a p-value in (0, 1): larger fires more
-# events (lower compression), smaller is stricter (higher compression).
+# significance is a p-value in (0, 1): larger fires more events (lower
+# compression), smaller is stricter (higher compression).
 DEFAULT_SIGNIFICANCES = [0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.001]
 DEFAULT_HEARTBEAT_HRS = [0.5, 1.0, 2.0, 3.0, 6.0, 12.0, 24.0, 48.0]
-# Heartbeat settings that each get their own significance-curve in `both` mode.
+# Heartbeats that each get their own significance-curve in `both` mode.
 MULTI_HEARTBEAT_HRS = [3.0, 6.0, 12.0]
 
-# Globals on filter_algo that a sweep may rebind; snapshotted and restored.
-# These are module-level names filter_algo binds at import (from config), so the
-# algorithm reads them by bare name — they must be set on filter_algo, not on
-# config, to take effect.
+# Globals a sweep may rebind. filter_algo binds these by bare name at import
+# (from config), so they must be set on filter_algo, not config, to take
+# effect; snapshotted and restored around a sweep.
 SWEPT_PARAMS = [
     "significance",
     "normalHeartbeatHours",
@@ -67,7 +44,6 @@ SWEPT_PARAMS = [
 
 
 def _snapshot() -> dict:
-    """Capture every knob a sweep may rebind so it can be restored afterward."""
     return {k: getattr(filter_algo, k) for k in SWEPT_PARAMS}
 
 
@@ -82,7 +58,7 @@ _BURST_OVER_NORMAL = config.burstHeartbeatHours / config.normalHeartbeatHours
 
 
 def _heartbeat_overrides(normal_hr: float) -> dict:
-    """All three heartbeat tiers scaled so their ratios match the config."""
+    """All three heartbeat tiers scaled to preserve the config ratios."""
     return {
         "normalHeartbeatHours": normal_hr,
         "quietHeartbeatHours": normal_hr * _QUIET_OVER_NORMAL,
@@ -192,23 +168,16 @@ def _collect(
 def _render_overlays(
     sensors_by_logger: dict, significances: list, plots_dir: str
 ) -> None:
-    """Write the compare.py overlay graphs once per `significance` value.
-
-    For each p-threshold we rebind filter_algo.significance, run both branches
-    for every logger, and drop the raw-vs-filtered overlays into a per-value
-    subfolder (`plots/overlay_sweep/p_<s>/overlay/<logger>.png`) so runs at
-    different thresholds sit side by side instead of clobbering each other.
-
-    Sensors are channel-split first, matching compare.py, so every overlay axis
-    is a single channel scored on its own dynamics.
-    """
+    """Write compare.py-style overlay graphs into a per-p-value subfolder
+    (plots/overlay_sweep/p_<s>/) so thresholds don't clobber each other.
+    Channel-split first, matching compare.py, so each axis is one channel."""
     split_by_logger = {
         name: pipeline.to_channel_streams(sensors)
         for name, sensors in sensors_by_logger.items()
     }
     for s in significances:
         filter_algo.significance = s
-        # A filesystem-safe stamp for the p-value (e.g. 0.05 -> "0p05").
+        # Filesystem-safe p-value stamp (e.g. 0.05 -> "0p05").
         stamp = f"p_{s:g}".replace(".", "p")
         p_dir = os.path.join(plots_dir, "overlay_sweep", stamp)
         print(f"  p={s:>6g}  ->  {p_dir}")
@@ -222,9 +191,8 @@ def _render_overlays(
 def _plot_curves(series, y_key, y_label, title, path, annotate, legend):
     """One or more curves of a metric against compression ratio.
 
-    `series` is a list of (label, points). `annotate` is a point key whose
-    value labels each marker (None to skip — used to keep multi-curve plots
-    readable). `legend` shows the series labels.
+    `annotate` is a (tag, point-key) pair labelling each marker, or None to
+    skip (keeps multi-curve plots readable).
     """
     fig, ax = plt.subplots(layout="constrained")
     for label, points in series:
@@ -260,12 +228,8 @@ def _plot_curves(series, y_key, y_label, title, path, annotate, legend):
 
 
 def _plot_error_comparison(series, title, path, annotate, legend):
-    """Reconstruction RMSE against compression ratio, showing both the causal
-    zero-order-hold error (solid) and the offline linear-interpolation error
-    (dashed) so the two reconstructions can be compared directly.
-
-    Mirrors `_plot_curves` but draws a paired ZOH/interp line per series.
-    """
+    """RMSE vs compression ratio, paired ZOH (solid) and interp (dashed) line
+    per series so the two reconstructions can be compared directly."""
     fig, ax = plt.subplots(layout="constrained")
     for label, points in series:
         for y_key, style, tag in (
@@ -298,8 +262,7 @@ def _plot_error_comparison(series, title, path, annotate, legend):
     ax.set_ylabel("Reconstruction RMSE (pooled, channel units)")
     ax.set_title(title)
     ax.grid(True, alpha=0.3)
-    # Always legend here — the ZOH vs interp distinction needs labelling even in
-    # the single-curve modes.
+    # Always legend: ZOH vs interp needs labelling even in single-curve modes.
     ax.legend(title="heartbeat tier" if legend else "reconstruction")
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -393,8 +356,7 @@ def main():
     print(f"sweep mode: {args.mode}")
     plots_dir = os.path.join(args.output, "plots")
 
-    # Overlay mode is not a tradeoff curve: it renders the raw-vs-filtered
-    # graphs once per significance and returns, leaving the globals restored.
+    # Overlay mode renders graphs per significance and returns, not a curve.
     if args.mode == "overlay":
         saved = _snapshot()
         try:
@@ -418,8 +380,7 @@ def main():
         "heartbeat": "_heartbeat",
         "both": "_multi",
     }[args.mode]
-    # Single-curve modes annotate each marker with the swept value; the
-    # multi-curve mode uses a legend instead to stay readable.
+    # Single-curve modes annotate markers; multi-curve uses a legend instead.
     annotate = {
         "significance": ("p", "significance"),
         "heartbeat": ("hb", "heartbeat_hr"),

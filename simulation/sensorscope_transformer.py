@@ -1,31 +1,10 @@
-"""
-@file       sensorscope_transformer.py
+"""Ingest SensorScope meteo-station logs (whitespace-delimited .txt) into the
+shared Sensor/Datum model.
 
-Ingest SensorScope-format meteo station logs (whitespace-delimited .txt) into
-the shared `Sensor`/`Datum` model so the ALIA comparison harness can run over
-them.
-
-Covers the fishnet-meteo, genepi-meteo, luce (sensorscope-meteo), and
-plaine_morte-meteo deployments. Two on-disk schema variants exist:
-
-    17 columns (fishnet, genepi):
-        ID Y M D h m s epoch  Tair Tsurf Solar RH SoilMoist Watermark Rain Wspd Wdir
-    18 columns (luce, plaine_morte):
-        ID Y M D h m s epoch  SeqNum  Tair Tsurf Solar RH SoilMoist Watermark Rain Wspd Wdir
-
-The only difference is an extra "Sequence Number" column after the epoch. In
-both layouts the nine physical measurement channels are always the final nine
-columns, so we slice from the end and ignore the optional sequence column
-entirely — no per-file schema sniffing required.
-
-The ALIA filter and metrics are single-channel: they key off `Datum.value`. So
-we emit one `Sensor` per (file, channel), with that channel's reading stored in
-`.value` and the channel name in `.name`. Samples whose channel value is NaN
-are dropped from that channel's series (other channels at the same timestamp
-are unaffected), which keeps the rolling-stats and delta logic clean.
-
-@author     jLab
-@author     HARE Lab
+Two schemas differ only by an optional SeqNum column after epoch (17 vs 18
+cols); the nine measurement channels are always the final nine columns, so we
+slice from the end. Emits one Sensor per (file, channel); NaN samples are
+dropped per-channel.
 """
 
 import math
@@ -34,7 +13,7 @@ from datetime import datetime
 
 from simulation.src.models import Datum, Sensor
 
-# Names + units for the trailing nine measurement columns, in file order.
+# Trailing nine measurement columns (name_unit), in file order.
 CHANNELS = [
     "AmbientTemp_C",
     "SurfaceTemp_C",
@@ -58,24 +37,20 @@ def _parse_float(token: str):
 
 
 def convert_txt_to_sensors(path: str) -> list[Sensor]:
-    """Parse one SensorScope .txt log into a list of per-channel Sensors.
-
-    Returns an empty list for the `*-def.txt` schema sidecar files and for any
-    file that does not contain parseable measurement rows.
-    """
+    """Parse one SensorScope .txt log into per-channel Sensors (empty for
+    `*-def.txt` sidecars or files without parseable rows)."""
     stem = os.path.splitext(os.path.basename(path))[0]
-    # The "<deployment>-def.txt" files are column-definition sidecars, not data.
+    # "<deployment>-def.txt" are column-definition sidecars, not data.
     if stem.endswith("-def"):
         return []
 
-    # One growing data list per channel; zipped into Sensors at the end.
     per_channel_data: list[list[Datum]] = [[] for _ in CHANNELS]
     station_id = None
 
     with open(path, "r") as fp:
         for line in fp:
             tokens = line.split()
-            # Need at least the 7 datetime fields + the 9 channels.
+            # Need the 7 datetime fields + 9 channels.
             if len(tokens) < 7 + N_CHANNELS:
                 continue
             try:
@@ -88,8 +63,7 @@ def convert_txt_to_sensors(path: str) -> list[Sensor]:
             if station_id is None:
                 station_id = tokens[0]
 
-            # The nine physical channels are always the final nine columns,
-            # regardless of the optional sequence-number column.
+            # Channels are the final nine columns (skips optional SeqNum col).
             values = [_parse_float(t) for t in tokens[-N_CHANNELS:]]
             for ci, value in enumerate(values):
                 if math.isnan(value):
@@ -101,7 +75,7 @@ def convert_txt_to_sensors(path: str) -> list[Sensor]:
     sensors: list[Sensor] = []
     for ci, channel in enumerate(CHANNELS):
         data = per_channel_data[ci]
-        if not data:  # channel never reported a real value in this file
+        if not data:
             continue
         sensors.append(
             Sensor(
@@ -117,9 +91,7 @@ def convert_txt_to_sensors(path: str) -> list[Sensor]:
 
 
 def get_txt_files_from_dir(path_dir: str) -> list[str]:
-    """Return data .txt files under a directory (recursively), excluding the
-    `*-def.txt` schema sidecars. Station folders may be passed directly or via
-    a parent that contains several of them."""
+    """Recursively return data .txt files under a dir, excluding `*-def.txt`."""
     if not os.path.isdir(path_dir):
         return []
     found = []

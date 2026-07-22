@@ -1,13 +1,4 @@
-"""
-@file       data_transformer.py - UCSCFarmHaybarnField-20241014_20250130
-
-Convert provided XLSX into GeoJSON files.
-
-@author     jLab
-@author     HARE Lab
-
-@version    0.0.9
-"""
+"""Convert UCSC Haybarn Field XLSX logger exports into Sensor/Datum data."""
 
 import argparse
 from datetime import datetime, timedelta
@@ -20,7 +11,7 @@ import re
 import sys
 import matplotlib.pyplot as plt
 
-# Make the simulation package importable when this file is run directly.
+# Make simulation package importable when run directly.
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
@@ -28,23 +19,15 @@ if _REPO_ROOT not in sys.path:
 from simulation.src.models import Datum, Sensor
 
 
-"""_ingest_sensor_data_single_dict(data_json) -> Sensor, crs
-
-@param  data_json   (dict)      Data from a sensor saved as a dict.
-@return             (Sensor)    Translated data.
-@return crs         (str)       Coordinate reference system used (if any).
-"""
-
-
 def _ingest_sensor_data_single_dict(data_json: dict) -> Sensor:
+    """Translate a GeoJSON sensor dict into a Sensor; returns (Sensor, crs)."""
     data = []
     name = data_json["name"]
-    # Assume coordinates and depth do not change before the file entry.
+    # Assume coordinates/depth constant; take from last feature.
     coordinates = data_json["features"][-1]["geometry"]["coordinates"]
     crs = None  # TODO(nubby)
     depth = data_json["features"][-1]["properties"]["depth"]
-    # A probe reports several quantities per reading; emit one Datum per
-    # channel, tagged with its name, all sharing the reading's timestamp.
+    # One Datum per channel per reading, sharing the reading's timestamp.
     for entry in data_json["features"]:
         ts = datetime.strptime(entry["properties"]["ts"], "%Y-%m-%d %H:%M:%S")
         props = entry["properties"]
@@ -59,10 +42,6 @@ def _ingest_sensor_data_single_dict(data_json: dict) -> Sensor:
     )
 
 
-"""
-"""
-
-
 def geojson2sensor(path: str):
     print(f"Ingesting sensor data from {path}...")
     with open(path, "r+") as fp:
@@ -75,12 +54,7 @@ def geojson2sensor(path: str):
     return sensor
 
 
-"""_get_xlsx_files_from_dir(path_dir)
-"""
-
-
 def _get_xlsx_files_from_dir(path_dir: str) -> list:
-    # Return an empty list if path does not exist.
     if not os.path.isdir(path_dir):
         return []
 
@@ -91,16 +65,13 @@ def _get_xlsx_files_from_dir(path_dir: str) -> list:
     ]
 
 
-"""_convert_xlsx_to_sensors(path)
-"""
-
-
 def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
     sensors = []
 
+    # Probe index -> depth (m); indices 0-2 and 3-5 are the two sensor sets.
     depth_lut = {0: 0.15, 1: 0.3, 2: 0.9, 3: 0.15, 4: 0.3, 5: 0.9}
 
-    # Get the coordinates of the two sets of sensors based on filename.
+    # Location label (from filename) -> UTM coordinates.
     coord_lut = {
         "b1c1": (584134.5112925094, 4093377.3821872333),
         "b1c2": (584146.4315727367, 4093386.8776871837),
@@ -124,27 +95,25 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
         "b4c5": (584193.5870133587, 4093401.059850761),
     }
     basename = os.path.splitext(os.path.basename(path))[0]  # e.g. "logger_B1C1"
+    # Filename may encode two locations joined by "+".
     location_labels = basename.split("_", 1)[-1].lower().split("+")
 
-    # Convert the provided Excel file inte DataFrames for reading.
     excel = pd.ExcelFile(path)
     sheet_pattern = r"Processed Data Config*"
     data_sheets = [
         sheet for sheet in excel.sheet_names if re.match(sheet_pattern, sheet)
     ]
 
-    # Read from each data set recorded.
     for sheet in data_sheets:
+        # 3-row header MultiIndex: (station, port, measurement).
         df = pd.read_excel(path, sheet_name=sheet, header=[0, 1, 2])
 
-        # Find the indices of sensor data within the DataFrame.
-        # df.columns = pd.MultiIndex.from_arrays([df.iloc[0], df.iloc[1]])
-        # Extract sensor data.
         data_sensors = []
         sheet_headers = df.keys()
         sheet_name = sheet_headers[0][0]
         timestamps = df[df.columns[0]]
 
+        # Per port: column indices for the VWC/ST/SC measurement channels.
         indices_vwc = []
         indices_st = []
         indices_sc = []
@@ -176,18 +145,12 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
         for index_row, row in df.iterrows():
             for index_sensor, index_swc in enumerate(indices_vwc):
                 vwc = row.iloc[index_swc]
-                # A blank logging interval is stored as an all-zero row
-                # (VWC=ST=SC=0.0), NOT as NaN — which is why the old
-                # `isinstance(..., float)` "nan filter" never caught it (0.0 is a
-                # float). A buried probe's VWC is physically never exactly 0, so
-                # an exact 0.0 (or a NaN) in the VWC column marks a missing
-                # reading; skip the whole row so the sentinel doesn't spike the
-                # histograms, inflate sigma, or fire phantom events in the filter.
+                # Blank interval = all-zero row (not NaN); buried probe VWC is
+                # never exactly 0, so treat 0.0 or NaN as a missing reading.
                 if not isinstance(vwc, float) or np.isnan(vwc) or vwc == 0.0:
                     continue
                 ts = timestamps.iloc[index_row]
                 data = data_sensors[index_sensor]
-                # One Datum per channel present, each tagged with its name.
                 data.append(Datum(timestamp=ts, value=vwc, name="VWC"))
                 idx_st = indices_st[index_sensor]
                 st_val = row.iloc[idx_st] if idx_st is not None else None
@@ -198,9 +161,9 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
                 if isinstance(sc_val, float) and not np.isnan(sc_val):
                     data.append(Datum(timestamp=ts, value=sc_val, name="SC"))
 
-        # Form the Sensor data type.
         for index, data in enumerate(data_sensors):
             try:
+                # Probes 0-2 map to first location, 3-5 to second (if any).
                 if index < 3 or len(location_labels) == 1:
                     loc_label = location_labels[0]
                 else:
@@ -219,7 +182,7 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
                         ]
                     ),
                 )
-                # Only generate sensor files when valid VWC data are present.
+                # Keep only sensors with valid VWC data.
                 vwc_vals = [datum.value for datum in data if datum.name == "VWC"]
                 if vwc_vals and not np.isnan(vwc_vals).all():
                     sensors.append(new_sensor)
@@ -229,29 +192,19 @@ def _convert_xlsx_to_sensors(path: str) -> list[Sensor]:
     return sensors
 
 
-"""_sensors_align_data(sensors)
-
-Truncate sensor data to only include samples taken at matching timestamps.
-
-@param  sensors
-@return
-"""
-
-
 def _sensors_align_data(sensors: list[Sensor]) -> list[Sensor]:
+    """Truncate each sensor to timestamps shared by all sensors."""
     timestamps = []
-    # Extract all unique timestamps used.
     for sensor in sensors:
         for datum in sensor.data:
             if datum.timestamp not in timestamps:
                 timestamps.append(datum.timestamp)
     timestamps.sort()
 
-    # Remove timestamps from list if not included in at least one sensor's data.
+    # Drop any timestamp missing from at least one sensor (flagged as None).
     for index, timestamp in enumerate(timestamps):
         for sensor in sensors:
             if timestamp not in [datum.timestamp for datum in sensor.data]:
-                # Set the timestamp to 'None' as a flag.
                 timestamps[index] = None
                 break
 
@@ -259,7 +212,6 @@ def _sensors_align_data(sensors: list[Sensor]) -> list[Sensor]:
 
     print(f"PARSED TS: {str(timestamps)}, {str(len(timestamps))}")
 
-    # Now update the sensors list to only include shared timestamps.
     for sensor in sensors:
         data = []
         for datum in sensor.data:
@@ -270,18 +222,12 @@ def _sensors_align_data(sensors: list[Sensor]) -> list[Sensor]:
     return sensors
 
 
-"""transform(paths_files, path_dir, output_dir)
-
-"""
-
-
 def transform(
     paths_files: list[str] = [],
     path_dir: str = "",
     output_dir: str = "",
     verbose: bool = False,
 ):
-    # Add any files located in directory specified.
     paths_files += _get_xlsx_files_from_dir(path_dir)
 
     # Convert logs to Sensors, grouped by logger file.
@@ -295,7 +241,6 @@ def transform(
         for sensor in sensorsFromXlsx:
             print(sensor.name)
 
-    # Compute the arithmetic mean VWC of each sensor.
     print("Mean VWC of each sensor:")
     for sensors in sensors_by_logger.values():
         for sensor in sensors:
@@ -303,17 +248,15 @@ def transform(
             mean = np.mean(vwc_vals) if vwc_vals else float("nan")
             print(f"\t+{sensor.name}: {str(mean)}")
 
-    # Human-readable titles for the known soil channels; any other channel name
-    # falls back to itself.
+    # Human-readable titles for known channels; others fall back to their name.
     channel_titles = {
         "VWC": "Volumetric Water Content (VWC)",
         "SC": "Soil Conductivity (SC)",
         "ST": "Soil Temperature (ST)",
     }
 
-    # Display charts interactively — one figure per logger, one axis per channel.
+    # One figure per logger, one axis per channel.
     for logger_name, sensors in sensors_by_logger.items():
-        # Channel names present across this logger's sensors, in first-seen order.
         channels = []
         for sensor in sensors:
             for datum in sensor.data:
@@ -345,26 +288,6 @@ def transform(
         axes[-1].set_xlabel("Time")
 
     plt.show()
-
-    """
-    # Read janky cache.
-    sensors = []
-    for path in os.listdir("."):
-        if "geojson" in path:
-            sensor = geojson2sensor(path)
-            if sensor:
-                sensors.append(sensor)
-
-    # Do stats.
-    try:
-        data = []
-        for sensor in sensors:
-            print(sensor.name)
-            data.append([datum.value for datum in sensor.data])
-        print(np.cov(data))
-    except Exception as e:
-        print(e)
-    """
 
 
 if __name__ == "__main__":
@@ -399,7 +322,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     if args.files:
-        paths_files = args.files.split(",")  # Convert file paths to a list.
+        paths_files = args.files.split(",")
     else:
         paths_files = []
     transform(
