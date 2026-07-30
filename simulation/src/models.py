@@ -18,6 +18,7 @@ class Datum:
     value: float
     name: str = ""
     run_length: int = 0
+    reason: str = ""  # why this point was kept: event / heartbeat / first / flush
 
     def is_present(self) -> bool:
         """True when this Datum carries a real reading (non-None, non-NaN)."""

@@ -6,9 +6,11 @@ import csv
 import json
 import os
 import sys
+from collections import Counter
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 from simulation.src import metrics, pipeline, plots
 
@@ -61,42 +63,42 @@ def _ingest(paths_files: list[str], path_dir: str, fmt: str):
     return _ingest_xlsx(paths_files, path_dir), fmt
 
 
-def _plot_original_histogram(logger_name: str, raw, out_dir: str):
-    """One subplot per channel: density histogram of raw values with a fitted
-    normal PDF. Channels carry different units, so each gets its own axis."""
-    channels = [fs for fs in raw if fs.data]
-    if not channels:
-        return
-    fig, axes = plt.subplots(
-        len(channels),
-        1,
-        layout="constrained",
-        figsize=(10, 2.2 * len(channels)),
-    )
-    if len(channels) == 1:
-        axes = [axes]
-    fig.suptitle(f"{logger_name} — histogram of raw")
+# def _plot_original_histogram(logger_name: str, raw, out_dir: str):
+#     """One subplot per channel: density histogram of raw values with a fitted
+#     normal PDF. Channels carry different units, so each gets its own axis."""
+#     channels = [fs for fs in raw if fs.data]
+#     if not channels:
+#         return
+#     fig, axes = plt.subplots(
+#         len(channels),
+#         1,
+#         layout="constrained",
+#         figsize=(10, 2.2 * len(channels)),
+#     )
+#     if len(channels) == 1:
+#         axes = [axes]
+#     fig.suptitle(f"{logger_name} — histogram of raw")
 
-    for ax, fs in zip(axes, channels):
-        label = fs.name.split("-")[-1]  # strip "<station>-" prefix
-        data = np.asarray([d.value for d in fs.data], dtype=float)
-        mu, sigma = data.mean(), data.std()
-        ax.hist(
-            data,
-            bins="auto",
-            density=True,
-            alpha=0.6,
-            edgecolor="black",
-        )
-        if sigma > 0:
-            x = np.linspace(data.min(), data.max(), 500)
-            ax.plot(x, stats.norm.pdf(x, mu, sigma), "r-", linewidth=2)
-        ax.set_title(f"{fs.name} — Histogram")
-        ax.set_xlabel(label, fontsize="small")
-        ax.set_ylabel("Density", fontsize="small")
+#     for ax, fs in zip(axes, channels):
+#         label = fs.name.split("-")[-1]  # strip "<station>-" prefix
+#         data = np.asarray([d.value for d in fs.data], dtype=float)
+#         mu, sigma = data.mean(), data.std()
+#         ax.hist(
+#             data,
+#             bins="auto",
+#             density=True,
+#             alpha=0.6,
+#             edgecolor="black",
+#         )
+#         if sigma > 0:
+#             x = np.linspace(data.min(), data.max(), 500)
+#             ax.plot(x, stats.norm.pdf(x, mu, sigma), "r-", linewidth=2)
+#         ax.set_title(f"{fs.name} — Histogram")
+#         ax.set_xlabel(label, fontsize="small")
+#         ax.set_ylabel("Density", fontsize="small")
 
-    fig.savefig(plots.plot_path(out_dir, "histogram", logger_name), dpi=120)
-    plt.close(fig)
+#     fig.savefig(plots.plot_path(out_dir, "histogram", logger_name), dpi=120)
+#     plt.close(fig)
 
 
 def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
@@ -117,6 +119,9 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
         axes = [axes]
     fig.suptitle(f"{logger_name} — raw (faded) vs filtered (solid)")
 
+    # State-change tick colors by the backoff bucket being entered.
+    tier_colors = {"responsive": "tab:orange", "backing": "0.55", "max": "tab:green"}
+
     for ax, fs in zip(axes, channels):
         rs = raw_by_name[fs.name]
         label = fs.name.split("-")[-1]  # strip "<station>-" prefix
@@ -133,8 +138,39 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
         )
         ax.set_ylabel(label, fontsize="small")
 
-        # Annotate panel: RMSE/max_err in channel units, "×N" compression ratio,
-        # "Nx res" is RMSE as a multiple of sensor resolution.
+        # Heartbeat transmissions: markers on the filtered line.
+        hb = [d for d in fs.data if d.reason == "heartbeat"]
+        if hb:
+            ax.scatter(
+                [d.timestamp for d in hb],
+                [d.value for d in hb],
+                marker="v",
+                color="tab:red",
+                s=26,
+                zorder=5,
+            )
+
+        # State (tier) changes: rug of ticks pinned to the bottom, colored by
+        # the tier entered; grouped so each tier is one plot call.
+        changes = getattr(fs, "state_changes", [])
+        trans = ax.get_xaxis_transform()
+        into = Counter(to for _, _, _, to in changes)
+        by_to = {}
+        for ts, _val, _frm, to in changes:
+            by_to.setdefault(to, []).append(ts)
+        for to, tss in by_to.items():
+            ax.plot(
+                tss,
+                [0.02] * len(tss),
+                marker="|",
+                linestyle="none",
+                color=tier_colors.get(to, "black"),
+                markersize=7,
+                alpha=0.7,
+                transform=trans,
+                clip_on=False,
+            )
+
         err = metrics.reconstruction_error(rs, fs)
         comp = len(rs.data) / len(fs.data) if fs.data else float("inf")
 
@@ -160,7 +196,49 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
             ha="left",
             bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="0.7", alpha=0.75),
         )
+
+        # Counts table: heartbeats, events, and state changes into each tier.
+        n_hb = sum(1 for d in fs.data if d.reason == "heartbeat")
+        n_ev = sum(1 for d in fs.data if d.reason == "event")
+        table = (
+            f"heartbeats    {n_hb}\n"
+            f"events        {n_ev}\n"
+            f"→ responsive  {into.get('responsive', 0)}\n"
+            f"→ backing     {into.get('backing', 0)}\n"
+            f"→ max         {into.get('max', 0)}"
+        )
+        ax.text(
+            0.994,
+            0.94,
+            table,
+            transform=ax.transAxes,
+            fontsize=6.5,
+            va="top",
+            ha="right",
+            family="monospace",
+            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="0.7", alpha=0.8),
+        )
     axes[-1].set_xlabel("Time")
+
+    # Figure legend explaining the markers.
+    handles = [
+        Line2D(
+            [], [], marker="v", color="tab:red", linestyle="none", label="heartbeat"
+        ),
+        Line2D(
+            [],
+            [],
+            marker="|",
+            color="tab:orange",
+            linestyle="none",
+            label="→ responsive",
+        ),
+        Line2D([], [], marker="|", color="0.55", linestyle="none", label="→ backing"),
+        Line2D([], [], marker="|", color="tab:green", linestyle="none", label="→ max"),
+    ]
+    fig.legend(
+        handles=handles, loc="outside lower center", ncol=4, fontsize=7, frameon=False
+    )
 
     fig.savefig(plots.plot_path(out_dir, "overlay", logger_name), dpi=120)
     plt.close(fig)
@@ -234,8 +312,10 @@ def _write_metrics_table(all_diffs: dict, table_path: str):
 
     def fmt(r):
         # Left-align text columns (first 2), right-align numeric ones.
-        cells = [r[i].ljust(widths[i]) if i < 2 else r[i].rjust(widths[i])
-                 for i in range(len(r))]
+        cells = [
+            r[i].ljust(widths[i]) if i < 2 else r[i].rjust(widths[i])
+            for i in range(len(r))
+        ]
         return "  ".join(cells)
 
     lines = [fmt(rows[0]), "  ".join("-" * w for w in widths)]
@@ -301,7 +381,7 @@ def main():
         _plot_overlay_generic(
             logger_name, branches["raw"], branches["filtered"], plots_dir
         )
-        _plot_original_histogram(logger_name, branches["raw"], plots_dir)
+        # _plot_original_histogram(logger_name, branches["raw"], plots_dir)
 
     csv_path = os.path.join(args.output, "metrics.csv")
     _write_metrics_csv(all_diffs, csv_path)
