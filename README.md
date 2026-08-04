@@ -25,6 +25,8 @@ ALIA/
 │       ├── metrics.py              # per-sensor stats and raw-vs-filtered diff
 │       ├── plots.py                # shared plotting helpers
 │       ├── sweep.py                # compression/error tradeoff sweeps
+│       ├── baselines.py            # comparison methods + matched-budget solver
+│       ├── benchmark.py            # ALIA vs baselines at equal packet count
 │       ├── detector_overlay.py     # per-detector overlay plots
 │       └── compare.py              # CLI entry point
 ├── data/
@@ -106,6 +108,58 @@ Outputs land in `<output>/`:
   descriptive stats, mean/std deltas, and both zero-order-hold and linear-interp
   error breakdowns.
 
+## Benchmarking against baselines
+
+`metrics.csv` compares ALIA against transmitting **everything**, which can only
+ever show that sending fewer packets costs fewer packets. `benchmark.py` answers
+the question that actually decides whether the algorithm is worth anything:
+**at the same number of packets, does ALIA reconstruct the signal better than a
+naive scheme?**
+
+```sh
+python -m simulation.src.benchmark \
+    --dir data/UCSC_Haybarn_Field \
+    --output data/out/bench-haybarn
+```
+
+Methods compared (all defined in `baselines.py`):
+
+| Method | What it does | Knob |
+|---|---|---|
+| `alia` | full algorithm: `Δ = max(α·σ, res)` + heartbeat backoff | α |
+| `deadband` | classic send-on-delta: transmit when `\|x − last_sent\| ≥ c` | c |
+| `deadband_hb` | same fixed `c`, plus ALIA's heartbeat backoff | c |
+| `uniform` | transmit every Nth sample | N |
+| `alia_events` | ablation: detector only, heartbeat disabled | α |
+| `alia_heartbeat` | ablation: heartbeat only, detector disabled | ceiling hours |
+
+`deadband_hb` is the load-bearing control: it differs from `alia` *only* in that
+the threshold does not track σ, so any gap between them is precisely what
+adaptivity buys. `alia_heartbeat` necessarily degenerates to periodic
+transmission — with no events the calm clock never resets and the interval pins
+at the ceiling — which is why it tracks `uniform` closely.
+
+Every ALIA-derived method calls `filter.filter` with keyword switches
+(`fixed_delta`, `alpha`, `use_events`, `use_heartbeat`) rather than
+reimplementing the loop, so run-length encoding, the flush packet and the
+backoff curve are identical across methods and any difference is attributable to
+the decision rule alone.
+
+Outputs:
+- `matched.csv` / `matched.txt` — every method solved (by bisection) to spend
+  **no more** packets than ALIA spent on that stream, then scored.
+  `rmse_vs_alia` > 1 means the baseline is worse than ALIA at equal cost;
+  < 1 means ALIA is losing.
+- `frontier.csv` and `plots/frontier/<channel>.png` — each method swept across
+  its own knob grid, error against compression, so the comparison is visible at
+  every operating point rather than at one. Lower and further right is better.
+
+Errors pool across the streams of a channel by summing squared error and sample
+counts before taking the root, so long streams are not double-counted. Flags:
+`--limit-samples N` truncates each stream (the solver re-runs the filter dozens
+of times per stream, so the half-million-sample `luce` records need it), and
+`--no-frontier` produces only the matched-budget table, which is ~2.5× faster.
+
 ## Editing the algorithm
 
 The decision logic lives in `simulation/src/filter.py` in `_should_log(...)`, which returns `(keep: bool, reason: str)`. `prev` is the most recently kept datum for the sensor (or `None` for the first sample). Rejected points are recorded in `filter.last_drops` and surfaced by `metrics.diff` as `drops_by_reason` — name reasons clearly so the metrics output is useful.
@@ -125,57 +179,75 @@ For each single-channel stream the filter walks the samples in order and, per
 sample, decides keep (transmit) or drop. The decision is, in priority order:
 
 1. **First sample** — always kept (`reason = "first"`).
-2. **Warm-up** — kept until `numWarmupTx` samples have accumulated, so detectors
-   have a baseline (`reason = "warmup"`).
-3. **Event** — if the active detector fires, transmit (`reason = "event"`). This
-   closes any open run and drops the stream into the **burst** tier.
-4. **Heartbeat** — otherwise, if the time since the last transmission exceeds the
-   current tier's interval, transmit anyway (`reason = "heartbeat"`).
-5. **Run** — otherwise drop and extend the current run-length-encoded run
+2. **Event** — if the detector fires, transmit (`reason = "event"`). This closes
+   any open run and resets the heartbeat backoff.
+3. **Heartbeat** — otherwise, if the time since the last transmission exceeds the
+   current backoff interval, transmit anyway (`reason = "heartbeat"`).
+4. **Run** — otherwise drop and extend the current run-length-encoded run
    (`reason = "in_run"`); the run count rides on the next transmitted packet.
 
-## Event detectors
+There is no explicit warm-up hold: the rolling σ backing the detector fills over
+the first `stdDevWindowHours` of samples, using a partial-window σ until then.
 
-The active detector is `config.eventDetector`; all three run per channel:
+## Event detector
 
-- **`delta`** (current default) — level guard: fire when
-  `|value − prev| ≥ Δ`, where `Δ = max(α·σ, resolution)`. `σ` is a rolling
-  standard deviation over `stdDevWindowHours`; `α` is `eventDeltaThreshold`
-  (global default 3, with per-channel overrides in `eventDeltaThresholdByChannel`);
-  `resolution` is the channel's `sensorResolution` floor so calm streams don't
-  fire on noise.
-- **`ttest`** — Welch's t-test (unequal variance) between the recent and baseline
-  delta windows; fire when `p < significance`, floored by the channel resolution
-  so a significant-but-trivial shift doesn't fire.
-- **`kl`** — histogram KL-divergence between a baseline and a recent window; the
-  threshold auto-calibrates per stream to the `(1 − klEventRate)` quantile of
-  recent KL values.
+The **delta** level guard is the sole event detector (hardcoded in `filter.py`):
+fire when `|value − prev| ≥ Δ`, where `Δ = max(α·σ, resolution)`. `σ` is a
+rolling standard deviation over `stdDevWindowHours`; `α` is `eventDeltaThreshold`
+(global default 3, with per-channel overrides in `eventDeltaThresholdByChannel`);
+`resolution` is the channel's `sensorResolution` floor so calm streams don't fire
+on noise. Delta wins because its firing rule *is* the reconstruction objective —
+"has the held value drifted too far?" — so it sits on the accuracy-per-packet
+frontier at every operating point.
 
-## Reporting tiers
+To pick α per channel, use the delta α sweep:
 
-Each stream moves between three heartbeat tiers based on its recent activity;
-the tier only sets the max quiet interval before a heartbeat transmission:
+```sh
+python -m simulation.src.sweep \
+    --dir data/UCSC_Haybarn_Field \
+    --output data/out/sweep-haybarn \
+    --mode alpha --channels VWC,ST,SC
+```
 
-| Tier   | Entered when                              | Heartbeat (`config`)          |
-|--------|-------------------------------------------|-------------------------------|
-| Burst  | an event just fired                       | `burstHeartbeatHours` (0.5 h) |
-| Normal | default                                   | `normalHeartbeatHours` (1 h)  |
-| Quiet  | no event for `quietEntryHours` of samples | `quietHeartbeatHours` (3 h)   |
+## Heartbeat backoff
+
+Between events, the stream still transmits periodically so data can't go stale.
+The required gap since the last transmission **grows the longer the stream stays
+calm**, capped at a ceiling:
+
+```
+interval = min(baseHeartbeatHours · 2^(calm_hours / backoffDoublingHours),
+               maxHeartbeatHours)
+```
+
+`calm_hours` is the wall-clock time since the last event; an event resets it to
+zero (back to the responsive `base` cadence). This replaced an older fixed
+three-tier scheme (burst/normal/quiet) whose burst tier could never fire and
+whose normal tier was a vestigial transient — a diagnostic sweep showed only the
+"quiet" tier did any work, so it collapsed into this single backoff curve. For
+reporting, the overlay plots bucket each sample as `responsive` (< one doubling
+of calm), `backing`, or `max` (interval at the ceiling).
 
 ## Configurables (`simulation/src/config.py`)
 
 | Name                        | Meaning                                              |
 |-----------------------------|------------------------------------------------------|
-| `eventDetector`             | Active detector: `delta`, `ttest`, or `kl`           |
-| `eventDeltaThreshold` (α)   | Sigma multiplier for the `delta` guard (default 3)   |
+| `eventDeltaThreshold` (α)   | Sigma multiplier for the delta guard (default 3)     |
+| `eventDeltaThresholdByChannel` | Per-channel α overrides                           |
 | `sensorResolution`          | Per-channel smallest change worth sending (Δ floor)  |
-| `stdDevWindowHours`         | Rolling-σ window for the `delta` guard               |
-| `significance`              | p-value threshold for the `ttest` detector           |
-| `numWarmupTx`               | Warm-up samples before any detector may fire         |
-| `normalHeartbeatHours`      | Normal-tier max interval between transmissions       |
-| `quietHeartbeatHours`       | Quiet-tier max interval                              |
-| `burstHeartbeatHours`       | Burst-tier max interval (after an event)             |
-| `quietEntryHours`           | Quiet duration before backing off to the quiet tier  |
+| `stdDevWindowHours`         | Rolling-σ window for the delta guard                 |
+| `baseHeartbeatHours`        | Heartbeat cadence right after an event (responsive)  |
+| `backoffDoublingHours`      | Calm hours per doubling of the heartbeat interval    |
+| `maxHeartbeatHours`         | Heartbeat interval ceiling once fully backed off     |
+| `excludedChannels`          | Channels dropped before filtering (see below)        |
 
-KL-specific knobs (`klHistogramBins`, `klEventRate`, `klRollingWindow`,
-`klBaselineLen`, `klRecentLen`) also live in `config.py`.
+### Excluded channels
+
+`WindDirection_deg` is excluded. It is **circular** — 0° and 360° are the same
+bearing — so the linear error metrics in `metrics.py` are invalid for it: a
+359°→1° step is a 2° move that RMSE scores as 358°, which is why the channel
+previously reported RMSE around 56–72° with `max_err` of 358.6°. Those numbers
+were measuring wraparound, not reconstruction quality. Scoring the channel
+properly needs angular differencing (`atan2(sin Δ, cos Δ)`) throughout
+`reconstruction_error`; until that exists the channel is dropped in
+`pipeline.to_channel_streams` rather than reported wrong.

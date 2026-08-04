@@ -3,7 +3,7 @@ branch is kept untouched so algorithm mutations can't invalidate it."""
 
 from copy import deepcopy
 
-from simulation.src import filter
+from simulation.src import config, filter
 from simulation.src.models import Datum, Sensor
 
 
@@ -14,13 +14,20 @@ def to_channel_streams(sensors: list[Sensor]) -> list[Sensor]:
     (VWC, SC, ST) is exploded into one stream per channel before filtering. The
     channel name is appended to the sensor name only when the source was
     multi-channel (single-channel meteo inputs keep their names).
+
+    Channels in `config.excludedChannels` are dropped here, so every downstream
+    consumer (compare, sweep, benchmark) sees the same channel set.
     """
     out: list[Sensor] = []
     for sensor in sensors:
         # Channel names present anywhere in this series, first-seen order.
         seen: list[str] = []
         for datum in sensor.data:
-            if datum.is_present() and datum.name not in seen:
+            if (
+                datum.is_present()
+                and datum.name not in seen
+                and datum.name not in config.excludedChannels
+            ):
                 seen.append(datum.name)
         multi = len(seen) > 1
         for channel in seen:
