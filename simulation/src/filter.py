@@ -73,8 +73,9 @@ def filter(
     machinery — a reimplementation could drift and make the comparison unfair.
 
     - `fixed_delta`: use this constant threshold instead of `max(alpha*sigma,
-      resolution)`. This is the fixed-deadband (send-on-delta) control; sigma is
-      not consulted at all.
+      resolution)`. This backs the `sod_commissioned` control, whose band is
+      measured once at commissioning and then frozen; the rolling sigma is not
+      consulted at all.
     - `alpha`: override the per-channel sigma multiplier (ignored when
       `fixed_delta` is set).
     - `use_events` / `use_heartbeat`: disable either half for ablations. With

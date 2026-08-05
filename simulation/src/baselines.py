@@ -1,32 +1,38 @@
-"""Comparison methods for ALIA, plus the knob solver that matches their packet
-budget to ALIA's.
+"""Comparison methods for ALIA, plus the knob solver used by both study tiers.
 
 Why this exists: every number in `metrics.csv` compares ALIA against sending
-*everything*, which only proves that sending less costs less. The question a
-reader actually asks is whether ALIA reconstructs better than a trivial scheme
-*at the same number of packets*. These are those trivial schemes.
+*everything*, which only proves that sending less costs less. The real question
+is whether ALIA does better than a simpler scheme at the same packet cost.
+
+Every knob here is **a priori**: a dimensionless multiplier, a sample stride, or
+a duration. None is expressed in the channel's physical units, and none is
+derived from the recording being scored. That is deliberate. A threshold in raw
+units cannot be picked without having already seen the target site, so including
+one would mean either fitting it to the answer or guessing -- neither of which
+measures anything about a deployable system.
 
 Methods
 -------
-alia            full algorithm: adaptive delta = max(alpha*sigma, resolution)
-                plus the heartbeat backoff. Knob: alpha.
-deadband        classic send-on-delta: transmit when |x - last_sent| >= c, for
-                a constant c. No sigma, no heartbeat. Knob: c (channel units).
-deadband_hb     the same fixed c, but with ALIA's heartbeat backoff bolted on.
-                This is the control that isolates *adaptivity*: it differs from
-                `alia` only in that the threshold does not track sigma.
-uniform         transmit every Nth sample. Knob: N. The dumbest baseline.
-alia_events     ALIA with the heartbeat disabled (detector only). Knob: alpha.
-alia_heartbeat  ALIA with the detector disabled (heartbeat only). Knob: the
-                backoff ceiling. Note this necessarily degenerates to periodic
-                transmission -- with no events the calm clock never resets, so
-                the interval pins at the ceiling. It is kept because showing
-                that degeneracy is itself informative.
+alia              full algorithm: delta = max(alpha*sigma, resolution) over a
+                  rolling sigma, plus the heartbeat backoff. Knob: alpha.
+sod_commissioned  send-on-delta with a fixed band, where the band is
+                  beta * sigma measured over the stream's first
+                  `commissioningHours` and then frozen. Knob: beta,
+                  dimensionless. This is the control that isolates whether the
+                  sigma needs to keep *updating*: it differs from `alia` only in
+                  that its scale is measured once instead of continuously.
+uniform           transmit every Nth sample. Knob: N. The floor.
+alia_events       ALIA with the heartbeat disabled (detector only). Knob: alpha.
+alia_heartbeat    ALIA with the detector disabled (heartbeat only). Knob: the
+                  backoff ceiling. Necessarily degenerates to periodic
+                  transmission -- with no events the calm clock never resets, so
+                  the interval pins at the ceiling. Kept because showing that
+                  degeneracy is itself informative.
 
-All of the ALIA-derived methods call `filter.filter` with keyword switches
-rather than reimplementing the loop, so run-length encoding, the flush packet
-and the backoff curve are bit-identical across methods and any difference in
-the results is attributable to the decision rule alone.
+All ALIA-derived methods call `filter.filter` with keyword switches rather than
+reimplementing the loop, so run-length encoding, the flush packet and the
+backoff curve are identical across methods, and any difference in the results is
+attributable to the decision rule alone.
 """
 
 from copy import deepcopy
@@ -38,9 +44,7 @@ from simulation.src.models import Datum, Sensor
 # method's knob is oriented this way so one monotone solver serves all of them.
 METHODS = [
     "alia",
-    "deadband",
-    "deadband_hb",
-    "deadband_gsigma",
+    "sod_commissioned",
     "uniform",
     "alia_events",
     "alia_heartbeat",
@@ -48,14 +52,21 @@ METHODS = [
 
 # Human-readable labels for plots and tables.
 LABELS = {
-    "alia": "ALIA (adaptive + heartbeat)",
-    "deadband": "fixed deadband (send-on-delta)",
-    "deadband_hb": "fixed deadband + heartbeat",
-    "deadband_gsigma": "deadband, beta*sigma from commissioning",
+    "alia": "ALIA (rolling sigma + heartbeat)",
+    "sod_commissioned": "send-on-delta (self-scaled at commissioning)",
     "uniform": "uniform downsampling",
     "alia_events": "ablation: events only",
     "alia_heartbeat": "ablation: heartbeat only",
 }
+
+# A threshold in raw physical units (c in degrees C, in m3/m3) was dropped as a
+# comparison method. It cannot be chosen without already having seen the target
+# site's data, and every protocol here forbids that -- so any value for it is
+# either an oracle fit (which flatters it) or an arbitrary guess (which does not
+# test anything). `sod_commissioned` replaces it: same fixed-band decision rule,
+# but the scale is measured on-device during commissioning and the transferable
+# knob is a dimensionless multiplier, exactly like ALIA's alpha. That keeps the
+# standard send-on-delta comparison in the study on terms it can actually meet.
 
 # How much of a stream a device would observe before committing to a threshold.
 commissioningHours = 24.0
@@ -66,7 +77,7 @@ def commissioning_sigma(stream: Sensor, hours: float = commissioningHours) -> fl
 
     This is what a real node could measure during a commissioning period and
     then hold fixed for the rest of the deployment -- no look-ahead, unlike
-    solving a threshold against the whole record. It backs `deadband_gsigma`,
+    solving a threshold against the whole record. It backs `sod_commissioned`,
     whose knob (beta) is a dimensionless sigma multiplier exactly like ALIA's
     alpha, but multiplies a *static* scale instead of a rolling one. That
     separates the two things ALIA conflates: dimensionless portability (which
@@ -74,20 +85,37 @@ def commissioning_sigma(stream: Sensor, hours: float = commissioningHours) -> fl
     (which is what costs accuracy).
     """
     present = [d for d in stream.data if d.is_present()]
-    if not present:
+    if len(present) < 2:
         return 0.0
     t0 = present[0].timestamp
-    window = [
-        d.value
-        for d in present
-        if (d.timestamp - t0).total_seconds() <= hours * 3600
-    ]
-    if len(window) < 2:
-        window = [d.value for d in present]
-    if len(window) < 2:
-        return 0.0
-    mean = sum(window) / len(window)
-    var = sum((v - mean) ** 2 for v in window) / (len(window) - 1)
+
+    def sigma_over(h):
+        w = [
+            d.value
+            for d in present
+            if (d.timestamp - t0).total_seconds() <= h * 3600
+        ]
+        if len(w) < 2:
+            return 0.0, len(w)
+        mean = sum(w) / len(w)
+        return (sum((v - mean) ** 2 for v in w) / (len(w) - 1)) ** 0.5, len(w)
+
+    # A commissioning window can land on a dead stretch -- a solar channel whose
+    # first day is all zeros, a wind channel through a calm -- and report sigma
+    # = 0. Left alone that makes the threshold 0, so the node transmits every
+    # sample and the method silently degenerates into "send everything" instead
+    # of acting as a control. Extend the window until it sees some variation.
+    h = hours
+    while h <= 24 * 365:
+        sigma, n = sigma_over(h)
+        if sigma > 0:
+            return sigma
+        if n >= len(present):  # already spans the whole record
+            break
+        h *= 2
+
+    mean = sum(d.value for d in present) / len(present)
+    var = sum((d.value - mean) ** 2 for d in present) / (len(present) - 1)
     return var**0.5
 
 
@@ -116,13 +144,7 @@ def run(method: str, sensors: list[Sensor], knob: float) -> list[Sensor]:
     """Apply `method` at setting `knob` and return the transmitted streams."""
     if method == "alia":
         return filter_algo.filter(deepcopy(sensors), alpha=knob)
-    if method == "deadband":
-        return filter_algo.filter(
-            deepcopy(sensors), fixed_delta=knob, use_heartbeat=False
-        )
-    if method == "deadband_hb":
-        return filter_algo.filter(deepcopy(sensors), fixed_delta=knob)
-    if method == "deadband_gsigma":
+    if method == "sod_commissioned":
         # knob is beta, a dimensionless multiplier on the commissioning sigma.
         out = []
         for s in sensors:
@@ -156,11 +178,7 @@ def knob_bounds(method: str, stream: Sensor) -> tuple[float, float]:
     """(lo, hi) bracketing the knob, scaled to this stream where the knob is in
     physical units. lo must transmit at least as much as the target, hi at most."""
     n = len(stream.data)
-    if method in ("deadband", "deadband_hb"):
-        vals = [d.value for d in stream.data if d.is_present()]
-        span = (max(vals) - min(vals)) if vals else 1.0
-        return 0.0, max(span, 1e-9) * 1.001
-    if method == "deadband_gsigma":
+    if method == "sod_commissioned":
         return 0.0, 500.0
     if method == "uniform":
         return 1.0, float(max(2, n))

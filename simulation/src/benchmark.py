@@ -40,31 +40,32 @@ import matplotlib.pyplot as plt
 from simulation.src import baselines, config, metrics, pipeline, plots
 from simulation.src.compare import _ingest
 
-# Knob grids for the frontier sweep. Each is ordered least-to-most compressing.
+# Knob grids for the frontier sweep. Each is ordered least-to-most compressing,
+# and log-spaced because what matters is proportional change: 0.25 -> 0.5 moves
+# the operating point about as far as 4 -> 8 does.
+#
+# Every grid is a priori -- dimensionless multipliers, a sample stride, a
+# duration. Nothing is scaled by the recording's own observed range, so the
+# frontier uses no information a node would lack on its first day.
 ALPHA_GRID = [0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 8.0]
-# Fixed deadband is in channel units, so it is expressed as a fraction of the
-# stream's own observed span and resolved per stream.
-DEADBAND_FRACS = [0.0005, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
+BETA_GRID = [0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 8.0]
 UNIFORM_GRID = [2, 3, 5, 8, 16, 32, 64, 128]
 HEARTBEAT_GRID = [0.25, 0.5, 1.0, 2.0, 6.0, 12.0, 24.0, 48.0]  # hours
 
 GRIDS = {
     "alia": ALPHA_GRID,
-    "deadband": DEADBAND_FRACS,
-    "deadband_hb": DEADBAND_FRACS,
+    "sod_commissioned": BETA_GRID,
     "uniform": UNIFORM_GRID,
     "alia_events": ALPHA_GRID,
     "alia_heartbeat": HEARTBEAT_GRID,
 }
 
 # Okabe-Ito subset, ordered so adjacent entries stay separable under deuteranopia
-# and protanopia (validated: worst adjacent CVD dE 9.6, normal-vision dE 15.6).
-# Marker and linestyle carry the same distinction as secondary encoding, so the
-# figures survive greyscale printing.
+# and protanopia. Marker and linestyle carry the same distinction as secondary
+# encoding, so the figures survive greyscale printing.
 STYLE = {
     "alia": ("#0072B2", "o", "-", 2.4),
-    "deadband_hb": ("#D55E00", "s", "--", 1.6),
-    "deadband": ("#E69F00", "^", "--", 1.6),
+    "sod_commissioned": ("#D55E00", "s", "--", 1.6),
     "uniform": ("#009E73", "D", ":", 1.6),
     "alia_events": ("#56B4E9", "v", "-.", 1.4),
     "alia_heartbeat": ("#CC79A7", "P", "-.", 1.4),
@@ -88,11 +89,12 @@ def _score(raw_stream, tx_stream) -> dict:
 
 
 def _knob_for(method: str, stream, grid_value: float) -> float:
-    """Resolve a grid entry to an actual knob value for this stream."""
-    if method in ("deadband", "deadband_hb"):
-        vals = [d.value for d in stream.data if d.is_present()]
-        span = (max(vals) - min(vals)) if vals else 1.0
-        return grid_value * span
+    """Resolve a grid entry to a knob value.
+
+    Now the identity: every remaining method's knob is already a priori, so
+    nothing needs rescaling by the stream's observed range. Kept as a seam in
+    case a method with dimensioned knobs is reintroduced.
+    """
     return grid_value
 
 
