@@ -11,6 +11,13 @@ sensorResolution = {
     "RelativeHumidity_pct": 0.08,  # relative humidity (%)
     "WindSpeed_ms": 0.5,  # wind speed (m/s)
     "WindDirection_deg": 1.0,  # wind direction (°) — see excludedChannels
+    # DirtViz exports. Pressure/temperature/humidity come from a BME280 (its
+    # temperature shares the AmbientTemp_C entry above); the electrical
+    # channels are the MFC power measurements.
+    "Pressure_hPa": 0.01,  # barometric pressure (hPa)
+    "Voltage_V": 0.0001,  # cell potential (V)
+    "Current_uA": 0.1,  # cell current (µA)
+    "Power_uW": 0.1,  # cell power (µW)
 }
 defaultSensorResolution = 0.02  # fallback for unlisted channels
 
@@ -31,6 +38,9 @@ eventDeltaThresholdByChannel = {
     "WindSpeed_ms": 1.5,
     "Rain_mm": 1.0,
     "VWC": 5.0,
+    "Pressure_hPa": 1.0,  # slow and diurnal, like the other met channels
+    # The MFC electrical channels are left at the global default: they are
+    # bursty rather than diurnal, so a tighter multiplier chatters on noise.
 }
 
 
@@ -55,7 +65,7 @@ def event_multiplier_for(channel: str) -> float:
 # Worst-case error falls 3-13x across all channels. Both sites are flat past
 # 24 h (fishnet gains a little more out to 168 h; plaine_morte gains nothing),
 # so one diurnal cycle is the defensible default.
-stdDevWindowHours = 24
+stdDevWindowHours = 6
 #   interval = min(baseHeartbeatours * 2**(calm_hours / backoffDoublingHours),
 #                  maxHeartbeatHours)
 # calm_hours = wall-clock since the last event; reset to 0 on each event.

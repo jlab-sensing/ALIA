@@ -337,7 +337,7 @@ def main():
     parser.add_argument("-d", "--dir", default="", type=str)
     parser.add_argument("-o", "--output", default="./out-bench", type=str)
     parser.add_argument(
-        "--format", default="auto", choices=["auto", "xlsx", "sensorscope"]
+        "--format", default="auto", choices=["auto", "xlsx", "sensorscope", "dirtviz"]
     )
     parser.add_argument(
         "--limit-samples",

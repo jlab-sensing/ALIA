@@ -42,16 +42,34 @@ def _ingest_sensorscope(paths_files: list[str], path_dir: str):
     return sensors_by_logger
 
 
+def _ingest_dirtviz(paths_files: list[str], path_dir: str):
+    """DirtViz CSV export ingestion: one export file per logger, one Sensor per
+    measurement column."""
+    from simulation import dirtviz_transformer as dv
+
+    paths_files = list(paths_files) + dv.get_csv_files_from_dir(path_dir)
+    sensors_by_logger = {}
+    for path in paths_files:
+        logger_name = os.path.splitext(os.path.basename(path))[0]
+        sensors = dv.convert_csv_to_sensors(path)
+        if sensors:  # skip headers-only or unparseable exports
+            sensors_by_logger[logger_name] = sensors
+    return sensors_by_logger
+
+
 def _detect_format(paths_files: list[str], path_dir: str) -> str:
-    """'sensorscope' if the inputs are .txt logs, else 'xlsx'."""
+    """Pick the ingester from the input extensions. `.xlsx` wins when formats
+    are mixed, since only the Haybarn path produces them."""
     candidates = list(paths_files)
     if path_dir and os.path.isdir(path_dir):
         for root, _dirs, files in os.walk(path_dir):
             candidates.extend(files)
-    if any(str(c).endswith(".txt") for c in candidates) and not any(
-        str(c).endswith(".xlsx") for c in candidates
-    ):
+    if any(str(c).endswith(".xlsx") for c in candidates):
+        return "xlsx"
+    if any(str(c).endswith(".txt") for c in candidates):
         return "sensorscope"
+    if any(str(c).endswith(".csv") for c in candidates):
+        return "dirtviz"
     return "xlsx"
 
 
@@ -60,6 +78,8 @@ def _ingest(paths_files: list[str], path_dir: str, fmt: str):
         fmt = _detect_format(paths_files, path_dir)
     if fmt == "sensorscope":
         return _ingest_sensorscope(paths_files, path_dir), fmt
+    if fmt == "dirtviz":
+        return _ingest_dirtviz(paths_files, path_dir), fmt
     return _ingest_xlsx(paths_files, path_dir), fmt
 
 
@@ -347,9 +367,9 @@ def main():
     parser.add_argument(
         "--format",
         default="auto",
-        choices=["auto", "xlsx", "sensorscope"],
-        help="Input format. 'auto' detects .txt (SensorScope "
-        "meteo) vs .xlsx (Haybarn loggers).",
+        choices=["auto", "xlsx", "sensorscope", "dirtviz"],
+        help="Input format. 'auto' detects .txt (SensorScope meteo) vs .xlsx "
+        "(Haybarn loggers) vs .csv (DirtViz exports).",
     )
     args = parser.parse_args()
 

@@ -14,10 +14,15 @@ the paper. The protocol is identical for every method:
     2. Freeze it. Apply it unchanged to a held-out site the knob has never seen.
     3. Report what happened there.
 
-No method gets to look at the held-out site. This is the comparison ALIA was
-designed to win: alpha is a dimensionless sigma multiplier, so it should carry
-its operating point across sites, whereas a deadband's c is in physical units
-and has no reason to.
+No method gets to look at the held-out site, and every knob involved is a priori
+(a dimensionless multiplier, a stride, a duration) rather than a threshold in
+the channel's units -- a raw-units threshold cannot be chosen without having
+already seen the target site, which is exactly what this protocol forbids.
+
+This is the comparison ALIA was designed to win: alpha multiplies a sigma the
+node measures for itself, so the operating point should carry across sites.
+`sod_commissioned` is the sharpest control, since its knob is dimensionless too
+and the only thing separating them is whether the sigma keeps updating.
 
 Columns:
     knob        the frozen value fitted on the donor
@@ -54,17 +59,36 @@ from simulation.src import baselines, metrics, pipeline
 from simulation.src.compare import _ingest
 
 
-def load(path_dir: str, limit: int) -> dict:
+MIN_SAMPLES = 100
+
+# A stream shorter than a few sigma windows is mostly warm-up, and at target R
+# it yields only len/R packets -- too few for the bisection to resolve a knob.
+# Below this many samples, warn rather than report a number that looks like a
+# transfer result but is really a warm-up artifact.
+WARN_SAMPLES = 500
+
+
+def load(path_dir: str, limit: int, min_samples: int = MIN_SAMPLES) -> dict:
     """{channel: [streams]} for one site."""
     by_logger, _ = _ingest([], path_dir, "auto")
     by_channel = defaultdict(list)
+    short = 0
     for sensors in by_logger.values():
         for s in pipeline.to_channel_streams(sensors):
             if limit:
                 s.data = s.data[:limit]
-            if len(s.data) >= 500:
-                ch = next((d.name for d in s.data if d.name), "")
-                by_channel[ch].append(s)
+            if len(s.data) < min_samples:
+                continue
+            if len(s.data) < WARN_SAMPLES:
+                short += 1
+            ch = next((d.name for d in s.data if d.name), "")
+            by_channel[ch].append(s)
+    if short:
+        print(
+            f"  [warning] {path_dir}: {short} stream(s) under {WARN_SAMPLES} "
+            f"samples -- knobs fitted or scored on these are dominated by "
+            f"sigma warm-up."
+        )
     return by_channel
 
 
@@ -99,14 +123,6 @@ def solve_fleet_knob(
     knob for every method (see `baselines.knob_bounds`).
     """
     lo, hi = baselines.knob_bounds(method, streams[0])
-    if method in ("deadband", "deadband_hb"):
-        # c is in physical units, so bound it by the widest span in the fleet.
-        spans = []
-        for s in streams:
-            vals = [d.value for d in s.data if d.is_present()]
-            if vals:
-                spans.append(max(vals) - min(vals))
-        hi = max(spans) * 1.001 if spans else hi
     for _ in range(iters):
         mid = (lo + hi) / 2
         if pooled(method, streams, mid)["compression"] < target_r:
@@ -208,10 +224,17 @@ def main():
         type=int,
         help="Truncate each stream (0 = no limit); the solver is iterative.",
     )
+    p.add_argument(
+        "--min-samples",
+        default=MIN_SAMPLES,
+        type=int,
+        help=f"Drop streams shorter than this (default {MIN_SAMPLES}). Streams "
+        f"under {WARN_SAMPLES} are kept but warned about.",
+    )
     args = p.parse_args()
 
-    donor = load(args.donor, args.limit_samples)
-    holdout = load(args.holdout, args.limit_samples)
+    donor = load(args.donor, args.limit_samples, args.min_samples)
+    holdout = load(args.holdout, args.limit_samples, args.min_samples)
     shared = sorted(set(donor) & set(holdout))
     if not shared:
         print("No channels shared between donor and holdout.")
