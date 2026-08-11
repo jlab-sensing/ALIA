@@ -192,20 +192,32 @@ def _plot_overlay_generic(logger_name: str, raw, filtered, out_dir: str):
             )
 
         err = metrics.reconstruction_error(rs, fs)
-        comp = len(rs.data) / len(fs.data) if fs.data else float("inf")
+        # Share of raw samples NOT transmitted: (n_raw - n_tx) / n_raw. Same
+        # quantity as `compression_rate` in metrics.py; higher is better.
+        saved_pct = (
+            100 * (len(rs.data) - len(fs.data)) / len(rs.data)
+            if rs.data
+            else float("nan")
+        )
 
         def _g(v, prec=3):
             return f"{v:.{prec}g}" if v is not None else "n/a"
 
-        over_res = (
-            f"{err['rmse_over_res']:.0f}× res"
-            if err["rmse_over_res"] is not None
-            else "n/a"
-        )
         note = (
-            f"RMSE {_g(err['rmse'])}  ·  max {_g(err['max_err'])}"
-            f"  ·  {comp:.0f}×  ·  {over_res}"
+            f"saved {saved_pct:.1f}%  ·  RMSE {_g(err['rmse'])}"
+            f"  ·  max {_g(err['max_err'])}"
         )
+        # Only channels with a configured threshold carry the exceedance term;
+        # for the rest the number would be in the wrong units (see config.py).
+        if err["frac_over_thresh"] is not None:
+            note += (
+                f"  ·  err>{err['error_threshold']:g}: {err['n_over_thresh']}"
+                f" ({100 * err['frac_over_thresh']:.1f}%)"
+            )
+        alpha = getattr(fs, "alpha", None)
+        if alpha is not None:
+            tag = "commissioned" if getattr(fs, "alpha_commissioned", False) else "fixed"
+            note += f"  ·  α {alpha:.2f} ({tag})"
         ax.text(
             0.006,
             0.94,
@@ -371,6 +383,13 @@ def main():
         help="Input format. 'auto' detects .txt (SensorScope meteo) vs .xlsx "
         "(Haybarn loggers) vs .csv (DirtViz exports).",
     )
+    parser.add_argument(
+        "--channels",
+        default="",
+        help="Comma-separated channels to keep (e.g. AmbientTemp_C,ST). "
+        "Default: every channel present. Narrowing to channels that share a "
+        "unit is what makes the error columns comparable across rows.",
+    )
     args = parser.parse_args()
 
     paths_files = args.files.split(",") if args.files else []
@@ -385,6 +404,22 @@ def main():
         name: pipeline.to_channel_streams(sensors)
         for name, sensors in sensors_by_logger.items()
     }
+
+    wanted = {c.strip() for c in args.channels.split(",") if c.strip()}
+    if wanted:
+        sensors_by_logger = {
+            name: [
+                s
+                for s in streams
+                if next((d.name for d in s.data if d.name), "") in wanted
+            ]
+            for name, streams in sensors_by_logger.items()
+        }
+        # Drop loggers left with nothing, so they don't produce empty figures.
+        sensors_by_logger = {n: s for n, s in sensors_by_logger.items() if s}
+        if not sensors_by_logger:
+            print(f"No streams matched --channels {sorted(wanted)}.")
+            return
 
     plots_dir = os.path.join(args.output, "plots")
     all_diffs = {}

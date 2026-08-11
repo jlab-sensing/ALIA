@@ -27,30 +27,51 @@ from datetime import datetime, timezone
 from simulation.src.models import Datum, Sensor
 
 # Column names that mean a channel this project already configures. Mapping to
-# the canonical name (rather than the export's own label) is what lets a
-# DirtViz site act as donor or holdout in `transfer.py`, which pairs sites by
-# channel name. Each entry is (canonical name, accepted units); a column whose
-# unit is not in the tuple falls back to the generic `<name>_<unit>` slug rather
-# than being silently mislabelled. `None` accepts any unit.
+# the canonical name (rather than the source's own label) is what lets a DirtViz
+# cell act as donor or holdout in `transfer.py`, which pairs sites by channel
+# name.
+#
+# Each entry is a list of (accepted units, canonical name), first match wins;
+# `None` accepts any unit. A column whose unit matches no rule falls back to the
+# generic `<name>_<unit>` slug rather than being silently mislabelled -- which
+# matters more than it sounds, because the same quantity arrives in different
+# units from different DirtViz endpoints. `/teros/` reports VWC in percent and
+# EC in uS/cm, while the Haybarn TEROS-12 channels `VWC`/`SC` are m3/m3 and
+# dS/m; collapsing them together would apply a resolution off by 100-1000x.
 _UNITS_C = ("c", "degc", "celsius")
+_UNITS_PCT = ("%", "pct", "percent", "rh")
 _CANONICAL = {
-    "temperature": ("AmbientTemp_C", _UNITS_C),
-    "air temperature": ("AmbientTemp_C", _UNITS_C),
-    "ambient temperature": ("AmbientTemp_C", _UNITS_C),
-    "surface temperature": ("SurfaceTemp_C", _UNITS_C),
-    "soil temperature": ("ST", _UNITS_C),
-    "humidity": ("RelativeHumidity_pct", ("%", "pct", "percent", "rh")),
-    "relative humidity": ("RelativeHumidity_pct", ("%", "pct", "percent", "rh")),
-    "pressure": ("Pressure_hPa", ("hpa", "mbar")),
-    "voltage": ("Voltage_V", ("v", "volt", "volts")),
-    "current": ("Current_uA", ("ua", "microamp", "microamps")),
-    "power": ("Power_uW", ("uw", "microwatt", "microwatts")),
-    "soil moisture": ("VWC", None),
-    "volumetric water content": ("VWC", None),
-    "vwc": ("VWC", None),
-    "conductivity": ("SC", None),
-    "bulk ec": ("SC", None),
-    "ec": ("SC", None),
+    # Air / surface temperature.
+    "temperature": [(_UNITS_C, "AmbientTemp_C")],
+    "air temperature": [(_UNITS_C, "AmbientTemp_C")],
+    "ambient temperature": [(_UNITS_C, "AmbientTemp_C")],
+    "surface temperature": [(_UNITS_C, "SurfaceTemp_C")],
+    # `/teros/` calls soil temperature `temp`; same units as ST, so it merges.
+    "temp": [(_UNITS_C, "ST")],
+    "soil temperature": [(_UNITS_C, "ST")],
+    # Atmosphere.
+    "humidity": [(_UNITS_PCT, "RelativeHumidity_pct")],
+    "relative humidity": [(_UNITS_PCT, "RelativeHumidity_pct")],
+    "pressure": [(("hpa", "mbar"), "Pressure_hPa")],
+    "co2": [(("ppm",), "CO2_ppm")],
+    # Electrical. `/power/` reports mV / uA / uW as `v` / `i` / `p`.
+    "v": [(("mv",), "Voltage_mV"), (("v", "volt", "volts"), "Voltage_V")],
+    "voltage": [(("mv",), "Voltage_mV"), (("v", "volt", "volts"), "Voltage_V")],
+    "i": [(("ua", "microamp", "microamps"), "Current_uA")],
+    "current": [(("ua", "microamp", "microamps"), "Current_uA")],
+    "p": [(("uw", "microwatt", "microwatts"), "Power_uW")],
+    "power": [(("uw", "microwatt", "microwatts"), "Power_uW")],
+    # Soil. Percent and m3/m3 are kept apart on purpose (see above).
+    "vwc": [(_UNITS_PCT, "VWC_pct"), (("m3/m3", "m3m3", ""), "VWC")],
+    "soil moisture": [(_UNITS_PCT, "VWC_pct"), (("m3/m3", "m3m3", ""), "VWC")],
+    "volumetric water content": [
+        (_UNITS_PCT, "VWC_pct"),
+        (("m3/m3", "m3m3", ""), "VWC"),
+    ],
+    "raw_vwc": [(None, "VWC_raw")],  # uncalibrated counts; unit is literally "raw"
+    "ec": [(("us/cm", "uscm"), "EC_uScm"), (("ds/m", "dsm"), "SC")],
+    "conductivity": [(("us/cm", "uscm"), "EC_uScm"), (("ds/m", "dsm"), "SC")],
+    "bulk ec": [(("ds/m", "dsm", ""), "SC")],
 }
 
 # Time-axis column labels, and unit strings meaning "epoch milliseconds".
@@ -70,14 +91,17 @@ def _slug(text: str) -> str:
 
 def _channel_name(name: str, unit: str) -> str:
     """Canonical channel name for a column, else a `<name>_<unit>` slug."""
-    entry = _CANONICAL.get(_norm(name))
-    if entry:
-        canonical, accepted_units = entry
-        # A missing unit row means "unspecified", not "wrong unit" — take the
-        # name at its word. Only a unit that is present and unrecognised (°F
-        # against a °C-defined channel) forces the generic fallback.
-        if accepted_units is None or _norm(unit) in accepted_units or not unit.strip():
-            return canonical
+    rules = _CANONICAL.get(_norm(name))
+    if rules:
+        normalized = _norm(unit)
+        for accepted_units, canonical in rules:
+            if accepted_units is None or normalized in accepted_units:
+                return canonical
+        # A missing unit means "unspecified", not "wrong unit" — take the name
+        # at its word and use the first rule. Only a unit that is present and
+        # unrecognised (°F against a °C channel) forces the generic fallback.
+        if not unit.strip():
+            return rules[0][1]
     unit_slug = _slug(unit.replace("°", "").replace("%", "pct").replace("µ", "u"))
     return f"{_slug(name)}_{unit_slug}" if unit_slug else _slug(name)
 

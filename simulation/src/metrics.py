@@ -70,7 +70,9 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
       better fit between packets; tails outside the first/last packet fall back to held.
 
     Returns `sse`/`abs_sum`/`n`/`max_abs` (+ interp) for cross-sensor pooling,
-    plus derived `rmse`/`mae`/`max_err` and resolution-normalized ratios.
+    plus derived `rmse`/`mae`/`max_err` and resolution-normalized ratios, and
+    `n_over_thresh`/`frac_over_thresh` — samples whose held error exceeds
+    `config.error_threshold_for(channel)`.
     """
     tx = sorted(
         (d for d in filtered.data if d.value is not None),
@@ -82,6 +84,7 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     mean = float(np.mean(raw_vals)) if raw_vals else 0.0
     channel = next((d.name for d in raw.data if d.name), "")
     resolution = config.resolution_for(channel)
+    threshold = config.error_threshold_for(channel)
     empty = {
         "sigma": sigma,
         "mean": mean,
@@ -94,6 +97,9 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
         "mae": None,
         "max_err": None,
         "rmse_over_res": None,
+        "error_threshold": threshold,
+        "n_over_thresh": None,
+        "frac_over_thresh": None,
         "sse_interp": 0.0,
         "abs_sum_interp": 0.0,
         "max_abs_interp": 0.0,
@@ -112,6 +118,7 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     abs_sum_interp = 0.0
     max_abs_interp = 0.0
     n = 0
+    n_over_thresh = 0  # samples whose held error exceeds config's threshold
     # k = latest packet at/before current sample: tx[k] held, tx[k+1] interp bracket.
     k = -1
     for d in raw_data:
@@ -138,6 +145,8 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
         sse += err * err
         abs_sum += err
         max_abs = max(max_abs, err)
+        if threshold is not None and err > threshold:
+            n_over_thresh += 1
 
         err_i = abs(d.value - interp)
         sse_interp += err_i * err_i
@@ -162,6 +171,13 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
         "mae": abs_sum / n if n else None,
         "max_err": max_abs,
         "rmse_over_res": (rmse / over_res) if (rmse is not None and over_res) else None,
+        # None rather than 0 when the channel has no configured threshold, so a
+        # channel that is not scored can't be mistaken for one scoring perfectly.
+        "error_threshold": threshold,
+        "n_over_thresh": n_over_thresh if threshold is not None else None,
+        "frac_over_thresh": (
+            (n_over_thresh / n) if (threshold is not None and n) else None
+        ),
         "sse_interp": sse_interp,
         "abs_sum_interp": abs_sum_interp,
         "max_abs_interp": max_abs_interp,
@@ -261,6 +277,9 @@ def diff(raw: list[Sensor], filtered: list[Sensor]) -> dict:
             "mae": err["mae"],
             "max_err": err["max_err"],
             "rmse_over_res": err["rmse_over_res"],
+            "error_threshold": err["error_threshold"],
+            "n_over_thresh": err["n_over_thresh"],
+            "frac_over_thresh": err["frac_over_thresh"],
             "mean_latency_hr": (lat["mean_sec"] / 3600) if lat["mean_sec"] else None,
             "n_reconstructable": n_reconstructable,
             "compression_rate": (n_raw - n_filt) / n_raw if n_raw else 0.0,

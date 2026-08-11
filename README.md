@@ -18,6 +18,7 @@ ALIA/
 │   ├── data_transformer.py         # XLSX → Sensor ingestion
 │   ├── sensorscope_transformer.py  # SensorScope .txt → Sensor ingestion
 │   ├── dirtviz_transformer.py      # DirtViz .csv → Sensor ingestion
+│   ├── dirtviz_api.py              # DirtViz API → raw .csv (via `ents`)
 │   └── src/                        # algorithm + comparison harness
 │       ├── models.py               # Datum, Sensor
 │       ├── config.py               # tunable filter parameters
@@ -36,7 +37,7 @@ ALIA/
 │   ├── genepi-meteo/           #   "
 │   ├── luce_stations_1x/       #   "
 │   ├── plaine_morte-meteo/     #   "
-│   ├── dirtviz/                # DirtViz CSV exports
+│   ├── dirtviz-raw/            # DirtViz API pulls (raw cadence)
 │   └── out/<dataset>/          # generated metrics.csv, metrics.json, plots/
 ```
 
@@ -45,10 +46,67 @@ ALIA/
 All run from the repo root. Input format is detected from the file extensions,
 so the same command works for every dataset.
 
+### DirtViz — fetch, then compare
+
+Two steps. **Step 1** pulls the raw series from the DirtViz API into a CSV;
+**step 2** runs the harness on it and writes the charts.
+
+```sh
+# 1. fetch — one CSV per cell
+python -m simulation.dirtviz_api --cell 1538 \
+    --start 2026-06-01 --end 2026-07-20 \
+    --output data/dirtviz-raw/gt_bme280.csv
+
+# 2. compare — reads every CSV in the folder
+python -m simulation.src.compare --dir data/dirtviz-raw --output data/out/dirtviz-raw
+```
+
+Charts land in `data/out/dirtviz-raw/plots/overlay/<cell>.png`, one panel per
+channel, next to `metrics.csv` / `.txt` / `.json`.
+
+The fetch writes the stacked-header CSV format the transformer already reads, so
+step 2 needs no extra flags. The CSV doubles as a cache — skip step 1 on reruns.
+To chart several cells on one run, fetch them all into the same folder (one
+figure per file) before running step 2.
+
+Find cell IDs with:
+
+```sh
+python -c "from ents.dirtviz import BackendClient
+for c in BackendClient().cells(): print(c.id, c.name, c.location)"
+```
+
+By default it fetches **every stream the cell has**. There is no API endpoint
+that lists them, so availability is discovered by probing — `--list` shows what
+a cell exposes in a window without downloading it:
+
+```sh
+python -m simulation.dirtviz_api --cell 20 --start 2023-07-08 --end 2023-08-17 --list
+# cell 20 'imwut_v1_1' (1)
+#   power    i, p, v
+#   teros    ec, raw_vwc, temp, vwc
+```
+
+Fetch flags:
+
+| Flag | Meaning |
+|---|---|
+| `--cell` | DirtViz cell id (required) |
+| `--start`, `--end` | ISO dates (required). You may get back less than you ask for — cells have outages |
+| `--list` | print what the cell has in the window, then exit |
+| `--sources` | comma-separated subset (`power,teros,bme280`); default is everything found |
+| `--measurements` | comma-separated subset of columns; default is all of them |
+| `--resample` | **leave at `none`.** Anything else returns server-averaged data |
+| `-o / --output` | CSV path to write (required unless `--list`) |
+
+The fetch prints the row count, span, and median cadence. If the cadence prints
+as `3600s` rather than the sensor's true rate, you were served hourly means —
+see the warning below.
+
 ### Compare — raw vs filtered, per-stream metrics and overlay plots
 
 ```sh
-python -m simulation.src.compare --dir data/dirtviz            --output data/out/dirtviz
+python -m simulation.src.compare --dir data/dirtviz-raw       --output data/out/dirtviz-raw
 python -m simulation.src.compare --dir data/UCSC_Haybarn_Field --output data/out/UCSC_Haybarn_Field
 python -m simulation.src.compare --dir data/fishnet-meteo      --output data/out/fishnet-meteo
 python -m simulation.src.compare --dir data/genepi-meteo       --output data/out/genepi-meteo
@@ -71,8 +129,8 @@ python -m simulation.src.benchmark --dir data/UCSC_Haybarn_Field \
     --output data/out/bench-haybarn --targets 30,60
 
 # faster: matched-budget table only, no frontier sweep
-python -m simulation.src.benchmark --dir data/dirtviz \
-    --output data/out/bench-dirtviz --targets 5,10 --no-frontier
+python -m simulation.src.benchmark --dir data/dirtviz-raw \
+    --output data/out/bench-dirtviz-raw --targets 5,10 --no-frontier
 
 # long records need truncating; the solver re-runs the filter per stream
 python -m simulation.src.benchmark --dir data/luce_stations_1x \
@@ -88,8 +146,8 @@ python -m simulation.src.transfer \
 
 # --min-samples sets the floor on stream length (default 100)
 python -m simulation.src.transfer \
-    --donor data/fishnet-meteo --holdout data/dirtviz \
-    --target 10 --min-samples 100 --output data/out/transfer-fishnet-to-dirtviz
+    --donor data/fishnet-meteo --holdout data/dirtviz-raw \
+    --target 10 --min-samples 100 --output data/out/transfer-fishnet-to-dirtviz-raw
 ```
 
 ### Sweep — compression/error tradeoff across parameter values
@@ -100,8 +158,8 @@ python -m simulation.src.sweep --dir data/UCSC_Haybarn_Field \
     --output data/out/sweep-haybarn --mode alpha --channels VWC,ST,SC
 
 # heartbeat ceiling
-python -m simulation.src.sweep --dir data/dirtviz \
-    --output data/out/sweep-dirtviz --mode heartbeat
+python -m simulation.src.sweep --dir data/dirtviz-raw \
+    --output data/out/sweep-dirtviz-raw --mode heartbeat
 
 # both axes together
 python -m simulation.src.sweep --dir data/fishnet-meteo \
@@ -128,38 +186,89 @@ solar radiation, relative humidity, soil moisture, watermark, rain, wind speed,
 wind direction). Both on-disk schema variants — with and without the extra
 sequence-number column — are handled automatically.
 
-### DirtViz exports (`.csv`)
+### DirtViz (`.csv`)
 
-A stacked header — column names, units, source device — above epoch-timestamped
-rows:
+`simulation/dirtviz_api.py` writes, and `simulation/dirtviz_transformer.py`
+reads, a stacked-header CSV — column names, units, source device — above
+epoch-timestamped rows:
 
 ```
-timestamp,temperature
-s,°C
-TIME,BME280
-1737770400,18.035
+timestamp,temperature,humidity,pressure
+s,C,%,hPa
+TIME,BME280,BME280,BME280
+1782323143,21.42,55.553,9867.4
 ```
 
-`simulation/dirtviz_transformer.py` emits **one `Sensor` per (export file,
-measurement column)**. The metadata rows are optional and vary in number
-between exports, so everything between the name row and the first parseable
-timestamp is read as metadata. Epoch seconds, epoch milliseconds (declared by a
-`ms` unit), and ISO-8601 timestamps are all accepted; blank cells are dropped
-rather than carried as NaN.
+The transformer emits **one `Sensor` per (file, measurement column)**. The
+metadata rows are optional and vary in number, so everything between the name
+row and the first parseable timestamp is read as metadata. Epoch seconds, epoch
+milliseconds (declared by a `ms` unit), and ISO-8601 timestamps are all
+accepted; blank cells are dropped rather than carried as NaN. This also means
+hand-written or third-party CSVs in the same shape drop straight in.
 
-Column names are mapped onto the channel names the rest of the project already
-configures — `temperature` (°C) → `AmbientTemp_C`, `humidity` →
-`RelativeHumidity_pct`, `voltage`/`current`/`power` →
-`Voltage_V`/`Current_uA`/`Power_uW`. The mapping is unit-checked: a column
-whose declared unit contradicts the canonical channel (°F against
-`AmbientTemp_C`) falls back to a generic `<name>_<unit>` channel and picks up
-`config.defaultSensorResolution`. Two columns measuring the same quantity are
-disambiguated by the device row (`<file>-BME280-AmbientTemp_C`).
+Column names are mapped onto the channel names the rest of the project
+configures. The API exposes streams through two families of endpoint, and both
+are covered:
 
-Window lengths are inferred per stream from its own cadence, so the hourly
-DirtViz sampling needs no config change. The `config.py` resolutions for
-`Voltage_V`, `Current_uA`, and `Power_uW` are placeholders — set them to your
-ADC's actual LSB before reading fidelity numbers on those channels.
+| Source | Endpoint | Columns → channels |
+|---|---|---|
+| `power` | `/power/<cell>` | `v` (mV) → `Voltage_mV`, `i` (µA) → `Current_uA`, `p` (µW) → `Power_uW` |
+| `teros` | `/teros/<cell>` | `vwc` (%) → `VWC_pct`, `raw_vwc` → `VWC_raw`, `temp` (°C) → `ST`, `ec` (µS/cm) → `EC_uScm` |
+| `bme280` | `/sensor/` | `temperature` (°C) → `AmbientTemp_C`, `humidity` (%) → `RelativeHumidity_pct`, `pressure` (hPa) → `Pressure_hPa`, `co2` (ppm) → `CO2_ppm` |
+
+Adding a sensor is one row in `NAMED_SOURCES` (for `/sensor/`) or
+`ENDPOINT_SOURCES` (for a dedicated endpoint) in `simulation/dirtviz_api.py`,
+plus a naming rule in `_CANONICAL` if the measurement is new.
+
+The mapping is **unit-checked**, and on DirtViz that is load-bearing rather than
+defensive: `/teros/` reports VWC in percent and EC in µS/cm, while the Haybarn
+TEROS-12 channels `VWC` and `SC` are m³/m³ and dS/m. Collapsing them together
+would apply a resolution floor off by 100–1000×, so they are kept as separate
+channels. A column whose unit matches no rule (°F against `AmbientTemp_C`)
+falls back to a generic `<name>_<unit>` channel and picks up
+`config.defaultSensorResolution` rather than being silently mislabelled.
+
+A cell carrying several sources gets one file with all of them (cell 20 yields
+7 channels). Their timestamps do not align across endpoints, so the columns are
+outer-joined and the blanks dropped per channel — each keeps its own cadence.
+Columns are prefixed with their source only when two sources would collide.
+
+Window lengths are inferred per stream from its own cadence, so DirtViz sampling
+needs no config change. The `config.py` resolutions for `Voltage_V`,
+`Current_uA`, and `Power_uW` are placeholders — set them to your ADC's actual
+LSB before reading fidelity numbers on those channels.
+
+#### Always pull with `resample=none`
+
+**Anything else returns server-side hourly means**, and averaging destroys
+exactly the sample-to-sample redundancy ALIA exists to remove — so compression
+measured against averaged data is badly understated. Cell 1538 (`gt_bme280`),
+same algorithm, same config:
+
+| source | cadence | samples | saved |
+|---|---|---|---|
+| hourly means | 1 h | 263 | 74.1% |
+| `resample=none` | 5 min | 6687 ×3 | **95.7%** |
+
+A 12× finer denominator is worth 22 points of compression. The DirtViz *web
+export* returns those hourly means, which is why the fetch tool exists — it
+pulls the raw series via the `ents` package (in `requirements.txt`;
+`pip install -r requirements.txt` if you have not).
+
+Two API quirks it works around:
+
+- `BackendClient.sensor_data` accepts a `resample` argument and never sends it
+  (as of `ents` 2.3.11), so it silently returns the hourly default. The module
+  calls `client.get("/sensor/", ...)` directly instead.
+- Long pulls are chunked into 30-day windows; chunk boundaries are inclusive on
+  both ends, so the seam sample is de-duplicated.
+
+Known data issue: cell 1538's `pressure` is labelled `hPa` but reads ~9860,
+about 10× atmospheric. Dividing by 10 gives 986.9 hPa, which matches Georgia
+Tech's ~320 m elevation — the values appear to be in 0.1 hPa. Until that is
+confirmed upstream, `Pressure_hPa`'s `sensorResolution` and `errorThreshold` are
+off by 10× for this stream, so its `rmse_over_res` (348) and exceedance count
+(83.6%) are not meaningful. Compression and RMSE in raw units are unaffected.
 
 ### Per-channel streams
 
@@ -175,15 +284,19 @@ Inputs that are already single-channel pass through with their names intact.
 Under `<output>/`:
 
 - `plots/overlay/<logger>.png` — one panel per single-channel stream, raw
-  (faded) and filtered (solid) overlaid.
+  (faded) and filtered (solid) overlaid. Each panel is annotated with
+  `saved <pct>% · RMSE <e> · max <e> · err><thr>: <n> (<pct>%)` — the share of
+  raw samples *not* transmitted (`(n_raw − n_tx) / n_raw`, the same quantity as
+  `compression_rate`; higher is better), reconstruction error in the channel's
+  own units, and how many samples exceed `config.errorThreshold`.
 - `metrics.txt` — human-readable table of the same rows as `metrics.csv`.
 - `metrics.csv` — one row per `(logger, stream)`: `n_raw`, `compression_ratio`,
   fidelity in the channel's own units (`rmse`, `mae`, `max_err`), plus
   `rmse_over_res` (RMSE as a multiple of sensor resolution — dimensionless and
   comparable across channels) and `mean_latency_hr`.
 - `metrics.json` — full diff: sample counts, drops by reason, per-stream
-  descriptive stats, mean/std deltas, and both zero-order-hold and
-  linear-interp error breakdowns.
+  descriptive stats, mean/std deltas, `n_over_thresh`/`frac_over_thresh`, and
+  both zero-order-hold and linear-interp error breakdowns.
 
 ## Benchmarking against baselines
 
@@ -286,6 +399,9 @@ interval = min(baseHeartbeatHours · 2^(calm_hours / backoffDoublingHours),
 
 ## Configurables (`simulation/src/config.py`)
 
+See [CONFIG.md](CONFIG.md) for how to choose each value, with measured
+alpha/window/heartbeat curves.
+
 | Name                        | Meaning                                              |
 |-----------------------------|------------------------------------------------------|
 | `eventDeltaThreshold` (α)   | Sigma multiplier for the delta guard (default 3)     |
@@ -295,6 +411,8 @@ interval = min(baseHeartbeatHours · 2^(calm_hours / backoffDoublingHours),
 | `baseHeartbeatHours`        | Heartbeat cadence right after an event (responsive)  |
 | `backoffDoublingHours`      | Calm hours per doubling of the heartbeat interval    |
 | `maxHeartbeatHours`         | Heartbeat interval ceiling once fully backed off     |
+| `errorThreshold`            | Reconstruction error counted as an exceedance on the overlay panels (default 0.5) |
+| `errorThresholdByChannel`   | Per-channel `errorThreshold` overrides               |
 | `excludedChannels`          | Channels dropped before filtering                    |
 
 ### Sizing `stdDevWindowHours`
