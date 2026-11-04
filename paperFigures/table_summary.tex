@@ -1,30 +1,32 @@
+% Preamble needs: \usepackage{booktabs,multirow,adjustbox}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{llrrrrrrrrr}
 \toprule
  & & \multicolumn{4}{c}{RMSE relative to uniform} & \multicolumn{5}{c}{Worst-case silence (h)} \\
 \cmidrule(lr){3-6}\cmidrule(lr){7-11}
 Dataset & Channel & ALIA & SoD & no HB & no ev. & ALIA & SoD & Unif. & no HB & no ev. \\
 \midrule
-\multirow{4}{*}{FishNet} & Air temperature & 0.68 & 0.48 & 0.68 & 0.88 & 7.4 & 15.7 & 0.7 & 7.9 & 0.4 \\
- & Relative humidity & 0.75 & 0.59 & 0.78 & 0.93 & 7.5 & 37.0 & 0.7 & 12.0 & 0.4 \\
- & Solar radiation & 0.50 & 0.27 & 0.55 & 1.00 & 15.3 & 39.2 & 0.7 & 38.6 & 0.4 \\
- & Surface temperature & 0.63 & 0.48 & 0.63 & 0.95 & 7.4 & 18.4 & 0.7 & 8.4 & 0.4 \\
+\multirow{4}{*}{FishNet} & Air temperature & 0.68 & \textbf{0.48} & 0.68 & 0.88 & 7.4 & 15.7 & 0.7 & 7.9 & \textbf{0.4} \\
+ & Relative humidity & 0.75 & \textbf{0.59} & 0.78 & 0.93 & 7.5 & 37.0 & 0.7 & 12.0 & \textbf{0.4} \\
+ & Solar radiation & 0.50 & \textbf{0.27} & 0.55 & 1.00 & 15.3 & 39.2 & 0.7 & 38.6 & \textbf{0.4} \\
+ & Surface temperature & 0.63 & \textbf{0.48} & 0.63 & 0.95 & 7.4 & 18.4 & 0.7 & 8.4 & \textbf{0.4} \\
 \midrule
-\multirow{4}{*}{Plaine Morte} & Air temperature & 0.64 & 0.55 & 0.64 & 0.96 & \textbf{2.2} & 3.0 & \textbf{0.1} & \textbf{2.2} & \textbf{0.1} \\
- & Relative humidity & 0.71 & 0.59 & 0.71 & 0.97 & 3.9 & \textbf{1.9} & \textbf{0.1} & 3.9 & \textbf{0.1} \\
- & Solar radiation & 0.61 & 0.31 & 0.68 & \textbf{0.73} & 7.4 & 12.0 & \textbf{0.1} & 11.7 & \textbf{0.1} \\
- & Surface temperature & \textbf{0.46} & 0.36 & \textbf{0.46} & 0.96 & 6.6 & 3.2 & \textbf{0.1} & 6.6 & \textbf{0.1} \\
+\multirow{4}{*}{Plaine Morte} & Air temperature & 0.64 & \textbf{0.55} & 0.64 & 0.96 & 2.2 & 3.0 & \textbf{0.1} & 2.2 & \textbf{0.1} \\
+ & Relative humidity & 0.71 & \textbf{0.59} & 0.71 & 0.97 & 3.9 & 1.9 & \textbf{0.1} & 3.9 & \textbf{0.1} \\
+ & Solar radiation & 0.61 & \textbf{0.31} & 0.68 & 0.73 & 7.4 & 12.0 & \textbf{0.1} & 11.7 & \textbf{0.1} \\
+ & Surface temperature & 0.46 & \textbf{0.36} & 0.46 & 0.96 & 6.6 & 3.2 & \textbf{0.1} & 6.6 & \textbf{0.1} \\
 \midrule
-\multirow{2}{*}{UCSC Haybarn} & Soil temperature & 0.69$^\ddagger$ & 0.52$^\ddagger$ & 0.69$^\ddagger$ & 1.00 & 23.8$^\ddagger$ & 155.2$^\ddagger$ & 2.5 & 318.8$^\ddagger$ & 1.7 \\
- & Soil VWC & 0.43$^\ddagger$ & \textbf{0.18} & 0.36$^\ddagger$ & 0.96 & 24.0$^\ddagger$ & 100.8 & 2.5 & 503.5$^\ddagger$ & 2.7 \\
+\multirow{2}{*}{UCSC Haybarn} & Soil temperature & 0.69 & \textbf{0.52} & 0.69 & 1.00 & 23.8 & 155.2 & 2.5 & 318.8 & \textbf{1.7} \\
+ & Soil VWC & 0.43 & \textbf{0.18} & 0.36 & 0.96 & 24.0 & 100.8 & \textbf{2.5} & 503.5 & 2.7 \\
 \bottomrule
 \end{tabular}
-
-% 10x packet budget: every method's knob is fitted per stream so it
-% sends at most 1 packet per 10 raw samples.
-% RMSE is divided by uniform downsampling's RMSE at the same budget
-% (uniform = 1.00; < 1 beats a fixed-rate clock).
-% Bold: best in each column among rows where that method met the budget.
-% $^\dagger$ sent more packets than the budget; $^\ddagger$ could not use it
-% (sent far fewer). SoD = send-on-delta, Unif. = uniform, no HB = ALIA with
-% no heartbeat, no ev. = ALIA with no event detector.
-% Needs \usepackage{booktabs,multirow}.
+\end{adjustbox}
+\normalsize
+\caption[Per-dataset comparison of ALIA against baselines and ablations]{%
+Per-dataset comparison at a 10$\times$ packet budget: every method is tuned to send at most one packet per 10 raw samples. RMSE is given as a ratio to uniform sampling's RMSE at the same budget, so values below 1 beat a fixed-rate sender. Worst-case silence is the longest gap between transmissions, in hours. Bold marks the lowest RMSE ratio and the shortest silence in each row; values that tie at the printed precision are all bold. On UCSC Haybarn, ALIA and no HB (both channels), and SoD (soil temperature) sent fewer packets than the budget allowed, even at their least-compressing settings, because the signal changes too slowly to use it; their error there comes at a lower packet cost than uniform's. VWC = volumetric water content; SoD = send-on-delta; Unif.\ = uniform sampling; no HB = ALIA without heartbeat; no ev.\ = ALIA without event detector.}
+\label{tab:per-dataset}
+\end{table}

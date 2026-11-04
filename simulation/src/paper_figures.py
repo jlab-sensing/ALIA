@@ -15,6 +15,7 @@ fig3_reconstruction     raw vs ALIA vs send-on-delta at an equal packet budget
 fig4_ablation           ALIA vs its two ablations at a matched budget
 fig5_sensitivity        one-at-a-time parameter sensitivity, indexed to baseline
 table_matched.{tex,csv} matched-budget results table
+table_balance           error vs silence balance per dataset
 
 Example (after the benchmark/sweep runs listed in paperFigures/README.md):
     python -m simulation.src.paper_figures --bench data/out/paper --output paperFigures
@@ -983,14 +984,15 @@ SHORT_LABEL = {
 
 
 def _met_budget(r):
-    return HIT_FLOOR <= (_float((r or {}).get("hit")) or 0) <= HIT_CEIL
+    """Summary-table rule: a method is comparable unless it sent *more* than the
+    budget. Sending fewer (hit > HIT_CEIL; e.g. event-driven methods on slow
+    Haybarn soil signals) only handicaps that method, so its error still counts
+    and gets no footnote mark; the caption says which rows that happens on."""
+    return (_float((r or {}).get("hit")) or 0) >= HIT_FLOOR
 
 
 def _budget_mark(r):
-    if _met_budget(r):
-        return ""
-    hit = _float((r or {}).get("hit")) or 0
-    return r"$^\dagger$" if hit < HIT_FLOOR else r"$^\ddagger$"
+    return "" if _met_budget(r) else r"$^\dagger$"
 
 
 # The reference every ratio is taken against: uniform downsampling at the same
@@ -1003,14 +1005,14 @@ def write_summary_table(bench_root, out_dir, target="10"):
 
     RMSE is given relative to uniform downsampling at the same packet budget
     (uniform = 1.00, < 1 means the method beats a fixed-rate clock); worst-case
-    silence in hours. The best value in each *column* is bolded, among rows
-    where that method met the budget.
+    silence in hours. In each row, the lowest RMSE ratio and the shortest silence
+    are bolded, among methods that did not exceed the budget. Values that tie at
+    the printed precision are all bolded.
     """
     ratio_methods = [m for m in baselines.METHODS if m != BASELINE]
     sil_methods = list(baselines.METHODS)
     n_cols = len(ratio_methods) + len(sil_methods)
 
-    # Gather every row first: column-best needs the whole column.
     body = []  # (dataset, channel, n_channels_in_dataset, {method: row})
     for sub, dataset in TABLE_DATASETS:
         rows = _matched(os.path.join(bench_root, sub))
@@ -1029,13 +1031,9 @@ def write_summary_table(bench_root, out_dir, target="10"):
     def silence(by, m):
         return _float(by.get(m, {}).get("max_latency_hr"))
 
-    def col_best(fn, m):
-        vals = [fn(by, m) for *_x, by in body if _met_budget(by.get(m))]
-        vals = [v for v in vals if v is not None]
-        return min(vals, default=None)
-
-    best_r = {m: col_best(ratio, m) for m in ratio_methods}
-    best_s = {m: col_best(silence, m) for m in sil_methods}
+    def row_best(fn, by, methods):
+        vals = [fn(by, m) for m in methods if _met_budget(by.get(m))]
+        return min((v for v in vals if v is not None), default=None)
 
     def cell(v, best, r, prec):
         if v is None:
@@ -1045,7 +1043,59 @@ def write_summary_table(bench_root, out_dir, target="10"):
             txt = rf"\textbf{{{txt}}}"
         return txt + _budget_mark(r)
 
+    # Which (method, dataset, channel) could not spend the budget: named in the
+    # caption instead of footnote-marked in the cells.
+    def _and(items):
+        return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+    under_txt = ""
+    for dataset in dict.fromkeys(d for d, *_x in body):
+        rows = [(ch, by) for d, ch, _n, by in body if d == dataset]
+        chans_of = defaultdict(list)  # method -> channels it under-spent on
+        for ch, by in rows:
+            for m in sil_methods:
+                if (_float((by.get(m) or {}).get("hit")) or 0) > HIT_CEIL:
+                    label = plots.channel_label(ch, False)
+                    chans_of[m].append(label[0].lower() + label[1:])
+        if not chans_of:
+            continue
+        groups = defaultdict(list)  # same channel list -> methods
+        for m, chans in chans_of.items():
+            groups[tuple(chans)].append(SHORT_LABEL[m])
+        phrases = []
+        for chans, methods in groups.items():
+            if len(chans) == len(rows):
+                where = "both channels" if len(rows) == 2 else "all channels"
+            else:
+                where = _and(list(chans))
+            phrases.append(f"{_and(methods)} ({where})")
+        under_txt += (
+            f" On {dataset}, {', and '.join(phrases)} sent fewer packets than the "
+            "budget allowed, even at their least-compressing settings, because "
+            "the signal changes too slowly to use it; their error there comes at "
+            "a lower packet cost than uniform's."
+        )
+    under_txt = _tex(under_txt)
+
+    caption = (
+        rf"Per-dataset comparison at a {target}$\times$ packet budget: every "
+        rf"method is tuned to send at most one packet per {target} raw samples. "
+        "RMSE is given as a ratio to uniform sampling's RMSE at the same budget, "
+        "so values below 1 beat a fixed-rate sender. Worst-case silence is the "
+        "longest gap between transmissions, in hours. Bold marks the lowest RMSE "
+        "ratio and the shortest silence in each row; values that tie at the "
+        "printed precision are all bold." + under_txt + " VWC = volumetric water content; "
+        r"SoD = send-on-delta; Unif.\ = uniform sampling; no HB = ALIA without "
+        r"heartbeat; no ev.\ = ALIA without event detector."
+    )
+
     tex = [
+        r"% Preamble needs: \usepackage{booktabs,multirow,adjustbox}",
+        r"\begin{table}[htbp]",
+        r"\centering",
+        r"\footnotesize",
+        r"\setlength{\tabcolsep}{3pt}",
+        r"\begin{adjustbox}{max width=\textwidth}",
         r"\begin{tabular}{ll" + "r" * n_cols + "}",
         r"\toprule",
         rf" & & \multicolumn{{{len(ratio_methods)}}}{{c}}{{RMSE relative to uniform}} & "
@@ -1063,28 +1113,139 @@ def write_summary_table(bench_root, out_dir, target="10"):
             tex.append(r"\midrule")
         name = rf"\multirow{{{n_ch}}}{{*}}{{{dataset}}}" if dataset != prev else ""
         prev = dataset
-        cells = [cell(ratio(by, m), best_r[m], by.get(m), 2) for m in ratio_methods]
-        cells += [cell(silence(by, m), best_s[m], by.get(m), 1) for m in sil_methods]
+        best_r = row_best(ratio, by, ratio_methods)
+        best_s = row_best(silence, by, sil_methods)
+        cells = [cell(ratio(by, m), best_r, by.get(m), 2) for m in ratio_methods]
+        cells += [cell(silence(by, m), best_s, by.get(m), 1) for m in sil_methods]
         tex.append(f"{name} & {_tex(plots.channel_label(ch, False))} & "
                    + " & ".join(cells) + r" \\")
     tex += [
         r"\bottomrule",
         r"\end{tabular}",
-        "",
-        rf"% {target}x packet budget: every method's knob is fitted per stream so it",
-        "% sends at most 1 packet per {target} raw samples.".replace("{target}", target),
-        "% RMSE is divided by uniform downsampling's RMSE at the same budget",
-        "% (uniform = 1.00; < 1 beats a fixed-rate clock).",
-        "% Bold: best in each column among rows where that method met the budget.",
-        r"% $^\dagger$ sent more packets than the budget; $^\ddagger$ could not use it",
-        "% (sent far fewer). SoD = send-on-delta, Unif. = uniform, no HB = ALIA with",
-        "% no heartbeat, no ev. = ALIA with no event detector.",
-        "% Needs \\usepackage{booktabs,multirow}.",
+        r"\end{adjustbox}",
+        # Caption below the table, matching the thesis figures. \normalsize so
+        # it is not shrunk by the table's \footnotesize; \label after \caption
+        # so \ref points at the table.
+        r"\normalsize",
+        r"\caption[Per-dataset comparison of ALIA against baselines and ablations]{%",
+        caption + "}",
+        r"\label{tab:per-dataset}",
+        r"\end{table}",
     ]
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "table_summary.tex"), "w") as fp:
         fp.write("\n".join(tex) + "\n")
     print("  wrote table_summary.tex")
+
+
+def write_balance_table(bench_root, out_dir, target="10"):
+    """Main-text table: how each method balances error and silence per dataset.
+
+    For each dataset: RMSE relative to uniform (geometric mean across channels)
+    and worst-case silence (max across channels), each ranked among all methods.
+    A method's balance is the worse of its two ranks; the lowest is bolded. The
+    caption only makes its claims about ALIA if the numbers still support them.
+
+    The heartbeat-only ablation is left out: it sends on a clock, so it is the
+    same kind of method as uniform. Fig. 4 and the per-channel table still have it.
+    """
+    methods = [m for m in baselines.METHODS if m != "alia_heartbeat"]
+    labels = {**SHORT_LABEL, "alia_events": "Adaptive threshold only"}
+    columns = []  # (dataset, {method: (rmse, rmse_rank, silence, silence_rank)})
+    under_budget = []  # datasets where a shown method could not spend the budget
+    for sub, dataset in TABLE_DATASETS:
+        rows = _matched(os.path.join(bench_root, sub))
+        if not rows:
+            continue
+        by = {(r["channel"], r["method"]): r for r in rows if r["target"] == target}
+        channels = sorted({c for c, _m in by})
+        rmse, silence = {}, {}
+        for m in methods:
+            ratios = [_float(by[c, m]["rmse"]) / _float(by[c, BASELINE]["rmse"])
+                      for c in channels]
+            rmse[m] = math.exp(sum(math.log(v) for v in ratios) / len(ratios))
+            silence[m] = max(_float(by[c, m]["max_latency_hr"]) for c in channels)
+        if any(_float(by[c, m]["hit"]) > HIT_CEIL for c in channels for m in methods):
+            under_budget.append(dataset)
+
+        def rank(vals, m):
+            return 1 + sum(v < vals[m] for v in vals.values())
+
+        columns.append((dataset, {
+            m: (rmse[m], rank(rmse, m), silence[m], rank(silence, m)) for m in methods
+        }))
+
+    def balance(stats):
+        return max(stats[1], stats[3])
+
+    claim = ""
+    if columns and all(
+        balance(col["alia"]) <= balance(col[m]) for _d, col in columns for m in methods
+    ):
+        claim += " ALIA has the best or joint-best balance on every dataset."
+    if columns and all(
+        col["alia"][2] < col[m][2]
+        for _d, col in columns for m in ("sod_commissioned", "alia_events")
+    ):
+        claim += (
+            " Its worst-case silence is shorter than that of SoD and adaptive "
+            "threshold only on every dataset."
+        )
+    if under_budget:
+        claim += (
+            f" On {', '.join(under_budget)}, some methods sent fewer packets than "
+            "the budget allowed because the signal changes too slowly to use it, "
+            r"so RMSE there is not at equal packet cost (see Table~\ref{tab:per-dataset})."
+        )
+    caption = (
+        rf"Balance between error and silence at a {target}$\times$ packet budget. "
+        "RMSE is relative to uniform sampling at the same budget, as a geometric "
+        "mean across the dataset's channels. Silence is the longest gap between "
+        "transmissions on any channel, in hours. Parentheses give the method's "
+        "rank among the methods shown on that metric (1 = best). Balance is the "
+        "worse of the two ranks, and bold marks the best balance on each dataset."
+        + claim +
+        r" SoD = send-on-delta; Unif.\ = uniform sampling; adaptive threshold "
+        "only = ALIA without heartbeat."
+    )
+
+    tex = [
+        r"% Preamble needs: \usepackage{booktabs,adjustbox}",
+        r"\begin{table}[htbp]",
+        r"\centering",
+        r"\footnotesize",
+        r"\setlength{\tabcolsep}{3pt}",
+        r"\begin{adjustbox}{max width=\textwidth}",
+        r"\begin{tabular}{l" + "rrc" * len(columns) + "}",
+        r"\toprule",
+        " & " + " & ".join(rf"\multicolumn{{3}}{{c}}{{{d}}}" for d, _c in columns) + r" \\",
+        "".join(rf"\cmidrule(lr){{{2 + 3 * i}-{4 + 3 * i}}}" for i in range(len(columns))),
+        "Method & " + " & ".join(["RMSE & Silence (h) & Balance"] * len(columns)) + r" \\",
+        r"\midrule",
+    ]
+    for m in methods:
+        cells = []
+        for _d, col in columns:
+            r, r_rank, s, s_rank = col[m]
+            b = balance(col[m])
+            is_best = b == min(balance(col[o]) for o in methods)
+            cells += [f"{r:.2f} ({r_rank})", f"{s:.1f} ({s_rank})",
+                      rf"\textbf{{{b}}}" if is_best else str(b)]
+        tex.append(f"{labels[m]} & " + " & ".join(cells) + r" \\")
+    tex += [
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{adjustbox}",
+        r"\normalsize",
+        r"\caption[Balance between error and silence per dataset]{%",
+        caption + "}",
+        r"\label{tab:balance}",
+        r"\end{table}",
+    ]
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "table_balance.tex"), "w") as fp:
+        fp.write("\n".join(tex) + "\n")
+    print("  wrote table_balance.tex")
 
 
 def main():
@@ -1139,6 +1300,7 @@ def main():
         )
     write_table(args.bench, out)
     write_summary_table(args.bench, out)
+    write_balance_table(args.bench, out)
 
 
 if __name__ == "__main__":

@@ -14,7 +14,8 @@ colour / marker / line style per method, defined in
 | `fig7_threshold` | 4 days of FishNet air temperature: δ(t) over time, plus zooms on its widest and narrowest stretch showing the ±δ band around the held value | Results (how the threshold adapts) |
 | `fig4_ablation` | ALIA vs. ALIA with no heartbeat / no event detector at a 10× budget; RMSE relative to uniform, silence on a broken linear axis | ablation |
 | `fig5_sensitivity_*` | one-at-a-time parameter sensitivity, indexed to the default | robustness (main text or appendix) |
-| `table_summary.tex` | 10× budget: RMSE relative to uniform + worst-case silence, one row per dataset × channel, best per column bold | main-text results table (`table*`; needs `booktabs`, `multirow`) |
+| `table_summary.tex` | 10× budget: RMSE relative to uniform + worst-case silence, one row per dataset × channel, lowest RMSE ratio and shortest silence bold in each row | main-text results table: a complete `table` float with caption and `\label{tab:per-dataset}`, ready to `\input`; needs `booktabs`, `multirow`, `adjustbox` |
+| `table_balance.tex` | 10× budget, per dataset: RMSE relative to uniform and worst-case silence with each method's rank; balance = the worse of the two ranks; heartbeat-only ablation left out | main-text results table: a complete `table` float with `abel{tab:balance}`; needs `booktabs`, `adjustbox` |
 | `table_matched_full.tex` / `table_matched.csv` | every number at 10× and 30×: RMSE, max error, mean latency, worst-case silence | appendix (long; wrap in `longtable` or split) |
 
 ## Regenerating
@@ -49,7 +50,10 @@ Panels, datasets and the overlay stream/window are set at the top of
 - **Budget not met (†) / not usable (‡).** † marks a method that could not get
   down to the budget (sent more packets than allowed); ‡ marks one that could
   not use it (even its least-compressing setting sent far fewer packets). Both
-  are excluded from bolding, and fig 4 labels ‡ bars.
+  are excluded from bolding in the appendix table, and fig 4 labels ‡ bars.
+  The main-text `table_summary.tex` drops ‡: sending fewer packets only
+  handicaps a method, so those cells count for bolding and the caption says
+  where it happens (Haybarn soil channels); only † would still be marked.
 - **Wind speed is excluded** from every figure and table
   (`EXCLUDED_CHANNELS` in `paper_figures.py`): its 0.5 m/s resolution floor
   stops ALIA at ~27×, so it has no equal-cost comparison at 10×.
