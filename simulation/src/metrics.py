@@ -84,7 +84,7 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     mean = float(np.mean(raw_vals)) if raw_vals else 0.0
     channel = next((d.name for d in raw.data if d.name), "")
     resolution = config.resolution_for(channel)
-    threshold = config.error_threshold_for(channel)
+    threshold = 0.5
     empty = {
         "sigma": sigma,
         "mean": mean,
@@ -190,30 +190,53 @@ def reconstruction_error(raw: Sensor, filtered: Sensor) -> dict:
     }
 
 
-def transmission_latency(raw: Sensor, filtered: Sensor) -> dict:
+def transmission_latency(
+    raw: Sensor, filtered: Sensor, exclude_outages: bool = False
+) -> dict:
     """Mean delay (s) between a sample and its info reaching the receiver.
 
     Transmitted samples have zero latency; a held (`in_run`) sample's info
     arrives with the next packet (carrying run_length), so latency is the gap
     to it. The trailing flush packet shares the last raw timestamp, so every
     raw sample is covered. Returns `sum_sec`/`n` for pooling, plus `mean_sec`/`max_sec`.
+
+    `exclude_outages`: subtract stretches where the sensor itself produced no
+    samples (raw gaps > 3 sample periods). Otherwise a day-long logger outage
+    reads as a day of radio silence for every method, even uniform sampling,
+    and swamps the quantity being compared.
     """
     tx_times = sorted(d.timestamp for d in filtered.data)
     raw_times = sorted(d.timestamp for d in raw.data)
     if not tx_times or not raw_times:
         return {"sum_sec": 0.0, "n": 0, "mean_sec": None, "max_sec": None}
 
+    # outage[i] = cumulative dead time (s) up to raw_times[i].
+    outage = [0.0] * len(raw_times)
+    if exclude_outages and len(raw_times) > 1:
+        gaps = [
+            (b - a).total_seconds() for a, b in zip(raw_times, raw_times[1:])
+        ]
+        period = float(np.median(gaps)) or 1.0
+        for i, g in enumerate(gaps, 1):
+            outage[i] = outage[i - 1] + (g - period if g > 3 * period else 0.0)
+
     sum_sec = 0.0
     max_sec = 0.0
     n = 0
     j = 0
-    for t in raw_times:
+    k = 0  # raw index of tx_times[j]
+    for i, t in enumerate(raw_times):
         while j < len(tx_times) and tx_times[j] < t:
             j += 1
         if j >= len(tx_times):
             # No transmission at/after this sample; its info never arrives.
             continue
         delay = (tx_times[j] - t).total_seconds()
+        if exclude_outages:
+            k = max(k, i)
+            while k + 1 < len(raw_times) and raw_times[k + 1] <= tx_times[j]:
+                k += 1
+            delay -= outage[k] - outage[i]
         sum_sec += delay
         max_sec = max(max_sec, delay)
         n += 1

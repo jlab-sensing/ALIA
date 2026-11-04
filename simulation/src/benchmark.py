@@ -60,16 +60,9 @@ GRIDS = {
     "alia_heartbeat": HEARTBEAT_GRID,
 }
 
-# Okabe-Ito subset, ordered so adjacent entries stay separable under deuteranopia
-# and protanopia. Marker and linestyle carry the same distinction as secondary
-# encoding, so the figures survive greyscale printing.
-STYLE = {
-    "alia": ("#0072B2", "o", "-", 2.4),
-    "sod_commissioned": ("#D55E00", "s", "--", 1.6),
-    "uniform": ("#009E73", "D", ":", 1.6),
-    "alia_events": ("#56B4E9", "v", "-.", 1.4),
-    "alia_heartbeat": ("#CC79A7", "P", "-.", 1.4),
-}
+# Per-method colour/marker/linestyle lives in plots.METHOD_STYLE so these
+# figures match the paper figures (paper_figures.py).
+STYLE = plots.METHOD_STYLE
 
 
 def _channel_of(stream) -> str:
@@ -79,12 +72,16 @@ def _channel_of(stream) -> str:
 def _score(raw_stream, tx_stream) -> dict:
     """Packet count and pooled-able error terms for one method on one stream."""
     err = metrics.reconstruction_error(raw_stream, tx_stream)
+    lat = metrics.transmission_latency(raw_stream, tx_stream, exclude_outages=True)
     return {
         "n_tx": len(tx_stream.data),
         "sse": err["sse"],
         "n": err["n"],
         "max_abs": err["max_abs"],
         "resolution": err["resolution"],
+        "lat_sum": lat["sum_sec"],
+        "lat_n": lat["n"],
+        "lat_max": lat["max_sec"] or 0.0,
     }
 
 
@@ -110,6 +107,10 @@ def _pool(acc: dict) -> dict:
         "rmse": rmse,
         "rmse_over_res": (rmse / res) if (rmse is not None and res) else None,
         "max_err": acc["max_abs"],
+        "mean_latency_hr": (
+            acc["lat_sum"] / acc["lat_n"] / 3600 if acc["lat_n"] else None
+        ),
+        "max_latency_hr": acc["lat_max"] / 3600,
     }
 
 
@@ -121,6 +122,9 @@ def _new_acc() -> dict:
         "n": 0,
         "max_abs": 0.0,
         "resolution": 0.0,
+        "lat_sum": 0.0,
+        "lat_n": 0,
+        "lat_max": 0.0,
     }
 
 
@@ -131,10 +135,34 @@ def _add(acc: dict, n_raw: int, s: dict) -> None:
     acc["n"] += s["n"]
     acc["max_abs"] = max(acc["max_abs"], s["max_abs"])
     acc["resolution"] = s["resolution"]
+    acc["lat_sum"] += s["lat_sum"]
+    acc["lat_n"] += s["lat_n"]
+    acc["lat_max"] = max(acc["lat_max"], s["lat_max"])
+
+
+def _bench_stream(stream, targets: list[float], do_frontier: bool) -> tuple:
+    """Score every method on one stream. Returns per-stream terms only, so
+    streams can be farmed out to worker processes and pooled afterwards."""
+    n_raw = len(stream.data)
+    matched = {}
+    for r in targets:
+        budget = max(2, int(n_raw / r))
+        for method in baselines.METHODS:
+            knob, _ = baselines.solve_knob(method, stream, budget)
+            tx = baselines.run(method, [stream], knob)[0]
+            matched[(r, method)] = _score(stream, tx)
+    frontier = {}
+    if do_frontier:
+        for method in baselines.METHODS:
+            for gi, g in enumerate(GRIDS[method]):
+                knob = _knob_for(method, stream, g)
+                tx = baselines.run(method, [stream], knob)[0]
+                frontier[(method, gi)] = _score(stream, tx)
+    return _channel_of(stream), n_raw, matched, frontier
 
 
 def run_benchmark(
-    streams: list, targets: list[float], do_frontier: bool = True
+    streams: list, targets: list[float], do_frontier: bool = True, jobs: int = 1
 ) -> tuple[dict, dict]:
     """Tier 1: the ORACLE comparison. Returns (matched, frontier).
 
@@ -150,6 +178,9 @@ def run_benchmark(
     advance. For what happens when a knob is chosen without seeing the target
     site, see the Tier 2 transfer harness in `transfer.py`.
 
+    `jobs` > 1 scores streams in parallel processes. Pooling only sums
+    per-stream terms, so the result is identical to a serial run.
+
     matched:  {target: {channel: {method: pooled}}}
     frontier: {channel: {method: [pooled per grid index]}}
     """
@@ -158,25 +189,28 @@ def run_benchmark(
     }
     frontier = defaultdict(lambda: defaultdict(lambda: defaultdict(_new_acc)))
 
-    for i, stream in enumerate(streams, 1):
-        channel = _channel_of(stream)
-        n_raw = len(stream.data)
+    def _collect(i, stream, result):
+        channel, n_raw, m_scores, f_scores = result
         print(f"  [{i}/{len(streams)}] {stream.name} ({n_raw} samples)", flush=True)
+        for (r, method), sc in m_scores.items():
+            _add(matched[r][channel][method], n_raw, sc)
+        for (method, gi), sc in f_scores.items():
+            _add(frontier[channel][method][gi], n_raw, sc)
 
-        for r in targets:
-            budget = max(2, int(n_raw / r))
-            for method in baselines.METHODS:
-                knob, _ = baselines.solve_knob(method, stream, budget)
-                tx = baselines.run(method, [stream], knob)[0]
-                _add(matched[r][channel][method], n_raw, _score(stream, tx))
+    if jobs > 1:
+        from concurrent.futures import ProcessPoolExecutor
 
-        if not do_frontier:
-            continue
-        for method in baselines.METHODS:
-            for gi, g in enumerate(GRIDS[method]):
-                knob = _knob_for(method, stream, g)
-                tx = baselines.run(method, [stream], knob)[0]
-                _add(frontier[channel][method][gi], n_raw, _score(stream, tx))
+        with ProcessPoolExecutor(max_workers=jobs) as pool:
+            futures = [
+                pool.submit(_bench_stream, s, targets, do_frontier) for s in streams
+            ]
+            # Collect in submission order so accumulation order (and thus
+            # floating-point sums) matches a serial run exactly.
+            for i, (stream, fut) in enumerate(zip(streams, futures), 1):
+                _collect(i, stream, fut.result())
+    else:
+        for i, stream in enumerate(streams, 1):
+            _collect(i, stream, _bench_stream(stream, targets, do_frontier))
 
     matched_out = {
         r: {ch: {m: _pool(a) for m, a in per.items()} for ch, per in by_ch.items()}
@@ -204,6 +238,8 @@ MATCHED_HEADER = [
     "rmse_over_res",
     "max_err",
     "rmse_vs_alia",
+    "mean_latency_hr",
+    "max_latency_hr",
 ]
 
 
@@ -244,6 +280,8 @@ def _matched_rows(matched: dict) -> list[list[str]]:
                         _f(r["rmse_over_res"], 2),
                         _f(r["max_err"]),
                         _f(ratio, 3),
+                        _f(r["mean_latency_hr"], 3),
+                        _f(r["max_latency_hr"], 2),
                     ]
                 )
     return rows
@@ -348,6 +386,18 @@ def main():
         "half-million-sample luce records need truncating to stay tractable.",
     )
     parser.add_argument(
+        "--jobs",
+        default=1,
+        type=int,
+        help="Worker processes; streams are scored in parallel.",
+    )
+    parser.add_argument(
+        "--channels",
+        default="",
+        type=str,
+        help="Comma-separated channel subset (default: every channel).",
+    )
+    parser.add_argument(
         "--no-frontier",
         action="store_true",
         help="Only produce the matched-budget table (much faster).",
@@ -360,6 +410,7 @@ def main():
     )
     args = parser.parse_args()
     targets = [float(t) for t in args.targets.split(",") if t.strip()]
+    channels = {c for c in args.channels.split(",") if c.strip()}
 
     paths_files = args.files.split(",") if args.files else []
     sensors_by_logger, _fmt = _ingest(paths_files, args.dir, args.format)
@@ -372,6 +423,8 @@ def main():
         for s in pipeline.to_channel_streams(sensors):
             if args.limit_samples:
                 s.data = s.data[: args.limit_samples]
+            if channels and _channel_of(s) not in channels:
+                continue
             if len(s.data) >= 100:
                 streams.append(s)
 
@@ -380,7 +433,7 @@ def main():
         f"targets {targets} (Tier 1, oracle-fitted -- every method incl. ALIA)"
     )
     matched, frontier = run_benchmark(
-        streams, targets, do_frontier=not args.no_frontier
+        streams, targets, do_frontier=not args.no_frontier, jobs=args.jobs
     )
 
     rows = _matched_rows(matched)
@@ -388,14 +441,28 @@ def main():
     _write_table(MATCHED_HEADER, rows, os.path.join(args.output, "matched.txt"))
 
     if frontier:
-        fr_header = ["channel", "method", "grid_index", "compression", "rmse"]
+        fr_header = [
+            "channel",
+            "method",
+            "grid_index",
+            "knob",
+            "compression",
+            "rmse",
+            "max_err",
+            "mean_latency_hr",
+            "max_latency_hr",
+        ]
         fr_rows = [
             [
                 ch,
                 m,
                 str(i),
+                f"{GRIDS[m][i]:g}",
                 f"{p['compression']:.3f}",
                 f"{p['rmse']:.6f}" if p["rmse"] is not None else "",
+                f"{p['max_err']:.6f}",
+                f"{p['mean_latency_hr']:.4f}" if p["mean_latency_hr"] is not None else "",
+                f"{p['max_latency_hr']:.3f}",
             ]
             for ch, per in sorted(frontier.items())
             for m, pts in per.items()

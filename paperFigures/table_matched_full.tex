@@ -1,0 +1,122 @@
+\begin{tabular}{llrrrr}
+\toprule
+Channel & Method & RMSE & max err & mean lat. (h) & max silence (h) \\
+\midrule
+\multicolumn{6}{l}{\emph{FishNet, 10$\times$ packet budget}} \\
+Air temperature ($^\circ$C) & ALIA & 0.321 & 1.66 & 0.61 & 7.4 \\
+ & Send-on-delta & \textbf{0.229} & \textbf{0.57} & 0.61 & 15.7 \\
+ & Uniform & 0.474 & 17.97 & 0.17 & 0.7 \\
+ & ALIA, no heartbeat & 0.321 & 1.66 & 0.62 & 7.9 \\
+ & ALIA, no events & 0.416 & 18.28 & \textbf{0.16} & \textbf{0.4} \\
+Relative humidity (\%) & ALIA & 1.638 & 7.59 & 1.39 & 7.5 \\
+ & Send-on-delta & \textbf{1.286} & \textbf{3.39} & 2.77 & 37.0 \\
+ & Uniform & 2.171 & 35.08 & 0.17 & 0.7 \\
+ & ALIA, no heartbeat & 1.688 & 7.32 & 1.61 & 12.0 \\
+ & ALIA, no events & 2.024 & 24.75 & \textbf{0.16} & \textbf{0.4} \\
+Solar radiation (W/m$^2$) & ALIA & 38.318 & 188.76 & 1.88 & 15.3 \\
+ & Send-on-delta & \textbf{21.003} & \textbf{61.68} & 3.90 & 39.2 \\
+ & Uniform & 76.840 & 906.05 & \textbf{0.16} & 0.7 \\
+ & ALIA, no heartbeat & 41.919 & 186.10 & 3.25 & 38.6 \\
+ & ALIA, no events & 76.899 & 883.72 & \textbf{0.16} & \textbf{0.4} \\
+Surface temperature ($^\circ$C) & ALIA & 0.552 & 3.00 & 0.84 & 7.4 \\
+ & Send-on-delta & \textbf{0.420} & \textbf{1.25} & 0.87 & 18.4 \\
+ & Uniform & 0.873 & 16.66 & 0.17 & 0.7 \\
+ & ALIA, no heartbeat & 0.553 & 3.00 & 0.85 & 8.4 \\
+ & ALIA, no events & 0.831 & 16.91 & \textbf{0.16} & \textbf{0.4} \\
+\midrule
+\multicolumn{6}{l}{\emph{FishNet, 30$\times$ packet budget}} \\
+Air temperature ($^\circ$C) & ALIA & 0.769 & 3.51 & 1.55 & 7.4 \\
+ & Send-on-delta & \textbf{0.491} & \textbf{1.21} & 1.50 & 20.4 \\
+ & Uniform & 0.911 & 17.44 & \textbf{0.51} & 1.7 \\
+ & ALIA, no heartbeat & 0.757 & 3.51 & 1.66 & 11.2 \\
+ & ALIA, no events & 0.823 & 18.03 & \textbf{0.51} & \textbf{1.1} \\
+Relative humidity (\%) & ALIA & 3.039 & 13.78 & 2.05 & 10.1 \\
+ & Send-on-delta & \textbf{2.366} & \textbf{5.97} & 4.21 & 41.9 \\
+ & Uniform & 3.599 & 35.08 & \textbf{0.51} & 1.7 \\
+ & ALIA, no heartbeat & 3.270 & 13.32 & 2.54 & 12.7 \\
+ & ALIA, no events & 3.326 & 27.28 & \textbf{0.51} & \textbf{1.1} \\
+Solar radiation (W/m$^2$) & ALIA & 106.802 & 504.60 & 2.69 & 15.3 \\
+ & Send-on-delta & \textbf{91.929} & \textbf{224.92} & 9.66 & 77.4 \\
+ & Uniform & 98.759 & 937.42 & \textbf{0.51} & 1.7 \\
+ & ALIA, no heartbeat & 114.916 & 505.67 & 4.54 & 38.6 \\
+ & ALIA, no events & 99.925 & 953.91 & 0.51 & \textbf{1.1} \\
+Surface temperature ($^\circ$C) & ALIA & 1.272 & 6.62 & 1.77 & 7.4 \\
+ & Send-on-delta & \textbf{0.927} & \textbf{2.81} & 2.22 & 31.7 \\
+ & Uniform & 1.395 & 16.35 & \textbf{0.51} & 1.7 \\
+ & ALIA, no heartbeat & 1.283 & 6.62 & 2.01 & 11.7 \\
+ & ALIA, no events & 1.324 & 16.60 & \textbf{0.51} & \textbf{1.1} \\
+\midrule
+\multicolumn{6}{l}{\emph{Plaine Morte, 10$\times$ packet budget}} \\
+Air temperature ($^\circ$C) & ALIA & 0.967 & 3.84 & 0.23 & 2.2 \\
+ & Send-on-delta & \textbf{0.830} & \textbf{2.22} & 0.20 & 3.0 \\
+ & Uniform & 1.513 & 10.88 & 0.05 & 0.1 \\
+ & ALIA, no heartbeat & 0.967 & 3.84 & 0.23 & 2.2 \\
+ & ALIA, no events & 1.448 & 10.88 & \textbf{0.05} & \textbf{0.1} \\
+Relative humidity (\%) & ALIA & 2.669 & 11.96 & 0.29 & 3.9 \\
+ & Send-on-delta & \textbf{2.208} & \textbf{5.77} & 0.15 & 1.9 \\
+ & Uniform & 3.769 & 25.52 & 0.05 & 0.1 \\
+ & ALIA, no heartbeat & 2.669 & 11.96 & 0.29 & 3.9 \\
+ & ALIA, no events & 3.638 & 25.85 & \textbf{0.05} & \textbf{0.1} \\
+Solar radiation (W/m$^2$) & ALIA & 6.278 & 20.74 & 1.33 & 7.4 \\
+ & Send-on-delta & \textbf{3.217} & \textbf{9.04} & 2.25 & 12.0 \\
+ & Uniform & 10.252 & 365.82 & 0.05 & 0.1 \\
+ & ALIA, no heartbeat & 6.949 & 20.74 & 2.24 & 11.7 \\
+ & ALIA, no events & 7.508 & 127.08 & \textbf{0.05} & \textbf{0.1} \\
+Surface temperature ($^\circ$C) & ALIA & 0.404 & 1.69 & 0.25 & 6.6 \\
+ & Send-on-delta & \textbf{0.316} & \textbf{0.81} & 0.12 & 3.2 \\
+ & Uniform & 0.883 & 51.00 & 0.05 & 0.1 \\
+ & ALIA, no heartbeat & 0.404 & 1.69 & 0.25 & 6.6 \\
+ & ALIA, no events & 0.846 & 50.81 & \textbf{0.05} & \textbf{0.1} \\
+\midrule
+\multicolumn{6}{l}{\emph{Plaine Morte, 30$\times$ packet budget}} \\
+Air temperature ($^\circ$C) & ALIA & 1.728 & 7.14 & 0.84 & 7.3 \\
+ & Send-on-delta & \textbf{1.433} & \textbf{4.15} & 0.53 & 5.4 \\
+ & Uniform & 1.917 & 10.64 & 0.15 & \textbf{0.4} \\
+ & ALIA, no heartbeat & 1.733 & 7.14 & 0.91 & 12.2 \\
+ & ALIA, no events & 1.939 & 10.85 & \textbf{0.14} & 0.4 \\
+Relative humidity (\%) & ALIA & 4.566 & 21.62 & 0.99 & 6.7 \\
+ & Send-on-delta & \textbf{3.547} & \textbf{9.27} & 0.46 & 3.6 \\
+ & Uniform & 4.873 & 26.73 & 0.15 & \textbf{0.4} \\
+ & ALIA, no heartbeat & 4.552 & 21.62 & 1.06 & 9.7 \\
+ & ALIA, no events & 4.848 & 30.15 & \textbf{0.14} & 0.4 \\
+Solar radiation (W/m$^2$) & ALIA & 23.061 & 87.20 & 1.56 & 7.4 \\
+ & Send-on-delta & \textbf{12.018} & \textbf{28.18} & 2.66 & 12.6 \\
+ & Uniform & 21.862 & 325.94 & 0.15 & \textbf{0.4} \\
+ & ALIA, no heartbeat & 25.094 & 87.20 & 2.66 & 12.3 \\
+ & ALIA, no events & 20.078 & 173.34 & \textbf{0.15} & 0.4 \\
+Surface temperature ($^\circ$C) & ALIA & 0.849 & 3.63 & 0.82 & 7.2 \\
+ & Send-on-delta & \textbf{0.562} & \textbf{1.50} & 0.43 & 7.8 \\
+ & Uniform & 1.278 & 51.06 & \textbf{0.15} & \textbf{0.4} \\
+ & ALIA, no heartbeat & 0.838 & 3.63 & 0.96 & 10.6 \\
+ & ALIA, no events & 1.514 & 50.81 & 0.15 & 0.4 \\
+\midrule
+\multicolumn{6}{l}{\emph{UCSC Haybarn, 10$\times$ packet budget}} \\
+Soil temperature ($^\circ$C) & ALIA$^\ddagger$ & 0.103 & 4.07 & 3.95 & 23.8 \\
+ & Send-on-delta$^\ddagger$ & 0.078 & 1.58 & 6.04 & 155.2 \\
+ & Uniform & \textbf{0.150} & 6.73 & \textbf{0.82} & 2.5 \\
+ & ALIA, no heartbeat$^\ddagger$ & 0.103 & 4.07 & 11.50 & 318.8 \\
+ & ALIA, no events & 0.151 & \textbf{6.64} & 0.83 & \textbf{1.7} \\
+Soil VWC (m$^3$/m$^3$) & ALIA$^\ddagger$ & 0.001 & 0.18 & 5.04 & 24.0 \\
+ & Send-on-delta & \textbf{0.001} & \textbf{0.04} & 3.66 & 100.8 \\
+ & Uniform & 0.003 & 0.35 & \textbf{0.82} & \textbf{2.5} \\
+ & ALIA, no heartbeat$^\ddagger$ & 0.001 & 0.11 & 13.92 & 503.5 \\
+ & ALIA, no events & 0.003 & 0.35 & 0.83 & 2.7 \\
+\midrule
+\multicolumn{6}{l}{\emph{UCSC Haybarn, 30$\times$ packet budget}} \\
+Soil temperature ($^\circ$C) & ALIA & 0.357 & \textbf{4.07} & 4.69 & 23.8 \\
+ & Send-on-delta & \textbf{0.206} & \textbf{4.07} & 9.12 & 155.5 \\
+ & Uniform & 0.399 & 7.26 & \textbf{2.49} & 5.8 \\
+ & ALIA, no heartbeat$^\ddagger$ & 0.270 & 3.08 & 12.50 & 318.8 \\
+ & ALIA, no events & 0.399 & 7.26 & 2.50 & \textbf{5.0} \\
+Soil VWC (m$^3$/m$^3$) & ALIA & 0.003 & 0.27 & 5.29 & 24.0 \\
+ & Send-on-delta & \textbf{0.001} & \textbf{0.10} & 11.02 & 193.2 \\
+ & Uniform & 0.005 & 0.27 & \textbf{2.49} & \textbf{6.0} \\
+ & ALIA, no heartbeat & 0.002 & 0.22 & 14.12 & 503.5 \\
+ & ALIA, no events & 0.005 & 0.29 & 2.50 & 17.2 \\
+\bottomrule
+\end{tabular}
+
+% \textbf{bold}: best among methods that met the budget.
+% $^\dagger$: sent more packets than the budget (achieved/target < 0.95).
+% $^\ddagger$: could not use the budget; sent far fewer packets (achieved/target > 1.25).
+% Neither is comparable at equal cost, so neither is bolded.

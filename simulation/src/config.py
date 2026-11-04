@@ -31,9 +31,9 @@ def resolution_for(channel: str) -> float:
 excludedChannels = {"WindDirection_deg"}
 
 
-eventDeltaThreshold = 3  # global default
+eventDeltaThreshold = 1  # global default
 eventDeltaThresholdByChannel = {
-    "AmbientTemp_C": 1.0,
+    "AmbientTemp_C": 0.05,
     "SurfaceTemp_C": 1.0,
     "RelativeHumidity_pct": 1.0,
     "SolarRadiation_Wm2": 1.5,

@@ -57,6 +57,7 @@ LABELS = {
     "uniform": "uniform downsampling",
     "alia_events": "ablation: events only",
     "alia_heartbeat": "ablation: heartbeat only",
+    "sod_fixed": "send-on-delta (fixed threshold)",
 }
 
 # A threshold in raw physical units (c in degrees C, in m3/m3) was dropped as a
@@ -153,6 +154,12 @@ def run(method: str, sensors: list[Sensor], knob: float) -> list[Sensor]:
                 filter_algo.filter([deepcopy(s)], fixed_delta=c, use_heartbeat=False)
             )
         return out
+    if method == "sod_fixed":
+        # knob is the band in the channel's own units. Only `pilot.py` uses
+        # it: there the band is chosen from the pilot, never the scored data.
+        return filter_algo.filter(
+            deepcopy(sensors), fixed_delta=knob, use_heartbeat=False
+        )
     if method == "uniform":
         return _uniform(sensors, knob)
     if method == "alia_events":
@@ -182,6 +189,9 @@ def knob_bounds(method: str, stream: Sensor) -> tuple[float, float]:
         return 0.0, 500.0
     if method == "uniform":
         return 1.0, float(max(2, n))
+    if method == "sod_fixed":
+        vals = [d.value for d in stream.data if d.is_present()]
+        return 0.0, (max(vals) - min(vals)) if vals else 1.0
     if method == "alia_heartbeat":
         # Hours; upper bound spans the whole record so compression can go as
         # high as "one packet".

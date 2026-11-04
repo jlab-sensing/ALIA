@@ -1,0 +1,13 @@
+logger,stream,detector,n_raw,n_tx,compression_ratio,kl_threshold,rmse,mae,max_err,mean_latency_hr
+fishnet-meteo-101,AmbientTemp_C,kl,14721,1767,8.33,2.3240,1.2922,0.8469,17.5400,1.24
+fishnet-meteo-101,AmbientTemp_C,ttest,14721,280,52.58,,1.3628,0.9230,15.4200,1.75
+fishnet-meteo-101,AmbientTemp_C,delta,14721,1237,11.90,,0.2772,0.1792,1.6400,0.42
+fishnet-meteo-101,SurfaceTemp_C,kl,14721,1836,8.02,2.1908,0.6925,0.4437,3.7510,1.36
+fishnet-meteo-101,SurfaceTemp_C,ttest,14721,280,52.58,,0.7573,0.5213,15.1000,1.75
+fishnet-meteo-101,SurfaceTemp_C,delta,14721,2574,5.72,,0.1504,0.0953,1.0000,0.31
+fishnet-meteo-101,SolarRadiation_Wm2,kl,14720,2176,6.76,1.9449,12.8442,4.9324,161.6430,1.48
+fishnet-meteo-101,SolarRadiation_Wm2,ttest,14720,280,52.57,,17.5057,6.6718,230.2350,1.75
+fishnet-meteo-101,SolarRadiation_Wm2,delta,14720,2074,7.10,,3.9796,1.9196,43.6010,0.56
+fishnet-meteo-101,RelativeHumidity_pct,kl,14720,1820,8.09,2.5688,5.5169,3.0214,30.0140,1.46
+fishnet-meteo-101,RelativeHumidity_pct,ttest,14720,280,52.57,,5.3400,3.0954,33.8130,1.75
+fishnet-meteo-101,RelativeHumidity_pct,delta,14720,1551,9.49,,1.1761,0.6269,8.9530,0.49

@@ -1,0 +1,101 @@
+dataset,target,channel,method,compression,hit,met_budget,rmse,max_err,mean_latency_hr,max_latency_hr
+FishNet,10,AmbientTemp_C,alia,10.01,1.00,yes,0.3205,1.6600,0.613,7.43
+FishNet,10,AmbientTemp_C,sod_commissioned,10.15,1.01,yes,0.2288,0.5700,0.608,15.67
+FishNet,10,AmbientTemp_C,uniform,10.99,1.10,yes,0.4737,17.9700,0.169,0.70
+FishNet,10,AmbientTemp_C,alia_events,10.01,1.00,yes,0.3212,1.6600,0.617,7.87
+FishNet,10,AmbientTemp_C,alia_heartbeat,10.56,1.06,yes,0.4158,18.2800,0.164,0.40
+FishNet,10,RelativeHumidity_pct,alia,10.01,1.00,yes,1.6384,7.5870,1.385,7.47
+FishNet,10,RelativeHumidity_pct,sod_commissioned,10.02,1.00,yes,1.2858,3.3920,2.773,37.03
+FishNet,10,RelativeHumidity_pct,uniform,10.82,1.08,yes,2.1708,35.0810,0.166,0.70
+FishNet,10,RelativeHumidity_pct,alia_events,10.01,1.00,yes,1.6883,7.3210,1.613,12.00
+FishNet,10,RelativeHumidity_pct,alia_heartbeat,10.56,1.06,yes,2.0241,24.7510,0.164,0.40
+FishNet,10,SolarRadiation_Wm2,alia,10.02,1.00,yes,38.3179,188.7610,1.878,15.27
+FishNet,10,SolarRadiation_Wm2,sod_commissioned,10.13,1.01,yes,21.0033,61.6800,3.903,39.17
+FishNet,10,SolarRadiation_Wm2,uniform,10.64,1.06,yes,76.8403,906.0540,0.163,0.70
+FishNet,10,SolarRadiation_Wm2,alia_events,10.01,1.00,yes,41.9194,186.1020,3.251,38.64
+FishNet,10,SolarRadiation_Wm2,alia_heartbeat,10.46,1.05,yes,76.8993,883.7160,0.163,0.40
+FishNet,10,SurfaceTemp_C,alia,10.03,1.00,yes,0.5517,3.0000,0.840,7.43
+FishNet,10,SurfaceTemp_C,sod_commissioned,10.78,1.08,yes,0.4203,1.2500,0.866,18.43
+FishNet,10,SurfaceTemp_C,uniform,10.99,1.10,yes,0.8730,16.6620,0.169,0.70
+FishNet,10,SurfaceTemp_C,alia_events,10.03,1.00,yes,0.5530,3.0000,0.855,8.40
+FishNet,10,SurfaceTemp_C,alia_heartbeat,10.56,1.06,yes,0.8309,16.9120,0.164,0.40
+FishNet,30,AmbientTemp_C,alia,30.09,1.00,yes,0.7693,3.5100,1.552,7.43
+FishNet,30,AmbientTemp_C,sod_commissioned,30.26,1.01,yes,0.4908,1.2100,1.505,20.40
+FishNet,30,AmbientTemp_C,uniform,30.97,1.03,yes,0.9113,17.4400,0.507,1.67
+FishNet,30,AmbientTemp_C,alia_events,30.07,1.00,yes,0.7575,3.5100,1.661,11.23
+FishNet,30,AmbientTemp_C,alia_heartbeat,30.19,1.01,yes,0.8229,18.0300,0.507,1.13
+FishNet,30,RelativeHumidity_pct,alia,30.07,1.00,yes,3.0386,13.7820,2.054,10.07
+FishNet,30,RelativeHumidity_pct,sod_commissioned,30.07,1.00,yes,2.3656,5.9730,4.207,41.87
+FishNet,30,RelativeHumidity_pct,uniform,30.97,1.03,yes,3.5986,35.0810,0.507,1.67
+FishNet,30,RelativeHumidity_pct,alia_events,30.08,1.00,yes,3.2697,13.3220,2.545,12.70
+FishNet,30,RelativeHumidity_pct,alia_heartbeat,30.19,1.01,yes,3.3265,27.2800,0.507,1.13
+FishNet,30,SolarRadiation_Wm2,alia,30.10,1.00,yes,106.8021,504.6030,2.687,15.27
+FishNet,30,SolarRadiation_Wm2,sod_commissioned,30.16,1.01,yes,91.9291,224.9180,9.665,77.44
+FishNet,30,SolarRadiation_Wm2,uniform,30.98,1.03,yes,98.7591,937.4200,0.507,1.67
+FishNet,30,SolarRadiation_Wm2,alia_events,30.20,1.01,yes,114.9160,505.6660,4.536,38.64
+FishNet,30,SolarRadiation_Wm2,alia_heartbeat,30.16,1.01,yes,99.9253,953.9060,0.512,1.13
+FishNet,30,SurfaceTemp_C,alia,30.08,1.00,yes,1.2718,6.6250,1.775,7.43
+FishNet,30,SurfaceTemp_C,sod_commissioned,31.25,1.04,yes,0.9268,2.8130,2.219,31.67
+FishNet,30,SurfaceTemp_C,uniform,30.97,1.03,yes,1.3955,16.3500,0.507,1.67
+FishNet,30,SurfaceTemp_C,alia_events,30.13,1.00,yes,1.2828,6.6250,2.013,11.70
+FishNet,30,SurfaceTemp_C,alia_heartbeat,30.19,1.01,yes,1.3238,16.6000,0.507,1.13
+Plaine Morte,10,AmbientTemp_C,alia,10.06,1.01,yes,0.9665,3.8400,0.226,2.17
+Plaine Morte,10,AmbientTemp_C,sod_commissioned,10.12,1.01,yes,0.8295,2.2200,0.195,3.00
+Plaine Morte,10,AmbientTemp_C,uniform,10.88,1.09,yes,1.5134,10.8800,0.048,0.15
+Plaine Morte,10,AmbientTemp_C,alia_events,10.06,1.01,yes,0.9666,3.8400,0.226,2.17
+Plaine Morte,10,AmbientTemp_C,alia_heartbeat,10.04,1.00,yes,1.4483,10.8800,0.046,0.13
+Plaine Morte,10,RelativeHumidity_pct,alia,10.02,1.00,yes,2.6688,11.9560,0.288,3.90
+Plaine Morte,10,RelativeHumidity_pct,sod_commissioned,10.03,1.00,yes,2.2085,5.7730,0.152,1.92
+Plaine Morte,10,RelativeHumidity_pct,uniform,10.88,1.09,yes,3.7691,25.5230,0.048,0.15
+Plaine Morte,10,RelativeHumidity_pct,alia_events,10.02,1.00,yes,2.6694,11.9560,0.287,3.90
+Plaine Morte,10,RelativeHumidity_pct,alia_heartbeat,10.04,1.00,yes,3.6380,25.8490,0.046,0.13
+Plaine Morte,10,SolarRadiation_Wm2,alia,10.01,1.00,yes,6.2781,20.7370,1.334,7.36
+Plaine Morte,10,SolarRadiation_Wm2,sod_commissioned,10.44,1.04,yes,3.2174,9.0400,2.251,11.98
+Plaine Morte,10,SolarRadiation_Wm2,uniform,10.90,1.09,yes,10.2521,365.8240,0.049,0.15
+Plaine Morte,10,SolarRadiation_Wm2,alia_events,10.01,1.00,yes,6.9488,20.7370,2.237,11.66
+Plaine Morte,10,SolarRadiation_Wm2,alia_heartbeat,10.03,1.00,yes,7.5079,127.0810,0.046,0.13
+Plaine Morte,10,SurfaceTemp_C,alia,10.04,1.00,yes,0.4040,1.6880,0.246,6.61
+Plaine Morte,10,SurfaceTemp_C,sod_commissioned,10.57,1.06,yes,0.3156,0.8130,0.123,3.17
+Plaine Morte,10,SurfaceTemp_C,uniform,10.82,1.08,yes,0.8834,51.0000,0.048,0.15
+Plaine Morte,10,SurfaceTemp_C,alia_events,10.04,1.00,yes,0.4040,1.6880,0.250,6.61
+Plaine Morte,10,SurfaceTemp_C,alia_heartbeat,10.05,1.01,yes,0.8461,50.8120,0.046,0.14
+Plaine Morte,30,AmbientTemp_C,alia,30.49,1.02,yes,1.7280,7.1400,0.841,7.33
+Plaine Morte,30,AmbientTemp_C,sod_commissioned,30.49,1.02,yes,1.4327,4.1500,0.533,5.37
+Plaine Morte,30,AmbientTemp_C,uniform,30.94,1.03,yes,1.9175,10.6400,0.146,0.38
+Plaine Morte,30,AmbientTemp_C,alia_events,30.24,1.01,yes,1.7327,7.1400,0.912,12.17
+Plaine Morte,30,AmbientTemp_C,alia_heartbeat,30.08,1.00,yes,1.9389,10.8500,0.145,0.39
+Plaine Morte,30,RelativeHumidity_pct,alia,30.39,1.01,yes,4.5658,21.6230,0.988,6.71
+Plaine Morte,30,RelativeHumidity_pct,sod_commissioned,30.29,1.01,yes,3.5470,9.2710,0.461,3.65
+Plaine Morte,30,RelativeHumidity_pct,uniform,30.94,1.03,yes,4.8728,26.7290,0.146,0.38
+Plaine Morte,30,RelativeHumidity_pct,alia_events,30.47,1.02,yes,4.5524,21.6230,1.065,9.72
+Plaine Morte,30,RelativeHumidity_pct,alia_heartbeat,30.08,1.00,yes,4.8478,30.1480,0.145,0.39
+Plaine Morte,30,SolarRadiation_Wm2,alia,30.17,1.01,yes,23.0611,87.2020,1.562,7.41
+Plaine Morte,30,SolarRadiation_Wm2,sod_commissioned,30.24,1.01,yes,12.0178,28.1810,2.658,12.55
+Plaine Morte,30,SolarRadiation_Wm2,uniform,30.94,1.03,yes,21.8619,325.9440,0.148,0.38
+Plaine Morte,30,SolarRadiation_Wm2,alia_events,30.11,1.00,yes,25.0939,87.2020,2.659,12.29
+Plaine Morte,30,SolarRadiation_Wm2,alia_heartbeat,30.11,1.00,yes,20.0785,173.3410,0.147,0.39
+Plaine Morte,30,SurfaceTemp_C,alia,30.41,1.01,yes,0.8492,3.6260,0.825,7.20
+Plaine Morte,30,SurfaceTemp_C,sod_commissioned,31.27,1.04,yes,0.5621,1.5000,0.434,7.83
+Plaine Morte,30,SurfaceTemp_C,uniform,30.92,1.03,yes,1.2780,51.0620,0.146,0.38
+Plaine Morte,30,SurfaceTemp_C,alia_events,30.27,1.01,yes,0.8379,3.6260,0.957,10.56
+Plaine Morte,30,SurfaceTemp_C,alia_heartbeat,30.11,1.00,yes,1.5137,50.8120,0.147,0.41
+UCSC Haybarn,10,ST,alia,16.94,1.69,NO,0.1031,4.0700,3.951,23.83
+UCSC Haybarn,10,ST,sod_commissioned,13.13,1.31,NO,0.0782,1.5800,6.036,155.17
+UCSC Haybarn,10,ST,uniform,10.84,1.08,yes,0.1504,6.7300,0.821,2.50
+UCSC Haybarn,10,ST,alia_events,18.03,1.80,NO,0.1033,4.0700,11.499,318.83
+UCSC Haybarn,10,ST,alia_heartbeat,10.99,1.10,yes,0.1506,6.6400,0.833,1.67
+UCSC Haybarn,10,VWC,alia,20.39,2.04,NO,0.0012,0.1849,5.038,24.00
+UCSC Haybarn,10,VWC,sod_commissioned,10.36,1.04,yes,0.0005,0.0384,3.656,100.83
+UCSC Haybarn,10,VWC,uniform,10.79,1.08,yes,0.0028,0.3536,0.818,2.50
+UCSC Haybarn,10,VWC,alia_events,23.20,2.32,NO,0.0010,0.1072,13.923,503.50
+UCSC Haybarn,10,VWC,alia_heartbeat,10.98,1.10,yes,0.0027,0.3536,0.833,2.67
+UCSC Haybarn,30,ST,alia,37.16,1.24,yes,0.3575,4.0700,4.691,23.83
+UCSC Haybarn,30,ST,sod_commissioned,33.68,1.12,yes,0.2061,4.0700,9.117,155.50
+UCSC Haybarn,30,ST,uniform,30.91,1.03,yes,0.3993,7.2600,2.494,5.83
+UCSC Haybarn,30,ST,alia_events,40.88,1.36,NO,0.2700,3.0800,12.503,318.83
+UCSC Haybarn,30,ST,alia_heartbeat,30.90,1.03,yes,0.3989,7.2600,2.498,5.00
+UCSC Haybarn,30,VWC,alia,32.72,1.09,yes,0.0031,0.2741,5.291,24.00
+UCSC Haybarn,30,VWC,sod_commissioned,30.46,1.02,yes,0.0014,0.1030,11.024,193.17
+UCSC Haybarn,30,VWC,uniform,30.87,1.03,yes,0.0052,0.2682,2.492,6.00
+UCSC Haybarn,30,VWC,alia_events,34.49,1.15,yes,0.0024,0.2163,14.124,503.50
+UCSC Haybarn,30,VWC,alia_heartbeat,30.89,1.03,yes,0.0052,0.2896,2.502,17.17
