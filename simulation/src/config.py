@@ -5,11 +5,13 @@ sensorResolution = {
     "VWC": 0.001,  # TEROS-10/12 volumetric water content (m³/m³)
     "SC": 0.001,  # TEROS-12 bulk electrical conductivity (dS/m)
     "ST": 0.1,  # TEROS-12 soil temperature (°C)
-    "AmbientTemp_C": 0.01,  # air temperature (°C)
-    "SurfaceTemp_C": 0.01,  # surface/IR temperature (°C)
-    "SolarRadiation_Wm2": 1.0,  # solar irradiance (W/m²)
-    "RelativeHumidity_pct": 0.08,  # relative humidity (%)
-    "WindSpeed_ms": 0.5,  # wind speed (m/s)
+    "AmbientTemp_C": 0.01,  # SHT75 air temperature (°C)
+    "SurfaceTemp_C": 0.0625,  # TN901 surface/IR temperature (°C); data steps
+    "SolarRadiation_Wm2": 0.53,  # Davis solar irradiance (W/m²); data steps
+    "RelativeHumidity_pct": 0.05,  # SHT75 relative humidity (%)
+    "WindSpeed_ms": 0.45,  # Davis anemometer, 1 mph (m/s)
+    "Rain_mm": 0.2,  # Davis rain collector (mm)
+    "SoilMoisture_pct": 0.1,  # Decagon EC-5 soil moisture (%)
     "WindDirection_deg": 1.0,  # wind direction (°) — see excludedChannels
     "Pressure_hPa": 0.01,  # barometric pressure (hPa)
     "CO2_ppm": 1.0,  # CO2 concentration (ppm)
@@ -40,6 +42,7 @@ eventDeltaThresholdByChannel = {
     "WindSpeed_ms": 1.5,
     "Rain_mm": 1.0,
     "VWC": 5.0,
+    "VWC_pct": 5.0,  # same TEROS-12 as VWC, reported in percent
     "Pressure_hPa": 1.0,  # slow and diurnal, like the other met channels
 }
 
